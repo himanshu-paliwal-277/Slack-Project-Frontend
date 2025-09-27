@@ -1,9 +1,11 @@
 import axios from 'axios';
 
+import AxiosInstance from '@/config/axiosConfig';
+
 interface SignupInput {
   email: string;
   password: string;
-  username: string;
+  userName: string;
 }
 
 interface SigninInput {
@@ -11,12 +13,12 @@ interface SigninInput {
   password: string;
 }
 
-export const signUpRequest = async ({ email, password, username }: SignupInput) => {
+export const signUpRequest = async ({ email, password, userName }: SignupInput) => {
   try {
-    const response = await axios.post('/users/signup', {
+    const response = await AxiosInstance.post('/users/signup', {
       email,
       password,
-      username,
+      userName,
     });
     return response.data;
   } catch (error) {
@@ -30,7 +32,7 @@ export const signUpRequest = async ({ email, password, username }: SignupInput) 
 
 export const signInRequest = async ({ email, password }: SigninInput) => {
   try {
-    const response = await axios.post('/users/signin', {
+    const response = await AxiosInstance.post('/users/signin', {
       email,
       password,
     });

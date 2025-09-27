@@ -1,10 +1,20 @@
-import { Button } from './components/ui/button';
+import { Route, Routes } from 'react-router-dom';
+
+import MainLayout from './components/organisms/MainLayout';
+import Home from './pages/Home';
+import SignIn from './pages/Signin';
+import SignUp from './pages/SignUp';
 
 function App() {
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center">
-      <Button>Click me</Button>
-    </div>
+    <Routes>
+      {/* Wrap all routes with MainLayout */}
+      <Route element={<MainLayout />}>
+        <Route path="/" element={<Home />} />
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/signup" element={<SignUp />} />
+      </Route>
+    </Routes>
   );
 }
 
