@@ -1,4 +1,6 @@
-import React, { memo, useState } from 'react';
+import { LucideLoader2, TriangleAlert } from 'lucide-react';
+import React, { memo } from 'react';
+import { FaCheck } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
 import { Button } from '@/components/ui/button';
@@ -6,29 +8,67 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 
-const SigninCard: React.FC = () => {
-  const navigate = useNavigate();
+import type { SignInData, ValidationError } from './SigninContainer';
 
-  const [signinForm, setSigninForm] = useState({
-    email: '',
-    password: '',
-  });
+interface IProps {
+  signinForm: SignInData;
+  setSigninForm: (signinForm: SignInData) => void;
+  validationError: ValidationError | null;
+  onSigninFormSubmit: (e: React.FormEvent) => void;
+  error: Error | null;
+  isPending: boolean;
+  isSuccess: boolean;
+}
+
+const SigninCard: React.FC<IProps> = ({
+  signinForm,
+  setSigninForm,
+  validationError,
+  onSigninFormSubmit,
+  error,
+  isPending,
+  isSuccess,
+}) => {
+  const navigate = useNavigate();
 
   return (
     <Card className="w-full h-full">
       <CardHeader>
         <CardTitle>Sign In</CardTitle>
         <CardDescription>Sign in to access your account</CardDescription>
+        {validationError && (
+          <div className="bg-destructive/15 p-4 rounded-md flex items-center gap-x-2 text-sm text-destructive mb-6">
+            <TriangleAlert className="size-5" />
+            <p>{validationError.message}</p>
+          </div>
+        )}
+
+        {error && (
+          <div className="bg-destructive/15 p-4 rounded-md flex items-center gap-x-2 text-sm text-destructive mb-6">
+            <TriangleAlert className="size-5" />
+            <p>{error.message}</p>
+          </div>
+        )}
+
+        {isSuccess && (
+          <div className="bg-primary/15 p-3 rounded-md flex items-center gap-x-2 text-sm text-primary mb-5">
+            <FaCheck className="size-5" />
+            <p>
+              Successfully signed in. You will be redirected to the login page in a few seconds.
+              <LucideLoader2 className="animate-spin ml-2" />
+            </p>
+          </div>
+        )}
       </CardHeader>
       <CardContent>
-        <form className="space-y-3">
+        <form className="space-y-3" onSubmit={(e) => onSigninFormSubmit(e)}>
           <Input
             placeholder="Email"
             required
             onChange={(e) => setSigninForm({ ...signinForm, email: e.target.value })}
             value={signinForm.email}
             type="email"
-            disabled={false}
+            disabled={isPending}
           />
           <Input
             placeholder="Password"
@@ -36,9 +76,9 @@ const SigninCard: React.FC = () => {
             onChange={(e) => setSigninForm({ ...signinForm, password: e.target.value })}
             value={signinForm.password}
             type="password"
-            disabled={false}
+            disabled={isPending}
           />
-          <Button disabled={false} size="lg" type="submit" className="w-full">
+          <Button disabled={isPending} size="lg" type="submit" className="w-full">
             Continue
           </Button>
         </form>
@@ -46,7 +86,7 @@ const SigninCard: React.FC = () => {
         <Separator className="my-5" />
 
         <p className="text-s text-muted-foreground mt-4">
-          Don't have an account?{' '}
+          Don't have an account ?{' '}
           <span
             className="text-sky-600 hover:underline cursor-pointer"
             onClick={() => navigate('/auth/signup')}
