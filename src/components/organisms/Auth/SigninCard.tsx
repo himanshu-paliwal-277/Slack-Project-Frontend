@@ -6,53 +6,35 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 
-const SignupCard: React.FC = () => {
+const SigninCard: React.FC = () => {
   const navigate = useNavigate();
 
-  const [signupForm, setSignupForm] = useState({
-    userName: '',
+  const [signinForm, setSigninForm] = useState({
     email: '',
     password: '',
-    confirmPassword: '',
   });
 
   return (
     <Card className="w-full h-full">
       <CardHeader>
-        <CardTitle>Sign Up</CardTitle>
-        <CardDescription>Sign up to access your account</CardDescription>
+        <CardTitle>Sign In</CardTitle>
+        <CardDescription>Sign in to access your account</CardDescription>
       </CardHeader>
       <CardContent>
         <form className="space-y-3">
           <Input
             placeholder="Email"
             required
-            onChange={(e) => setSignupForm({ ...signupForm, email: e.target.value })}
-            value={signupForm.email}
+            onChange={(e) => setSigninForm({ ...signinForm, email: e.target.value })}
+            value={signinForm.email}
             type="email"
-            disabled={false}
-          />
-          <Input
-            placeholder="Your userName"
-            required
-            onChange={(e) => setSignupForm({ ...signupForm, userName: e.target.value })}
-            value={signupForm.userName}
-            type="text"
             disabled={false}
           />
           <Input
             placeholder="Password"
             required
-            onChange={(e) => setSignupForm({ ...signupForm, password: e.target.value })}
-            value={signupForm.password}
-            type="password"
-            disabled={false}
-          />
-          <Input
-            placeholder="Confirm Password"
-            required
-            onChange={(e) => setSignupForm({ ...signupForm, confirmPassword: e.target.value })}
-            value={signupForm.confirmPassword}
+            onChange={(e) => setSigninForm({ ...signinForm, password: e.target.value })}
+            value={signinForm.password}
             type="password"
             disabled={false}
           />
@@ -64,12 +46,12 @@ const SignupCard: React.FC = () => {
         <Separator className="my-5" />
 
         <p className="text-s text-muted-foreground mt-4">
-          Already have an account ?{' '}
+          Don't have an account?{' '}
           <span
             className="text-sky-600 hover:underline cursor-pointer"
-            onClick={() => navigate('/auth/signin')}
+            onClick={() => navigate('/auth/signup')}
           >
-            Sign In
+            Sign Up
           </span>
         </p>
       </CardContent>
@@ -77,4 +59,4 @@ const SignupCard: React.FC = () => {
   );
 };
 
-export default memo(SignupCard);
+export default memo(SigninCard);
