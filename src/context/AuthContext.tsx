@@ -7,6 +7,7 @@ interface IProps {
 interface AuthData {
   user: string | null;
   token: string | null;
+  isLoading: boolean;
 }
 
 interface AuthContextType {
@@ -20,6 +21,7 @@ const AppContext: React.FC<IProps> = ({ children }) => {
   const [auth, setAuth] = useState<AuthData>({
     user: null,
     token: null,
+    isLoading: true,
   });
 
   useEffect(() => {
@@ -30,15 +32,18 @@ const AppContext: React.FC<IProps> = ({ children }) => {
       setAuth({
         user: JSON.parse(user),
         token,
+        isLoading: false,
+      });
+    } else {
+      setAuth({
+        user: null,
+        token: null,
+        isLoading: false,
       });
     }
   }, []);
 
-  return (
-    <AuthContext.Provider value={{ auth, setAuth }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={{ auth, setAuth }}>{children}</AuthContext.Provider>;
 };
 
 export default memo(AppContext);
