@@ -4,12 +4,21 @@ interface IProps {
   children: React.ReactNode;
 }
 
+// Define proper user type
+interface User {
+  avatar: string;
+  email: string;
+  username?: string;
+}
+
+// Auth data type
 interface AuthData {
-  user: string | null;
+  user: User | null;
   token: string | null;
   isLoading: boolean;
 }
 
+// Context type
 interface AuthContextType {
   auth: AuthData;
   setAuth: React.Dispatch<React.SetStateAction<AuthData>>;

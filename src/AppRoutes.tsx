@@ -5,6 +5,7 @@ import ProtectedRoute from './components/molecules/ProtectedRoute/ProtectedRoute
 import SigninContainer from './components/organisms/Auth/SigninContainer';
 import SignupContainer from './components/organisms/Auth/SignupContainer';
 import Auth from './pages/Auth/Auth';
+import Home from './pages/Home/Home';
 import { Notfound } from './pages/NotFound/NotFound';
 
 const AppRoutes: React.FC = () => {
@@ -14,7 +15,7 @@ const AppRoutes: React.FC = () => {
         path="/"
         element={
           <ProtectedRoute>
-            <h1>Home</h1>
+            <Home />
           </ProtectedRoute>
         }
       />
