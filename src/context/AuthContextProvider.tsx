@@ -1,4 +1,4 @@
-import React, { createContext, memo, useEffect, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 
 interface IProps {
   children: React.ReactNode;
@@ -25,16 +25,16 @@ interface AuthContextType {
   logout: () => void;
 }
 
-const AuthContext = createContext<AuthContextType | null>(null);
+export const AuthContext = createContext<AuthContextType | null>(null);
 
-const AppContext: React.FC<IProps> = ({ children }) => {
+export const AuthContextProvider: React.FC<IProps> = ({ children }) => {
   const [auth, setAuth] = useState<AuthData>({
     user: null,
     token: null,
     isLoading: true,
   });
 
-  const logout = () => {
+  const logout = (): void => {
     localStorage.removeItem('user');
     localStorage.removeItem('token');
     setAuth({
@@ -45,15 +45,25 @@ const AppContext: React.FC<IProps> = ({ children }) => {
   };
 
   useEffect(() => {
-    const user = localStorage.getItem('user');
+    const userData = localStorage.getItem('user');
     const token = localStorage.getItem('token');
 
-    if (user && token) {
-      setAuth({
-        user: JSON.parse(user),
-        token,
-        isLoading: false,
-      });
+    if (userData && token) {
+      try {
+        const parsedUser: User = JSON.parse(userData);
+        setAuth({
+          user: parsedUser,
+          token,
+          isLoading: false,
+        });
+      } catch (error) {
+        console.error('Error parsing user data from localStorage:', error);
+        setAuth({
+          user: null,
+          token: null,
+          isLoading: false,
+        });
+      }
     } else {
       setAuth({
         user: null,
@@ -65,6 +75,3 @@ const AppContext: React.FC<IProps> = ({ children }) => {
 
   return <AuthContext.Provider value={{ auth, setAuth, logout }}>{children}</AuthContext.Provider>;
 };
-
-export default memo(AppContext);
-export { AuthContext };

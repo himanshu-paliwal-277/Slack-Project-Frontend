@@ -3,7 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import { createWorkspaceRequest } from '@/apis/workspaces';
 import { useAuth } from '@/hooks/context/useAuth';
 
-interface CreateWorkspaceInput {
+export interface CreateWorkspaceInput {
   name: string;
   description: string;
 }
