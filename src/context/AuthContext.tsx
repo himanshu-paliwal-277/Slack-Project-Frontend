@@ -22,6 +22,7 @@ interface AuthData {
 interface AuthContextType {
   auth: AuthData;
   setAuth: React.Dispatch<React.SetStateAction<AuthData>>;
+  logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -32,6 +33,16 @@ const AppContext: React.FC<IProps> = ({ children }) => {
     token: null,
     isLoading: true,
   });
+
+  const logout = () => {
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+    setAuth({
+      user: null,
+      token: null,
+      isLoading: false,
+    });
+  };
 
   useEffect(() => {
     const user = localStorage.getItem('user');
@@ -52,7 +63,7 @@ const AppContext: React.FC<IProps> = ({ children }) => {
     }
   }, []);
 
-  return <AuthContext.Provider value={{ auth, setAuth }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ auth, setAuth, logout }}>{children}</AuthContext.Provider>;
 };
 
 export default memo(AppContext);

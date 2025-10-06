@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { Toaster } from 'sonner';
 
 import AppRoutes from './AppRoutes';
+import { Toaster } from './components/ui/sonner';
 import { AppContextProvider } from './context/AppContextProvider';
 
 // Create a QueryClient instance

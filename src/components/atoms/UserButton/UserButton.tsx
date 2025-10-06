@@ -1,5 +1,7 @@
 import { LogOutIcon, SettingsIcon } from 'lucide-react';
 import React, { memo } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
@@ -11,7 +13,14 @@ import {
 import { useAuth } from '@/hooks/context/useAuth';
 
 const UserButton: React.FC = () => {
-  const { auth } = useAuth();
+  const { auth, logout } = useAuth();
+  const navigate = useNavigate();
+
+  async function handleLogout() {
+    logout();
+    navigate('/auth/signin');
+    toast.success('Successfully logged out');
+  }
 
   return (
     <DropdownMenu>
@@ -28,7 +37,7 @@ const UserButton: React.FC = () => {
           <SettingsIcon className="size-4 mr-2 h-10" />
           Settings
         </DropdownMenuItem>
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={handleLogout}>
           <LogOutIcon className="size-4 mr-2 h-10" />
           Logout
         </DropdownMenuItem>
