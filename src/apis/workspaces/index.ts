@@ -55,3 +55,28 @@ export const fetchWorkspacesRequest = async ({ token }: FetchWorkspaceInput) => 
     throw error;
   }
 };
+
+interface FetchWorkspaceDetailsInput {
+  workspaceId: string;
+  token: string;
+}
+
+export const fetchWorkspaceDetailsRequest = async ({
+  workspaceId,
+  token,
+}: FetchWorkspaceDetailsInput) => {
+  try {
+    const response = await axios.get(`/workspaces/${workspaceId}`, {
+      headers: {
+        'x-access-token': token,
+      },
+    });
+    return response?.data?.data;
+  } catch (error) {
+    console.log('Error in fetching workspace details request', error);
+    if (axios.isAxiosError(error) && error.response) {
+      throw error.response.data;
+    }
+    throw error;
+  }
+};
