@@ -7,6 +7,7 @@ import SignupContainer from './components/organisms/Auth/SignupContainer';
 import Auth from './pages/Auth/Auth';
 import Home from './pages/Home/Home';
 import { Notfound } from './pages/NotFound/NotFound';
+import WorkspaceLayout from './pages/Workspace/WorkspaceLayout';
 
 const AppRoutes: React.FC = () => {
   return (
@@ -33,6 +34,14 @@ const AppRoutes: React.FC = () => {
           <Auth>
             <SigninContainer />
           </Auth>
+        }
+      />
+      <Route
+        path="/workspaces/:workspaceId"
+        element={
+          <ProtectedRoute>
+            <WorkspaceLayout>Workspace</WorkspaceLayout>
+          </ProtectedRoute>
         }
       />
       <Route path="/*" element={<Notfound />} />
