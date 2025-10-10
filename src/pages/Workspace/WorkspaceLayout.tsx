@@ -1,5 +1,6 @@
 import React, { memo } from 'react';
 
+import WorkspaceNavbar from '@/components/organisms/Workspace/WorkspaceNavbar';
 import WorkspaceSidebar from '@/components/organisms/Workspace/WorkspaceSidebar';
 
 interface IProps {
@@ -9,7 +10,8 @@ interface IProps {
 const WorkspaceLayout: React.FC<IProps> = ({ children }) => {
   return (
     <div className="h-[100vh]">
-      <div className="flex h-full">
+      <WorkspaceNavbar />
+      <div className="flex h-[calc(100vh-40px)]">
         <WorkspaceSidebar />
         {children}
       </div>

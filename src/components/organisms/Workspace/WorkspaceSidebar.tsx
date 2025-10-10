@@ -4,9 +4,13 @@ import React, { memo } from 'react';
 import UserButton from '@/components/atoms/UserButton/UserButton';
 import SidebarButton from '@/components/molecules/SidebarButton/SidebarButton';
 
+import WorkspaceSwitcher from './WorkspaceSwitcher';
+
 const WorkspaceSidebar: React.FC = () => {
   return (
     <aside className="w-[70px] h-full bg-slack flex flex-col gap-y-4 items-center pt-[10px] pb-[5px]">
+      <WorkspaceSwitcher />
+
       <SidebarButton Icon={HomeIcon} label="Home" />
 
       <SidebarButton Icon={MessageSquareIcon} label="DMs" />

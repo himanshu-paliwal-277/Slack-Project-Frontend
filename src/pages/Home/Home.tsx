@@ -12,7 +12,7 @@ const Home: React.FC = () => {
     if (isFetching) return;
     console.log('workspaces in home', workspaces);
 
-    if (workspaces.length === 0 || !workspaces) {
+    if (workspaces?.length === 0 || !workspaces) {
       console.log('No workspaces found, create one');
     } else {
       navigate(`/workspaces/${workspaces[0]._id}`);
