@@ -2,7 +2,6 @@ import { Loader } from 'lucide-react';
 import React, { memo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,13 +28,13 @@ const WorkspaceSwitcher: React.FC = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <Button className="size-9 relative overflow-hidden bg-[#ABABAD] hover:bg-[#ABABAD]/80 font-semibold text-slate-800 text-xl">
+        <div className="size-9 relative overflow-hidden bg-[#ABABAD] hover:bg-[#ABABAD]/80 font-semibold text-slate-800 text-xl">
           {isFetching ? (
             <Loader className="size-5 animate-spin" />
           ) : (
             workspace?.name.charAt(0).toUpperCase()
           )}
-        </Button>
+        </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuItem className="cursor-pointer flex-col justify-start items-start">

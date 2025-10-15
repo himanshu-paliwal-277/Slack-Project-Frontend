@@ -9,6 +9,7 @@ interface User {
   avatar: string;
   email: string;
   username?: string;
+  _id: string;
 }
 
 // Auth data type

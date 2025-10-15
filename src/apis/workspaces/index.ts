@@ -66,7 +66,7 @@ export const fetchWorkspaceDetailsRequest = async ({
   token,
 }: FetchWorkspaceDetailsInput) => {
   try {
-    const response = await axios.get(`/workspaces/${workspaceId}`, {
+    const response = await AxiosInstance.get(`/workspaces/${workspaceId}`, {
       headers: {
         'x-access-token': token,
       },
