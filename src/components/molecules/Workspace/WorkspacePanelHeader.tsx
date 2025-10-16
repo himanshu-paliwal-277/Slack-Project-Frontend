@@ -1,5 +1,5 @@
 import { ChevronDownIcon, ListFilterIcon, SquarePenIcon } from 'lucide-react';
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useAuth } from '@/hooks/context/useAuth';
+import { useWorkspacePreferencesModal } from '@/hooks/context/useWorkspacePreferencesModals';
 
 interface WorkspacePanelHeaderProps {
   workspace: {
@@ -22,29 +23,39 @@ interface WorkspacePanelHeaderProps {
 const WorkspacePanelHeader: React.FC<WorkspacePanelHeaderProps> = ({ workspace }) => {
   console.log('workspace is', workspace);
 
-  const workspacemembers = workspace?.members;
+  const workspaceMembers = workspace?.members;
 
   const { auth } = useAuth();
 
-  console.log(auth);
+  console.log('auth is', auth);
 
-  const isLoggedInUserAdminOfWorkspace = workspacemembers?.find(
+  console.log('workspaceMembers is', workspaceMembers);
+
+  const isLoggedInUserAdminOfWorkspace = !!workspaceMembers?.find(
     (member) => member.memberId === auth?.user?._id && member.role === 'admin'
   );
 
-  console.log(isLoggedInUserAdminOfWorkspace);
+  const workspacePreferencesModal = useWorkspacePreferencesModal();
+  const setOpenPreferences = workspacePreferencesModal?.setOpenPreferences;
+  const openPreferences = workspacePreferencesModal?.openPreferences;
+
+  useEffect(() => {
+    console.log('openPreferences is', openPreferences);
+  }, [openPreferences]);
+
+  console.log('isLoggedInUserAdminOfWorkspace is', isLoggedInUserAdminOfWorkspace);
 
   return (
     <div className="flex items-center justify-between px-4 h-[50px] gap-0.5">
       <DropdownMenu>
-        <DropdownMenuTrigger>
-          <Button
+        <DropdownMenuTrigger className="flex items-center gap-2 font-semibold text-lg w-auto p-1.5 overflow-hidden">
+          {/* <Button
             variant="transparent"
             className="font-semibold text-lg w-auto p-1.5 overflow-hidden"
-          >
-            <span className="truncate">{workspace?.name}</span>
-            <ChevronDownIcon className="size-5 ml-1" />
-          </Button>
+          > */}
+          <span className="truncate">{workspace?.name}</span>
+          <ChevronDownIcon className="size-5 ml-1" />
+          {/* </Button> */}
         </DropdownMenuTrigger>
 
         <DropdownMenuContent side="bottom" align="start" className="w-64">
@@ -60,7 +71,12 @@ const WorkspacePanelHeader: React.FC<WorkspacePanelHeaderProps> = ({ workspace }
 
           {isLoggedInUserAdminOfWorkspace && (
             <>
-              <DropdownMenuItem className="cursor-pointer py-2">Preferences</DropdownMenuItem>
+              <DropdownMenuItem
+                className="cursor-pointer py-2"
+                onClick={() => setOpenPreferences && setOpenPreferences(true)}
+              >
+                Preferences
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem className="cursor-pointer py-2">
                 Invite people to {workspace?.name}
