@@ -46,9 +46,7 @@ const SigninContainer: React.FC = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      setTimeout(() => {
-        navigate('/');
-      }, 3000);
+      navigate('/');
     }
   }, [isSuccess, navigate]);
 

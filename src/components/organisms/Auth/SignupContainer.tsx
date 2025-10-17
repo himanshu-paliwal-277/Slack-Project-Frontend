@@ -62,9 +62,7 @@ const SignupContainer: React.FC = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      setTimeout(() => {
-        navigate('/auth/signin');
-      }, 3000);
+      navigate('/auth/signin');
     }
   }, [isSuccess, navigate]);
 

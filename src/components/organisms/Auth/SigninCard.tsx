@@ -34,29 +34,26 @@ const SigninCard: React.FC<IProps> = ({
   return (
     <Card className="w-full h-full">
       <CardHeader>
-        <CardTitle>Sign In</CardTitle>
-        <CardDescription>Sign in to access your account</CardDescription>
+        <CardTitle className="text-xl">Sign In</CardTitle>
+        <CardDescription className="mb-2">Sign in to access your account</CardDescription>
         {validationError && (
-          <div className="bg-destructive/15 p-4 rounded-md flex items-center gap-x-2 text-sm text-destructive mb-6">
+          <div className="bg-destructive/15 p-4 rounded-md flex items-center gap-x-2 text-sm text-destructive">
             <TriangleAlert className="size-5" />
             <p>{validationError.message}</p>
           </div>
         )}
 
         {error && (
-          <div className="bg-destructive/15 p-4 rounded-md flex items-center gap-x-2 text-sm text-destructive mb-6">
+          <div className="bg-destructive/15 p-4 rounded-md flex items-center gap-x-2 text-sm text-destructive">
             <TriangleAlert className="size-5" />
             <p>{error.message}</p>
           </div>
         )}
 
         {isSuccess && (
-          <div className="bg-primary/15 p-3 rounded-md flex items-center gap-x-2 text-sm text-primary mb-5">
-            <FaCheck className="size-5" />
-            <p>
-              Successfully signed in. You will be redirected to the login page in a few seconds.
-              <LucideLoader2 className="animate-spin ml-2" />
-            </p>
+          <div className="bg-green-800/20 p-3 rounded-md flex items-center gap-x-3 text-sm text-primary">
+            <FaCheck className="size-4" />
+            <p>Successfully signed in</p>
           </div>
         )}
       </CardHeader>
@@ -64,7 +61,6 @@ const SigninCard: React.FC<IProps> = ({
         <form className="space-y-3" onSubmit={(e) => onSigninFormSubmit(e)}>
           <Input
             placeholder="Email"
-            required
             onChange={(e) => setSigninForm({ ...signinForm, email: e.target.value })}
             value={signinForm.email}
             type="email"
@@ -72,20 +68,19 @@ const SigninCard: React.FC<IProps> = ({
           />
           <Input
             placeholder="Password"
-            required
             onChange={(e) => setSigninForm({ ...signinForm, password: e.target.value })}
             value={signinForm.password}
             type="password"
             disabled={isPending}
           />
           <Button disabled={isPending} size="lg" type="submit" className="w-full">
-            Continue
+            {isPending ? <LucideLoader2 className="animate-spin ml-2 w-16 h-16" /> : 'Continue'}
           </Button>
         </form>
 
         <Separator className="my-5" />
 
-        <p className="text-s text-muted-foreground mt-4">
+        <p className="text-sm text-muted-foreground mt-4">
           Don't have an account ?{' '}
           <span
             className="text-sky-600 hover:underline cursor-pointer"
