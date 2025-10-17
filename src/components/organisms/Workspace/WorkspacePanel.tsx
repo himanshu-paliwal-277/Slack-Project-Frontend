@@ -12,7 +12,7 @@ const WorkspacePanel: React.FC = () => {
 
   if (isFetching) {
     return (
-      <div className="flex flex-col gap-y-2 h-full items-center justify-center text-white">
+      <div className="flex h-full items-center justify-center bg-[#552957] text-white">
         <Loader className="animate-spin size-6 text-white" />
       </div>
     );
@@ -20,7 +20,7 @@ const WorkspacePanel: React.FC = () => {
 
   if (!isSuccess) {
     return (
-      <div className="flex flex-col gap-y-2 h-full items-center justify-center text-white">
+      <div className="flex flex-col gap-y-2 h-full bg-[#552957] items-center justify-center text-white">
         <AlertTriangleIcon className="size-6 text-white" />
         Something went wrong
       </div>
@@ -28,7 +28,7 @@ const WorkspacePanel: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col h-full bg-[#5c3b58]">
+    <div className="flex flex-col h-full bg-[#552957]">
       <WorkspacePanelHeader workspace={workspace} />
     </div>
   );

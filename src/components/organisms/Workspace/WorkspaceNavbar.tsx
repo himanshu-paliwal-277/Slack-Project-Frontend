@@ -1,4 +1,4 @@
-import { InfoIcon, LucideLoader2, SearchIcon } from 'lucide-react';
+import { InfoIcon, SearchIcon } from 'lucide-react';
 import React, { memo } from 'react';
 import { useParams } from 'react-router-dom';
 
@@ -8,19 +8,15 @@ import { useGetWorkspaceById } from '@/hooks/apis/workspaces/useGetWorkspaceById
 const WorkspaceNavbar: React.FC = () => {
   const { workspaceId } = useParams();
 
-  const { isFetching, workspace } = useGetWorkspaceById(workspaceId || '');
-
-  if (isFetching) {
-    return <LucideLoader2 className="animate-spin ml-2" />;
-  }
+  const { workspace } = useGetWorkspaceById(workspaceId || '');
 
   return (
-    <nav className="flex items-center justify-center h-10 p-1.5 bg-slack">
+    <nav className="flex items-center h-[50px] justify-center px-3">
       <div className="flex-1" />
       <div>
         <Button size="sm" className="bg-accent/25 hover:bg-accent/15 w-full justify-start h-7 px-2">
           <SearchIcon className="size-5 text-white mr-2" />
-          <span className="text-white text-xs">Search {workspace?.name || 'Workspace'}</span>
+          <span className="text-white text-xs">Search in {workspace?.name || 'Workspace'}</span>
         </Button>
       </div>
 

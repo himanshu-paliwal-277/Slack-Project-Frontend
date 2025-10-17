@@ -46,9 +46,9 @@ const WorkspacePanelHeader: React.FC<WorkspacePanelHeaderProps> = ({ workspace }
   console.log('isLoggedInUserAdminOfWorkspace is', isLoggedInUserAdminOfWorkspace);
 
   return (
-    <div className="flex items-center justify-between px-4 h-[50px] gap-0.5">
+    <div className="flex items-center justify-between px-4 py-3 gap-0.5">
       <DropdownMenu>
-        <DropdownMenuTrigger className="flex items-center gap-2 font-semibold text-lg w-auto p-1.5 overflow-hidden">
+        <DropdownMenuTrigger className="rounded-sm bg-transparent hover:bg-accent/10 text-accent flex items-center gap-2 font-semibold text-lg w-auto p-1.5 overflow-hidden">
           {/* <Button
             variant="transparent"
             className="font-semibold text-lg w-auto p-1.5 overflow-hidden"

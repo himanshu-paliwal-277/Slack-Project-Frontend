@@ -28,7 +28,7 @@ const WorkspaceSwitcher: React.FC = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <div className="size-9 relative overflow-hidden bg-[#ABABAD] hover:bg-[#ABABAD]/80 font-semibold text-slate-800 text-xl">
+        <div className="w-[44px] h-[44px] flex items-center justify-center rounded-lg relative overflow-hidden bg-[#ABABAD] hover:bg-[#ABABAD]/80 font-semibold text-slate-800 text-xl">
           {isFetching ? (
             <Loader className="size-5 animate-spin" />
           ) : (

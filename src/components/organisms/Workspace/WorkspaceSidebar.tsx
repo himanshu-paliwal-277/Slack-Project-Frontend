@@ -8,7 +8,7 @@ import WorkspaceSwitcher from './WorkspaceSwitcher';
 
 const WorkspaceSidebar: React.FC = () => {
   return (
-    <aside className="w-[70px] h-full bg-slack flex flex-col gap-y-4 items-center pt-[10px] pb-[5px]">
+    <aside className="w-[80px] h-full flex flex-col gap-y-4 items-center pt-[10px] pb-[5px]">
       <WorkspaceSwitcher />
 
       <SidebarButton Icon={HomeIcon} label="Home" />
