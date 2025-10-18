@@ -1,20 +1,42 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { TrashIcon } from 'lucide-react';
-import React, { memo } from 'react';
+import React, { memo, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { useDeleteWorkspace } from '@/hooks/apis/workspaces/useDeleteWorkspace';
 import { useWorkspacePreferencesModal } from '@/hooks/context/useWorkspacePreferencesModals';
 
 const WorkspacePreferencesModal: React.FC = () => {
-  const workspacePreferences = useWorkspacePreferencesModal();
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+  const { initialValue, openPreferences, setOpenPreferences, workspace } =
+    useWorkspacePreferencesModal();
 
-  if (!workspacePreferences) {
-    return null;
-  }
+  const [workspaceId, setWorkspaceId] = useState<string | null>(null);
 
-  const { initialValue, openPreferences, setOpenPreferences } = workspacePreferences;
+  const { deleteWorkspaceMutation } = useDeleteWorkspace(workspaceId || '');
 
   function handleClose() {
     setOpenPreferences(false);
+  }
+
+  useEffect(() => {
+    setWorkspaceId(workspace?._id || null);
+  }, [workspace]);
+
+  async function handleDelete() {
+    try {
+      await deleteWorkspaceMutation();
+      navigate('/home');
+      queryClient.invalidateQueries({ queryKey: ['fetchWorkspaces'] });
+      setOpenPreferences(false);
+      toast.success('Workspace deleted successfully');
+    } catch (error) {
+      console.log('Error in deleting workspace', error);
+      toast.error('Error in deleting workspace');
+    }
   }
 
   return (
@@ -33,7 +55,10 @@ const WorkspacePreferencesModal: React.FC = () => {
             <p className="text-sm">{initialValue}</p>
           </div>
 
-          <button className="flex items-center gap-x-2 px-5 py-4 bg-white rounded-lg border cursor-pointer hover:bg-gray-50">
+          <button
+            className="flex items-center gap-x-2 px-5 py-4 bg-white rounded-lg border cursor-pointer hover:bg-gray-50"
+            onClick={handleDelete}
+          >
             <TrashIcon className="size-5" />
             <p>Delete Workspace</p>
           </button>

@@ -1,5 +1,5 @@
 import { ChevronDownIcon, ListFilterIcon, SquarePenIcon } from 'lucide-react';
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -31,11 +31,17 @@ const WorkspacePanelHeader: React.FC<WorkspacePanelHeaderProps> = ({ workspace }
 
   console.log('workspaceMembers is', workspaceMembers);
 
+  const { setWorkspace } = useWorkspacePreferencesModal();
+
   const isLoggedInUserAdminOfWorkspace = !!workspaceMembers?.find(
     (member) => member.memberId === auth?.user?._id && member.role === 'admin'
   );
 
   const { setOpenPreferences, setInitialValue } = useWorkspacePreferencesModal();
+
+  useEffect(() => {
+    setWorkspace(workspace);
+  }, [workspace, setWorkspace]);
 
   console.log('isLoggedInUserAdminOfWorkspace is', isLoggedInUserAdminOfWorkspace);
 
