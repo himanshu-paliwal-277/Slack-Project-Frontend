@@ -1,5 +1,5 @@
 import { ChevronDownIcon, ListFilterIcon, SquarePenIcon } from 'lucide-react';
-import React, { memo, useEffect } from 'react';
+import React, { memo } from 'react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -35,13 +35,7 @@ const WorkspacePanelHeader: React.FC<WorkspacePanelHeaderProps> = ({ workspace }
     (member) => member.memberId === auth?.user?._id && member.role === 'admin'
   );
 
-  const workspacePreferencesModal = useWorkspacePreferencesModal();
-  const setOpenPreferences = workspacePreferencesModal?.setOpenPreferences;
-  const openPreferences = workspacePreferencesModal?.openPreferences;
-
-  useEffect(() => {
-    console.log('openPreferences is', openPreferences);
-  }, [openPreferences]);
+  const { setOpenPreferences, setInitialValue } = useWorkspacePreferencesModal();
 
   console.log('isLoggedInUserAdminOfWorkspace is', isLoggedInUserAdminOfWorkspace);
 
@@ -73,7 +67,10 @@ const WorkspacePanelHeader: React.FC<WorkspacePanelHeaderProps> = ({ workspace }
             <>
               <DropdownMenuItem
                 className="cursor-pointer py-2"
-                onClick={() => setOpenPreferences && setOpenPreferences(true)}
+                onClick={() => {
+                  setInitialValue(workspace?.name ?? '');
+                  setOpenPreferences(true);
+                }}
               >
                 Preferences
               </DropdownMenuItem>

@@ -11,7 +11,7 @@ export const useGetWorkspaceById = (id: string) => {
     error,
     data: workspace,
   } = useQuery({
-    queryFn: () => fetchWorkspaceDetailsRequest({ workspaceId: id, token: auth?.token as string }),
+    queryFn: () => fetchWorkspaceDetailsRequest(id, auth?.token as string),
     queryKey: [`fetchWorkspaceById-${id}`],
     staleTime: 10000,
   });

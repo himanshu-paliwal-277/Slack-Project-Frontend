@@ -56,15 +56,7 @@ export const fetchWorkspacesRequest = async ({ token }: FetchWorkspaceInput) => 
   }
 };
 
-interface FetchWorkspaceDetailsInput {
-  workspaceId: string;
-  token: string;
-}
-
-export const fetchWorkspaceDetailsRequest = async ({
-  workspaceId,
-  token,
-}: FetchWorkspaceDetailsInput) => {
+export const fetchWorkspaceDetailsRequest = async (workspaceId: string, token: string) => {
   try {
     const response = await AxiosInstance.get(`/workspaces/${workspaceId}`, {
       headers: {
@@ -74,6 +66,56 @@ export const fetchWorkspaceDetailsRequest = async ({
     return response?.data?.data;
   } catch (error) {
     console.log('Error in fetching workspace details request', error);
+    if (axios.isAxiosError(error) && error.response) {
+      throw error.response.data;
+    }
+    throw error;
+  }
+};
+
+export const deleteWorkspaceRequest = async (workspaceId: string, token: string) => {
+  try {
+    const response = await AxiosInstance.delete(`/workspaces/${workspaceId}`, {
+      headers: {
+        'x-access-token': token,
+      },
+    });
+    return response?.data?.data;
+  } catch (error) {
+    console.log('Error in deleting workspace request', error);
+    if (axios.isAxiosError(error) && error.response) {
+      throw error.response.data;
+    }
+    throw error;
+  }
+};
+
+interface UpdateWorkspaceInput {
+  workspaceId: string;
+  name: string;
+  description: string;
+  token: string;
+}
+
+export const updateWorkspaceRequest = async ({
+  workspaceId,
+  name,
+  description,
+  token,
+}: UpdateWorkspaceInput) => {
+  try {
+    const response = await AxiosInstance.put(
+      `/workspaces/${workspaceId}`,
+      { name, description },
+      {
+        headers: {
+          'x-access-token': token,
+        },
+      }
+    );
+    return response?.data?.data;
+  } catch (error) {
+    console.log('Error in updating workspace request', error);
     if (axios.isAxiosError(error) && error.response) {
       throw error.response.data;
     }

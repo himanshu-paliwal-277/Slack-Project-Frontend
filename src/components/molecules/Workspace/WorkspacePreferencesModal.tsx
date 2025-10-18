@@ -30,6 +30,7 @@ const WorkspacePreferencesModal: React.FC = () => {
               <p className="font-semibold text-sm">Workspace Name</p>
               <p className="text-sm font-semibold hover:underline">Edit</p>
             </div>
+            <p className="text-sm">{initialValue}</p>
           </div>
 
           <button className="flex items-center gap-x-2 px-5 py-4 bg-white rounded-lg border cursor-pointer hover:bg-gray-50">
