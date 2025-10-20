@@ -18,6 +18,7 @@ import { Input } from '@/components/ui/input';
 import { useDeleteWorkspace } from '@/hooks/apis/workspaces/useDeleteWorkspace';
 import { useUpdateWorkspace } from '@/hooks/apis/workspaces/useUpdateWorkspace';
 import { useWorkspacePreferencesModal } from '@/hooks/context/useWorkspacePreferencesModals';
+import { useConfirm } from '@/hooks/useConfirm';
 
 const WorkspacePreferencesModal: React.FC = () => {
   const queryClient = useQueryClient();
@@ -29,6 +30,16 @@ const WorkspacePreferencesModal: React.FC = () => {
     useWorkspacePreferencesModal();
   const { deleteWorkspaceMutation } = useDeleteWorkspace(workspaceId);
   const { isPending, updateWorkspaceMutation } = useUpdateWorkspace(workspaceId);
+
+  const { confirmation, ConfirmDialog } = useConfirm({
+    title: 'Do you want to delete the workspace?',
+    message: 'This action cannot be undone.',
+  });
+
+  const { confirmation: updateConfirmation, ConfirmDialog: UpdateDialog } = useConfirm({
+    title: 'Do you want to update the workspace?',
+    message: 'This action cannot be undone.',
+  });
 
   const [renameValue, setRenameValue] = useState(workspace?.name || '');
 
@@ -43,11 +54,29 @@ const WorkspacePreferencesModal: React.FC = () => {
 
   async function handleDelete() {
     try {
+      const ok = await confirmation();
+      console.log('Confimation received');
+      if (!ok) {
+        return;
+      }
+
       await deleteWorkspaceMutation();
-      navigate('/home');
-      queryClient.invalidateQueries({ queryKey: ['fetchWorkspaces'] });
+
+      // Invalidate and refetch workspaces to get updated list
+      await queryClient.invalidateQueries({ queryKey: ['fetchWorkspaces'] });
+      const updatedWorkspaces = await queryClient.fetchQuery({
+        queryKey: ['fetchWorkspaces'],
+      });
+
       setOpenPreferences(false);
       toast('Workspace deleted successfully');
+
+      // Navigate to the next available workspace or home
+      if (updatedWorkspaces && Array.isArray(updatedWorkspaces) && updatedWorkspaces.length > 0) {
+        navigate(`/workspaces/${updatedWorkspaces[0]._id}`);
+      } else {
+        navigate('/home');
+      }
     } catch (error) {
       console.log('Error in deleting workspace', error);
       toast('Error in deleting workspace');
@@ -57,6 +86,12 @@ const WorkspacePreferencesModal: React.FC = () => {
   async function handleFormSubmit(e: React.FormEvent) {
     e.preventDefault();
     try {
+      const ok = await updateConfirmation();
+      console.log('Confimation received');
+      if (!ok) {
+        return;
+      }
+
       await updateWorkspaceMutation({
         name: renameValue,
         description: '',
@@ -71,65 +106,70 @@ const WorkspacePreferencesModal: React.FC = () => {
   }
 
   return (
-    <Dialog open={openPreferences} onOpenChange={handleClose}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>{initialValue}</DialogTitle>
-        </DialogHeader>
+    <>
+      <Dialog open={openPreferences} onOpenChange={handleClose}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{initialValue}</DialogTitle>
+          </DialogHeader>
 
-        <div className="px-4 pb-4 flex flex-col gap-y-2">
-          <Dialog open={editOpen} onOpenChange={setEditOpen}>
-            <DialogTrigger>
-              <div className="px-5 py-4 bg-white rounded-lg border cursor-pointer hover:bg-gray-50">
-                <div className="flex items-center justify-between">
-                  <p className="font-semibold text-sm">Workspace Name</p>
-                  <p className="text-sm font-semibold hover:underline">Edit</p>
+          <div className="px-4 pb-4 flex flex-col gap-y-2">
+            <Dialog open={editOpen} onOpenChange={setEditOpen}>
+              <DialogTrigger>
+                <div className="px-5 py-4 bg-white rounded-lg border cursor-pointer hover:bg-gray-50">
+                  <div className="flex items-center justify-between">
+                    <p className="font-semibold text-sm">Workspace Name</p>
+                    <p className="text-sm font-semibold hover:underline">Edit</p>
+                  </div>
+
+                  <p className="text-sm">{initialValue}</p>
                 </div>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Rename Workspace</DialogTitle>
+                </DialogHeader>
 
-                <p className="text-sm">{initialValue}</p>
-              </div>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Rename Workspace</DialogTitle>
-              </DialogHeader>
+                <form className="space-y-4" onSubmit={handleFormSubmit}>
+                  <Input
+                    value={renameValue}
+                    onChange={(e) => setRenameValue(e.target.value)}
+                    required
+                    autoFocus
+                    minLength={3}
+                    maxLength={50}
+                    disabled={isPending}
+                    placeholder="Workspace Name e.g. Design Team"
+                  />
 
-              <form className="space-y-4" onSubmit={handleFormSubmit}>
-                <Input
-                  value={renameValue}
-                  onChange={(e) => setRenameValue(e.target.value)}
-                  required
-                  autoFocus
-                  minLength={3}
-                  maxLength={50}
-                  disabled={isPending}
-                  placeholder="Workspace Name e.g. Design Team"
-                />
-
-                <DialogFooter>
-                  <DialogClose>
-                    <Button variant="outline" disabled={isPending}>
-                      Cancel
+                  <DialogFooter>
+                    <DialogClose>
+                      <Button variant="outline" disabled={isPending}>
+                        Cancel
+                      </Button>
+                    </DialogClose>
+                    <Button type="submit" disabled={isPending}>
+                      Save
                     </Button>
-                  </DialogClose>
-                  <Button type="submit" disabled={isPending}>
-                    Save
-                  </Button>
-                </DialogFooter>
-              </form>
-            </DialogContent>
-          </Dialog>
+                  </DialogFooter>
+                </form>
+              </DialogContent>
+            </Dialog>
 
-          <button
-            className="flex items-center gap-x-2 px-5 py-4 bg-white rounded-lg border cursor-pointer hover:bg-gray-50"
-            onClick={handleDelete}
-          >
-            <TrashIcon className="size-5" />
-            <p className="text-sm font-semibold">Delete Workspace</p>
-          </button>
-        </div>
-      </DialogContent>
-    </Dialog>
+            <button
+              className="flex items-center gap-x-2 px-5 py-4 bg-white rounded-lg border cursor-pointer hover:bg-gray-50"
+              onClick={handleDelete}
+            >
+              <TrashIcon className="size-5" />
+              <p className="text-sm font-semibold">Delete Workspace</p>
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <ConfirmDialog />
+      <UpdateDialog />
+    </>
   );
 };
 
