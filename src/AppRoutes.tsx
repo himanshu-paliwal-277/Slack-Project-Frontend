@@ -46,6 +46,11 @@ const AppRoutes: React.FC = () => {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/workspaces/:workspaceId/channels/:channelId"
+          element={<ProtectedRoute>Channel</ProtectedRoute>}
+        />
+
         <Route path="/*" element={<Notfound />} />
       </Routes>
     </Suspense>

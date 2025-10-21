@@ -17,7 +17,7 @@ const Home: React.FC = () => {
     } else {
       navigate(`/workspaces/${workspaces[0]._id}`);
     }
-  }, [isFetching, workspaces]);
+  }, [isFetching, workspaces, navigate]);
 
   return (
     <div className="">

@@ -10,11 +10,13 @@ interface WorkspacePreferencesModalContextType {
     name: string;
     members: { memberId: string; role: string }[];
   } | null;
-  setWorkspace: React.Dispatch<React.SetStateAction<{
-    _id: string;
-    name: string;
-    members: { memberId: string; role: string }[];
-  } | null>>;
+  setWorkspace: React.Dispatch<
+    React.SetStateAction<{
+      _id: string;
+      name: string;
+      members: { memberId: string; role: string }[];
+    } | null>
+  >;
 }
 
 const WorkspacePreferencesModalContext = createContext<WorkspacePreferencesModalContextType | null>(
