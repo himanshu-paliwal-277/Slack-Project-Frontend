@@ -25,7 +25,7 @@ const sideBarItemVariants = cva(
   }
 );
 
-const SidebarItem: React.FC<IProps> = ({
+const SideBarItem: React.FC<IProps> = ({
   label,
   id, // channelId
   icon: Icon,
@@ -43,4 +43,4 @@ const SidebarItem: React.FC<IProps> = ({
   );
 };
 
-export default memo(SidebarItem);
+export default memo(SideBarItem);
