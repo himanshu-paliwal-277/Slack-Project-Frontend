@@ -19,18 +19,21 @@ const WorkspaceNavbar: React.FC = () => {
     }
   }, [workspace, setCurrentWorkspace]);
 
-  if (isFetching) {
-    return <LucideLoader2 className="animate-spin ml-2" />;
-  }
-
   return (
     <nav className="flex items-center h-[50px] justify-center px-3">
       <div className="flex-1" />
       <div>
-        <Button size="sm" className="bg-accent/25 hover:bg-accent/15 w-full justify-start h-7 px-2">
-          <SearchIcon className="size-5 text-white mr-2" />
-          <span className="text-white text-xs">Search in {workspace?.name || 'Workspace'}</span>
-        </Button>
+        {isFetching ? (
+          <LucideLoader2 color="white" className="animate-spin ml-2" />
+        ) : (
+          <Button
+            size="sm"
+            className="bg-accent/25 hover:bg-accent/15 w-full justify-start h-7 px-2"
+          >
+            <SearchIcon className="size-5 text-white mr-2" />
+            <span className="text-white text-xs">Search in {workspace?.name || 'Workspace'}</span>
+          </Button>
+        )}
       </div>
 
       <div className="ml-auto flex-1 flex items-center justify-end">
