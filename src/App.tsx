@@ -12,12 +12,12 @@ const queryClient = new QueryClient();
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <AppContextProvider>
-        <ErrorBoundary>
+      <ErrorBoundary>
+        <AppContextProvider>
           <AppRoutes />
           <Modals />
-        </ErrorBoundary>
-      </AppContextProvider>
+        </AppContextProvider>
+      </ErrorBoundary>
       <Toaster />
     </QueryClientProvider>
   );

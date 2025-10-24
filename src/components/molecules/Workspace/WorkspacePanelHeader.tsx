@@ -16,7 +16,7 @@ interface WorkspacePanelHeaderProps {
   workspace: {
     _id: string;
     name: string;
-    members: { memberId: string; role: string }[];
+    members: { memberId: { _id: string; name: string }; role: string }[];
   } | null;
 }
 
@@ -33,14 +33,25 @@ const WorkspacePanelHeader: React.FC<WorkspacePanelHeaderProps> = ({ workspace }
 
   const { setWorkspace } = useWorkspacePreferencesModal();
 
-  const isLoggedInUserAdminOfWorkspace = !!workspaceMembers?.find(
-    (member) => member.memberId === auth?.user?._id && member.role === 'admin'
+  const isLoggedInUserAdminOfWorkspace = workspaceMembers?.find(
+    (member) => member.memberId._id === auth?.user?._id && member.role === 'admin'
   );
 
   const { setOpenPreferences, setInitialValue } = useWorkspacePreferencesModal();
 
   useEffect(() => {
-    setWorkspace(workspace);
+    if (workspace) {
+      setWorkspace({
+        _id: workspace._id,
+        name: workspace.name,
+        members: workspace.members.map((member) => ({
+          memberId: member.memberId._id,
+          role: member.role,
+        })),
+      });
+    } else {
+      setWorkspace(null);
+    }
   }, [workspace, setWorkspace]);
 
   console.log('isLoggedInUserAdminOfWorkspace is', isLoggedInUserAdminOfWorkspace);

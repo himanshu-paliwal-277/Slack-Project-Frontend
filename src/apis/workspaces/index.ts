@@ -122,3 +122,34 @@ export const updateWorkspaceRequest = async ({
     throw error;
   }
 };
+
+interface AddChannelInput {
+  workspaceId: string;
+  channelName: string;
+  token: string;
+}
+
+export const addChannelToWorkspaceRequest = async ({
+  workspaceId,
+  channelName,
+  token,
+}: AddChannelInput) => {
+  try {
+    const response = await AxiosInstance.put(
+      `/workspaces/${workspaceId}/channels`,
+      { channelName },
+      {
+        headers: {
+          'x-access-token': token,
+        },
+      }
+    );
+    return response?.data?.data;
+  } catch (error) {
+    console.log('Error in adding channel to workspace request', error);
+    if (axios.isAxiosError(error) && error.response) {
+      throw error.response.data;
+    }
+    throw error;
+  }
+};

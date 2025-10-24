@@ -1,21 +1,41 @@
+import { useQueryClient } from '@tanstack/react-query';
 import React, { memo, useState } from 'react';
+import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
+import { useAddChannelToWorkspace } from '@/hooks/apis/workspaces/useAddChannelToWorkspace';
 import { useCreateChannelModal } from '@/hooks/context/useCreateChannelModal';
+import { useCurrentWorkspace } from '@/hooks/context/useCurrentWorkspace';
 
 const CreateChannelModal: React.FC = () => {
   const { openCreateChannelModal, setOpenCreateChannelModal } = useCreateChannelModal();
 
   const [channelName, setChannelName] = useState('');
 
+  const queryClient = useQueryClient();
+
+  const { addChannelToWorkspaceMutation } = useAddChannelToWorkspace();
+
+  const { currentWorkspace } = useCurrentWorkspace();
+
   function handleClose() {
     setOpenCreateChannelModal(false);
   }
 
-  function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    await addChannelToWorkspaceMutation({
+      workspaceId: currentWorkspace?._id as string,
+      channelName: channelName,
+    });
+
+    toast('Channel created successfully');
+
+    queryClient.invalidateQueries({ queryKey: [`fetchWorkspaceById-${currentWorkspace?._id}`] });
+
+    handleClose();
   }
 
   return (
