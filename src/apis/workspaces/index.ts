@@ -179,3 +179,60 @@ export const resetJoinCodeRequest = async ({ workspaceId, token }: ResetJoinCode
     throw error;
   }
 };
+
+interface AddMemberInput {
+  workspaceId: string;
+  token: string;
+}
+
+export const addMemberToWorkspaceRequest = async ({ workspaceId, token }: AddMemberInput) => {
+  try {
+    const response = await AxiosInstance.put(
+      `/workspaces/${workspaceId}/members`,
+      {},
+      {
+        headers: {
+          'x-access-token': token,
+        },
+      }
+    );
+    return response?.data?.data;
+  } catch (error) {
+    console.log('Error in adding member to workspace request', error);
+    if (axios.isAxiosError(error) && error.response) {
+      throw error.response.data;
+    }
+    throw error;
+  }
+};
+
+interface JoinWorkspaceInput {
+  workspaceId: string;
+  joinCode: string;
+  token: string;
+}
+
+export const joinWorkspaceRequest = async ({
+  workspaceId,
+  joinCode,
+  token,
+}: JoinWorkspaceInput) => {
+  try {
+    const response = await AxiosInstance.put(
+      `/workspaces/${workspaceId}/join`,
+      { joinCode },
+      {
+        headers: {
+          'x-access-token': token,
+        },
+      }
+    );
+    return response?.data?.data;
+  } catch (error) {
+    console.log('Error in joining workspace request', error);
+    if (axios.isAxiosError(error) && error.response) {
+      throw error.response.data;
+    }
+    throw error;
+  }
+};
