@@ -34,8 +34,8 @@ const UserButton: React.FC = () => {
       <DropdownMenuTrigger className="outline-none relative">
         <Avatar className="size-12 hover:opacity-65 transition bg-gray-200">
           <AvatarImage src={auth?.user?.avatar} />
-          {auth?.user?.username && (
-            <AvatarFallback>{auth?.user?.username[0].toUpperCase()}</AvatarFallback>
+          {auth?.user?.userName && (
+            <AvatarFallback>{auth?.user?.userName[0].toUpperCase()}</AvatarFallback>
           )}
         </Avatar>
       </DropdownMenuTrigger>

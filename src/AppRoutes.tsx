@@ -39,11 +39,11 @@ const AppRoutes: React.FC = () => {
         <Route path="/workspaces/join/:workspaceId" element={<JoinPage />} />
 
         {/* Protected Routes - Workspace Layout */}
-        <Route path="/" element={<WorkspaceLayout />}>
-          <Route element={<ProtectedRoute />}>
-            {/* Home/Dashboard */}
-            <Route index element={<Home />} />
+        <Route element={<ProtectedRoute />}>
+          {/* Home */}
+          <Route index element={<Home />} />
 
+          <Route path="/" element={<WorkspaceLayout />}>
             {/* Workspace Routes */}
             <Route path="workspaces/:workspaceId" element={'workspace'} />
 

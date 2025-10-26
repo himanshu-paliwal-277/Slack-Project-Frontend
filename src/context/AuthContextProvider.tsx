@@ -8,7 +8,7 @@ interface IProps {
 interface User {
   avatar: string;
   email: string;
-  username?: string;
+  userName?: string;
   _id: string;
 }
 

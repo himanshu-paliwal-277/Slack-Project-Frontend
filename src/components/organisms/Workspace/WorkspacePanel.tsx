@@ -74,11 +74,11 @@ const WorkspacePanel: React.FC = () => {
 
       <WorkspacePanelSection label="Direct messages" onIconClick={() => {}}>
         {workspace?.members?.map(
-          (item: { memberId: { _id: string; username: string; avatar: string } }) => {
+          (item: { memberId: { _id: string; userName: string; avatar: string }; role: string }) => {
             return (
               <UserItem
                 key={item.memberId._id}
-                label={item.memberId.username}
+                label={`${item.memberId.userName} ${item.role === 'admin' ? '(Admin)' : ''}`}
                 id={item.memberId._id}
                 image={item.memberId.avatar}
               />
