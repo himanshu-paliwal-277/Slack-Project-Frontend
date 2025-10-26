@@ -58,12 +58,12 @@ const WorkspacePanelHeader: React.FC<WorkspacePanelHeaderProps> = ({ workspace }
     <>
       <div className="flex items-center justify-between px-4 py-3 gap-0.5">
         <DropdownMenu>
-          <DropdownMenuTrigger className="rounded-sm bg-transparent hover:bg-accent/10 text-accent flex items-center gap-2 font-semibold text-lg w-auto p-1.5 overflow-hidden">
+          <DropdownMenuTrigger className="rounded-sm cursor-pointer bg-transparent hover:bg-accent/10 text-accent flex items-center gap-2 font-semibold text-lg w-auto px-2 py-[2px] overflow-hidden">
             {/* <Button
             variant="transparent"
             className="font-semibold text-lg w-auto p-1.5 overflow-hidden"
           > */}
-            <span className="truncate">{workspace?.name}</span>
+            <span className="truncate font-bold">{workspace?.name}</span>
             <ChevronDownIcon className="size-5 ml-1" />
             {/* </Button> */}
           </DropdownMenuTrigger>
