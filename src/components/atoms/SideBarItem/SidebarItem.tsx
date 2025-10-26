@@ -34,7 +34,12 @@ const SideBarItem: React.FC<IProps> = ({
   const { workspaceId } = useParams();
 
   return (
-    <Button variant="transparent" size="sm" className={cn(sideBarItemVariants({ variant }))}>
+    <Button
+      variant="transparent"
+      size="sm"
+      className={cn(sideBarItemVariants({ variant }))}
+      asChild
+    >
       <Link className="flex items-center gap-1.5" to={`/workspaces/${workspaceId}/channels/${id}`}>
         <Icon className="size-3.5 mr-1" />
         <span className="text-sm">{label}</span>
