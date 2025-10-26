@@ -9,6 +9,7 @@ import React, { memo } from 'react';
 import { useParams } from 'react-router-dom';
 
 import SideBarItem from '@/components/atoms/SideBarItem/SideBarItem';
+import UserItem from '@/components/atoms/UserItem/UserItem';
 import WorkspacePanelHeader from '@/components/molecules/Workspace/WorkspacePanelHeader';
 import WorkspacePanelSection from '@/components/molecules/Workspace/WorkspacePanelSection';
 import { useGetWorkspaceById } from '@/hooks/apis/workspaces/useGetWorkspaceById';
@@ -69,6 +70,21 @@ const WorkspacePanel: React.FC = () => {
             />
           );
         })}
+      </WorkspacePanelSection>
+
+      <WorkspacePanelSection label="Direct messages" onIconClick={() => {}}>
+        {workspace?.members?.map(
+          (item: { memberId: { _id: string; username: string; avatar: string } }) => {
+            return (
+              <UserItem
+                key={item.memberId._id}
+                label={item.memberId.username}
+                id={item.memberId._id}
+                image={item.memberId.avatar}
+              />
+            );
+          }
+        )}
       </WorkspacePanelSection>
     </div>
   );

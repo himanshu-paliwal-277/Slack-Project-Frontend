@@ -8,7 +8,9 @@ import SignupContainer from './components/organisms/Auth/SignupContainer';
 import Auth from './pages/Auth/Auth';
 import Home from './pages/Home/Home';
 import { Notfound } from './pages/NotFound/NotFound';
+import Channel from './pages/Workspace/Channel/Channel';
 import JoinPage from './pages/Workspace/JoinPage';
+import Members from './pages/Workspace/Members/Members';
 import WorkspaceLayout from './pages/Workspace/WorkspaceLayout';
 
 const AppRoutes: React.FC = () => {
@@ -46,7 +48,10 @@ const AppRoutes: React.FC = () => {
             <Route path="workspaces/:workspaceId" element={'workspace'} />
 
             {/* Channel Routes */}
-            <Route path="workspaces/:workspaceId/channels/:channelId" element={'Channel'} />
+            <Route path="workspaces/:workspaceId/channels/:channelId" element={<Channel />} />
+
+            {/* Members Routes */}
+            <Route path="workspaces/:workspaceId/members/:memberId" element={<Members />} />
           </Route>
         </Route>
 
