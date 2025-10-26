@@ -8,10 +8,10 @@ import {
 import React, { memo } from 'react';
 import { useParams } from 'react-router-dom';
 
-import SideBarItem from '@/components/atoms/SideBarItem/SideBarItem';
 import UserItem from '@/components/atoms/UserItem/UserItem';
 import WorkspacePanelHeader from '@/components/molecules/Workspace/WorkspacePanelHeader';
 import WorkspacePanelSection from '@/components/molecules/Workspace/WorkspacePanelSection';
+import SideBarItem from '@/components/SideBarItem/SideBarItem';
 import { useGetWorkspaceById } from '@/hooks/apis/workspaces/useGetWorkspaceById';
 import { useCreateChannelModal } from '@/hooks/context/useCreateChannelModal';
 
