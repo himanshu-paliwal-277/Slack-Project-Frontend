@@ -1,14 +1,10 @@
 import { LucideLoader2 } from 'lucide-react';
 import React, { memo } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 
 import { useAuth } from '@/hooks/context/useAuth';
 
-interface IProps {
-  children: React.ReactNode;
-}
-
-const ProtectedRoute: React.FC<IProps> = ({ children }) => {
+const ProtectedRoute: React.FC = () => {
   const { auth } = useAuth();
 
   if (auth.isLoading) {
@@ -23,7 +19,7 @@ const ProtectedRoute: React.FC<IProps> = ({ children }) => {
     return <Navigate to="/auth/signin" />;
   }
 
-  return children;
+  return <Outlet />;
 };
 
 export default memo(ProtectedRoute);

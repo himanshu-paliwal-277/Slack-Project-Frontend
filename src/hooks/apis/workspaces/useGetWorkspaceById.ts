@@ -14,6 +14,8 @@ export const useGetWorkspaceById = (id: string) => {
     queryFn: () => fetchWorkspaceDetailsRequest(id, auth?.token as string),
     queryKey: [`fetchWorkspaceById-${id}`],
     staleTime: 30000,
+    refetchOnWindowFocus: false,
+    refetchOnMount: true,
   });
 
   return {

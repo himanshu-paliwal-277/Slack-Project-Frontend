@@ -1,15 +1,12 @@
 import React, { memo } from 'react';
+import { Outlet } from 'react-router-dom';
 
 import WorkspaceNavbar from '@/components/organisms/Workspace/WorkspaceNavbar';
 import WorkspacePanel from '@/components/organisms/Workspace/WorkspacePanel';
 import WorkspaceSidebar from '@/components/organisms/Workspace/WorkspaceSidebar';
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
 
-interface IProps {
-  children: React.ReactNode;
-}
-
-const WorkspaceLayout: React.FC<IProps> = ({ children }) => {
+const WorkspaceLayout: React.FC = () => {
   return (
     <div className="h-[100vh] bg-[#3b0d3c]">
       <WorkspaceNavbar />
@@ -26,7 +23,7 @@ const WorkspaceLayout: React.FC<IProps> = ({ children }) => {
             </ResizablePanel>
             <ResizableHandle withHandle />
             <ResizablePanel className="bg-white" minSize={20}>
-              {children}
+              <Outlet />
             </ResizablePanel>
           </ResizablePanelGroup>
         </div>

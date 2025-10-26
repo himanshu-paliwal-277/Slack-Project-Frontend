@@ -15,14 +15,7 @@ const AppRoutes: React.FC = () => {
   return (
     <Suspense fallback={<LoadingFallback />}>
       <Routes>
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute>
-              <Home />
-            </ProtectedRoute>
-          }
-        />
+        {/* Public Routes - Authentication */}
         <Route
           path="/auth/signup"
           element={
@@ -39,21 +32,26 @@ const AppRoutes: React.FC = () => {
             </Auth>
           }
         />
-        <Route
-          path="/workspaces/:workspaceId"
-          element={
-            <ProtectedRoute>
-              <WorkspaceLayout>Workspace</WorkspaceLayout>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/workspaces/:workspaceId/channels/:channelId"
-          element={<ProtectedRoute>Channel</ProtectedRoute>}
-        />
+
+        {/* Public Routes - Workspace Join */}
         <Route path="/workspaces/join/:workspaceId" element={<JoinPage />} />
 
-        <Route path="/*" element={<Notfound />} />
+        {/* Protected Routes - Workspace Layout */}
+        <Route path="/" element={<WorkspaceLayout />}>
+          <Route element={<ProtectedRoute />}>
+            {/* Home/Dashboard */}
+            <Route index element={<Home />} />
+
+            {/* Workspace Routes */}
+            <Route path="workspaces/:workspaceId" element={'workspace'} />
+
+            {/* Channel Routes */}
+            <Route path="workspaces/:workspaceId/channels/:channelId" element={'Channel'} />
+          </Route>
+        </Route>
+
+        {/* Fallback Route - 404 Not Found */}
+        <Route path="*" element={<Notfound />} />
       </Routes>
     </Suspense>
   );
