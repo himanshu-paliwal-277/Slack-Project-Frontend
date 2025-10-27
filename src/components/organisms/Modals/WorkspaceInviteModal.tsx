@@ -1,5 +1,5 @@
-import { CopyIcon, RefreshCcwIcon } from 'lucide-react';
-import React, { memo } from 'react';
+import { CopyCheck, CopyIcon, RefreshCcwIcon } from 'lucide-react';
+import React, { memo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 
@@ -29,12 +29,15 @@ const WorkspaceInviteModal: React.FC<WorkspaceInviteModalProps> = ({
   workspaceId,
 }) => {
   const { resetJoinCodeMutation } = useResetJoinCode(workspaceId);
+  const [isCopied, setIsCopied] = useState(false);
 
   async function handleCopy() {
-    // const inviteLink = `${window.location.origin}/join/${joinCode}`;
-    // await navigator.clipboard.writeText(inviteLink);
     await navigator.clipboard.writeText(joinCode);
     toast('Link copied to clipboard');
+    setIsCopied(true);
+    setTimeout(() => {
+      setIsCopied(false);
+    }, 1200);
   }
 
   async function handleResetCode() {
@@ -45,6 +48,7 @@ const WorkspaceInviteModal: React.FC<WorkspaceInviteModalProps> = ({
       console.log('Error in resetting join code', error);
     }
   }
+
   return (
     <Dialog open={openInviteModal} onOpenChange={setOpenInviteModal}>
       <DialogContent>
@@ -58,11 +62,14 @@ const WorkspaceInviteModal: React.FC<WorkspaceInviteModalProps> = ({
         <div className="flex flex-col items-center justify-center py-10 gap-y-4">
           <p className="font-bold text-4xl uppercase">{joinCode}</p>
           <Button size="sm" variant="ghost" onClick={handleCopy}>
-            Copy Code
-            <CopyIcon className="size-4 ml-2" />
+            <span className="w-20">{isCopied ? 'Copied' : 'Copy Code'}</span>
+            {isCopied ? (
+              <CopyCheck className="size-4 ml-2 text-green-500" />
+            ) : (
+              <CopyIcon className="size-4 ml-2" />
+            )}
           </Button>
 
-          {/* Link to redirect the user in a new tab to the join page */}
           <Link
             to={`/workspaces/join/${workspaceId}`}
             target="_blank"
