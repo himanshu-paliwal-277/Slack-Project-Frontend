@@ -1,4 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
+import { toast } from 'sonner';
 
 import { updateWorkspaceRequest } from '@/apis/workspaces';
 import { useAuth } from '@/hooks/context/useAuth';
@@ -25,9 +26,11 @@ export const useUpdateWorkspace = (workspaceId: string) => {
       }),
     onSuccess: () => {
       console.log('Workspace updated successfully');
+      toast('Workspace updated successfully');
     },
     onError: (error) => {
       console.log('Error in updating workspace', error);
+      toast(error.message || 'Error in updating workspace');
     },
   });
 

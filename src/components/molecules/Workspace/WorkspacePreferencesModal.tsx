@@ -1,8 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { TrashIcon } from 'lucide-react';
+import { LucideLoader2, TrashIcon } from 'lucide-react';
 import React, { memo, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -69,7 +68,6 @@ const WorkspacePreferencesModal: React.FC = () => {
       });
 
       setOpenPreferences(false);
-      toast('Workspace deleted successfully');
 
       // Navigate to the next available workspace or home
       if (updatedWorkspaces && Array.isArray(updatedWorkspaces) && updatedWorkspaces.length > 0) {
@@ -79,7 +77,6 @@ const WorkspacePreferencesModal: React.FC = () => {
       }
     } catch (error) {
       console.log('Error in deleting workspace', error);
-      toast('Error in deleting workspace');
     }
   }
 
@@ -98,10 +95,10 @@ const WorkspacePreferencesModal: React.FC = () => {
       });
       queryClient.invalidateQueries({ queryKey: [`fetchWorkspaceById-${workspace?._id}`] });
       setOpenPreferences(false);
-      toast('Workspace updated successfully');
     } catch (error) {
       console.log('Error in updating workspace', error);
-      toast('Error in updating workspace');
+    } finally {
+      setEditOpen(false);
     }
   }
 
@@ -110,19 +107,20 @@ const WorkspacePreferencesModal: React.FC = () => {
       <Dialog open={openPreferences} onOpenChange={handleClose}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{initialValue}</DialogTitle>
+            {/* <DialogTitle>{initialValue}</DialogTitle> */}
+            <DialogTitle>Preferences</DialogTitle>
           </DialogHeader>
 
-          <div className="px-4 pb-4 flex flex-col gap-y-2">
+          <div className="flex flex-col gap-y-2">
             <Dialog open={editOpen} onOpenChange={setEditOpen}>
               <DialogTrigger>
-                <div className="px-5 py-4 bg-white rounded-lg border cursor-pointer hover:bg-gray-50">
-                  <div className="flex items-center justify-between">
+                <div className="flex justify-between items-center px-5 py-4 bg-white rounded-lg border cursor-pointer hover:bg-gray-50">
+                  <div className="flex flex-col gap-2">
                     <p className="font-semibold text-sm">Workspace Name</p>
-                    <p className="text-sm font-semibold hover:underline">Edit</p>
+                    <p className="text-sm text-start">{initialValue}</p>
                   </div>
 
-                  <p className="text-sm">{initialValue}</p>
+                  <p className="text-sm font-semibold hover:underline">Edit</p>
                 </div>
               </DialogTrigger>
               <DialogContent>
@@ -148,21 +146,26 @@ const WorkspacePreferencesModal: React.FC = () => {
                         Cancel
                       </Button>
                     </DialogClose>
-                    <Button type="submit" disabled={isPending}>
-                      Save
+                    <Button className="w-24" type="submit" disabled={isPending}>
+                      {isPending ? (
+                        <LucideLoader2 color="white" className="animate-spin ml-2" />
+                      ) : (
+                        'Save'
+                      )}
                     </Button>
                   </DialogFooter>
                 </form>
               </DialogContent>
             </Dialog>
 
-            <button
-              className="flex items-center gap-x-2 px-5 py-4 bg-white rounded-lg border cursor-pointer hover:bg-gray-50"
+            <Button
+              // className="flex items-center gap-x-2 px-5 py-4 bg-white rounded-lg border cursor-pointer hover:bg-gray-50"
+              className="bg-red-500 hover:bg-red-400 active:bg-red-600"
               onClick={handleDelete}
             >
               <TrashIcon className="size-5" />
               <p className="text-sm font-semibold">Delete Workspace</p>
-            </button>
+            </Button>
           </div>
         </DialogContent>
       </Dialog>

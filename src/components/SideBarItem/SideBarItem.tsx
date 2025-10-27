@@ -13,7 +13,7 @@ interface IProps {
 }
 
 const sideBarItemVariants = cva(
-  'flex items-center justify-start gap-1.5 font-normal h-7 px-[20px] text-sm overflow-hidden',
+  'flex items-center justify-start gap-1.5 font-normal h-8 !px-[18px] text-sm overflow-hidden rounded-sm',
   {
     variants: {
       variant: {
@@ -40,9 +40,9 @@ const SideBarItem: React.FC<IProps> = ({
       className={cn(sideBarItemVariants({ variant }))}
       asChild
     >
-      <Link className="flex items-center gap-1.5" to={`/workspaces/${workspaceId}/channels/${id}`}>
-        <Icon className="size-3.5 mr-1" />
-        <span className="text-sm">{label}</span>
+      <Link className="flex items-center gap-1" to={`/workspaces/${workspaceId}/channels/${id}`}>
+        <Icon className="size-4 mr-1" />
+        <span className="text-[15px] font-[400]">{label}</span>
       </Link>
     </Button>
   );

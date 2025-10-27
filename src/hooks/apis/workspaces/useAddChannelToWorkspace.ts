@@ -1,4 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
+import { toast } from 'sonner';
 
 import { addChannelToWorkspaceRequest } from '@/apis/workspaces';
 import { useAuth } from '@/hooks/context/useAuth';
@@ -25,9 +26,11 @@ export const useAddChannelToWorkspace = () => {
       }),
     onSuccess: (data) => {
       console.log('Channel added to workspace', data);
+      toast('Channel added successfully');
     },
     onError: (error) => {
       console.log('Error adding channel to workspace', error);
+      toast(error.message || 'Failed to add channel');
     },
   });
 

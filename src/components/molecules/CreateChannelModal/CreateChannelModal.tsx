@@ -1,4 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query';
+import { LucideLoader2 } from 'lucide-react';
 import React, { memo, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -16,26 +17,33 @@ const CreateChannelModal: React.FC = () => {
 
   const queryClient = useQueryClient();
 
-  const { addChannelToWorkspaceMutation } = useAddChannelToWorkspace();
+  const { addChannelToWorkspaceMutation, isPending } = useAddChannelToWorkspace();
 
   const { currentWorkspace } = useCurrentWorkspace();
 
   function handleClose() {
     setOpenCreateChannelModal(false);
+    setTimeout(() => {
+      setChannelName('');
+    }, 2000);
   }
 
   async function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    await addChannelToWorkspaceMutation({
-      workspaceId: currentWorkspace?._id as string,
-      channelName: channelName,
-    });
+    try {
+      await addChannelToWorkspaceMutation({
+        workspaceId: currentWorkspace?._id as string,
+        channelName: channelName,
+      });
 
-    toast('Channel created successfully');
+      toast('Channel created successfully');
 
-    queryClient.invalidateQueries({ queryKey: [`fetchWorkspaceById-${currentWorkspace?._id}`] });
+      queryClient.invalidateQueries({ queryKey: [`fetchWorkspaceById-${currentWorkspace?._id}`] });
 
-    handleClose();
+      handleClose();
+    } catch (error) {
+      console.log('Error = ', error);
+    }
   }
 
   return (
@@ -55,7 +63,13 @@ const CreateChannelModal: React.FC = () => {
           />
 
           <div className="flex justify-end mt-4">
-            <Button>Create Channel</Button>
+            <Button className="w-36" disabled={isPending}>
+              {isPending ? (
+                <LucideLoader2 color="white" className="animate-spin" />
+              ) : (
+                'Create Channel'
+              )}
+            </Button>
           </div>
         </form>
       </DialogContent>
