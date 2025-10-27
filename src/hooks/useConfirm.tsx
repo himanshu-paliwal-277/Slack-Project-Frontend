@@ -46,7 +46,7 @@ export const useConfirm = ({ title, message }: UseConfirmProps): UseConfirmRetur
   const ConfirmDialog = (): React.JSX.Element => {
     return (
       <Dialog open={promise !== null} onOpenChange={handleClose}>
-        <DialogContent>
+        <DialogContent className="w-[420px]">
           <DialogHeader>
             <DialogTitle>{title}</DialogTitle>
             <DialogDescription>{message}</DialogDescription>

@@ -1,4 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query';
+import { LucideLoader2 } from 'lucide-react';
 import React, { memo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -24,6 +25,9 @@ const CreateWorkspaceModal: React.FC = () => {
 
   function handleClose() {
     setOpenCreateWorkspaceModal(false);
+    setTimeout(() => {
+      setWorkspaceName('');
+    }, 2000);
   }
 
   async function handleFormSubmit(e: React.FormEvent) {
@@ -59,7 +63,13 @@ const CreateWorkspaceModal: React.FC = () => {
           />
 
           <div className="flex justify-end mt-5">
-            <Button disabled={isPending}>Create workspace</Button>
+            <Button className="w-42" disabled={isPending}>
+              {isPending ? (
+                <LucideLoader2 color="white" className="animate-spin" />
+              ) : (
+                'Create workspace'
+              )}
+            </Button>
           </div>
         </form>
       </DialogContent>

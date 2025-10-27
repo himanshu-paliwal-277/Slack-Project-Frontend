@@ -36,7 +36,10 @@ const WorkspacePanelSection: React.FC<IProps> = ({ label, children, onIconClick 
         {onIconClick && (
           <Button
             size="sm"
-            onClick={onIconClick}
+            onClick={(e) => {
+              e.stopPropagation();
+              onIconClick();
+            }}
             className="text-[#f9edffcc] hidden group-hover:flex transition opacity ml-auto p-0.5 text-sm size-6 bg-transparent hover:bg-accent/10"
           >
             <PlusIcon className="size-4 text-[#f9edffcc]" />
