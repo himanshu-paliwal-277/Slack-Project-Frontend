@@ -1,18 +1,42 @@
+import { Loader2Icon, TriangleAlertIcon } from 'lucide-react';
 import React, { memo } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { useGetChannelDetails } from '@/hooks/apis/channel/useGetChannelDetails';
+import ChatInput from '@/components/molecules/ChatInput/ChatInput';
+import { useGetChannelById } from '@/hooks/apis/channel/useGetChannelDetails';
 
 const Channel: React.FC = () => {
   const { channelId } = useParams<{ channelId: string }>();
 
-  const { isFetching, channel } = useGetChannelDetails(channelId as string);
+  const { channelDetails, isFetching, isError } = useGetChannelById(channelId || '');
 
-  if (isFetching) return <div>fetching...</div>;
+  if (isFetching) {
+    return (
+      <div className="h-full flex-1 flex items-center justify-center">
+        <Loader2Icon className="size-5 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
 
-  console.log('Channel = ', channel);
+  if (isError) {
+    return (
+      <div className="h-full flex-1 flex flex-col gap-y-2 items-center justify-center">
+        <TriangleAlertIcon className="size-6 text-muted-foreground" />
+        <span className="text-sm text-muted-foreground">Channel Not found</span>
+      </div>
+    );
+  }
 
-  return <div className="">Channel: {channel.name}</div>;
+  return (
+    <div>
+      Channel {channelId}
+      Channel Name: {channelDetails?.name}
+      <div className="flex flex-col h-full">
+        <div className="flex-1" />
+        <ChatInput />
+      </div>
+    </div>
+  );
 };
 
 export default memo(Channel);

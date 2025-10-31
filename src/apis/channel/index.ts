@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import AxiosInstance from '@/config/axiosConfig';
 
-export const getChannelDetailsById = async (channelId: string, token: string) => {
+export const getChannelById = async (channelId: string, token: string) => {
   try {
     const response = await AxiosInstance.get(`/channels/${channelId}`, {
       headers: {
