@@ -1,4 +1,4 @@
-import { CopyCheck, CopyIcon, RefreshCcwIcon } from 'lucide-react';
+import { Check, CopyIcon, RefreshCcwIcon } from 'lucide-react';
 import React, { memo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -64,7 +64,7 @@ const WorkspaceInviteModal: React.FC<WorkspaceInviteModalProps> = ({
           <Button size="sm" variant="ghost" onClick={handleCopy}>
             <span className="w-20">{isCopied ? 'Copied' : 'Copy Code'}</span>
             {isCopied ? (
-              <CopyCheck className="size-4 ml-2 text-green-500" />
+              <Check className="size-4 ml-2 text-green-500" />
             ) : (
               <CopyIcon className="size-4 ml-2" />
             )}

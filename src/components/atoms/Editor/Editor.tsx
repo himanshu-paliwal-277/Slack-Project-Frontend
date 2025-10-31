@@ -1,3 +1,5 @@
+import 'quill/dist/quill.snow.css';
+
 import Quill, { type QuillOptions } from 'quill';
 import React, { memo, useEffect, useRef } from 'react';
 
@@ -10,24 +12,20 @@ interface IProps {
   defaultValue?: string;
 }
 
-const Editor: React.FC<IProps> = ({
-  //   variant = 'create',
-  //   onSubmit,
-  //   onCancel,
-  placeholder,
-  disabled = false,
-  defaultValue = '',
-}) => {
-  //   const [isToolbarVisible, setIsToolbarVisible] = useState(false);
-
+const Editor: React.FC<IProps> = ({ placeholder, disabled = false, defaultValue = '' }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const quillRef = useRef<Quill | null>(null);
 
   useEffect(() => {
     if (!containerRef.current) return;
 
-    const container = containerRef.current;
-    const editorContainer = container.appendChild(container.ownerDocument.createElement('div'));
+    const toolbar = document.createElement('div');
+    toolbar.setAttribute('id', 'toolbar');
+    containerRef.current.appendChild(toolbar);
+
+    const editor = document.createElement('div');
+    editor.setAttribute('id', 'editor');
+    containerRef.current.appendChild(editor);
 
     const options: QuillOptions = {
       theme: 'snow',
@@ -61,7 +59,7 @@ const Editor: React.FC<IProps> = ({
       },
     };
 
-    const quill = new Quill(editorContainer, options);
+    const quill = new Quill(editor, options);
     quillRef.current = quill;
 
     if (defaultValue) {
@@ -73,15 +71,21 @@ const Editor: React.FC<IProps> = ({
     }
 
     return () => {
-      container.innerHTML = ''; // cleanup
+      if (containerRef.current) {
+        containerRef.current.innerHTML = ''; // ✅ Safe cleanup
+      }
     };
   }, [defaultValue, placeholder, disabled]);
 
   return (
     <div className="flex flex-col">
-      <div className="flex flex-col border border-slate-300 rounded-md overflow-hidden focus-within:shadow-sm focus-within:border-slate-400 bg-white transition">
-        <div ref={containerRef} />
-      </div>
+      <div
+        className="flex flex-col border border-slate-300 rounded-md bg-white"
+        ref={containerRef}
+      />
+      <p className="p-2 text-[10px] text-muted-foreground flex justify-end">
+        <strong>Shift + return</strong> &nbsp; to add a new line
+      </p>
     </div>
   );
 };

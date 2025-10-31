@@ -28,7 +28,7 @@ const Channel: React.FC = () => {
   }
 
   return (
-    <div>
+    <div className="flex flex-col h-full">
       Channel {channelId}
       Channel Name: {channelDetails?.name}
       <div className="flex flex-col h-full">
