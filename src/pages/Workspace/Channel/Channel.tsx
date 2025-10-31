@@ -2,6 +2,7 @@ import { Loader2Icon, TriangleAlertIcon } from 'lucide-react';
 import React, { memo } from 'react';
 import { useParams } from 'react-router-dom';
 
+import ChannelHeader from '@/components/molecules/Channel/ChannelHeader';
 import ChatInput from '@/components/molecules/ChatInput/ChatInput';
 import { useGetChannelById } from '@/hooks/apis/channel/useGetChannelDetails';
 
@@ -29,8 +30,7 @@ const Channel: React.FC = () => {
 
   return (
     <div className="flex flex-col h-full">
-      Channel {channelId}
-      Channel Name: {channelDetails?.name}
+      <ChannelHeader name={channelDetails?.name} />
       <div className="flex flex-col h-full">
         <div className="flex-1" />
         <ChatInput />
