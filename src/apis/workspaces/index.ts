@@ -67,7 +67,7 @@ export const fetchWorkspaceDetailsRequest = async (workspaceId: string, token: s
   } catch (error) {
     console.log('Error in fetching workspace details request', error);
     if (axios.isAxiosError(error) && error.response) {
-      throw error.response.data;
+      throw error.response;
     }
     throw error;
   }
