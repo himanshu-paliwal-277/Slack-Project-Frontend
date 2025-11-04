@@ -1,6 +1,6 @@
 import 'quill/dist/quill.snow.css';
 
-import { ImageIcon } from 'lucide-react';
+import { ImageIcon, Send } from 'lucide-react';
 import Quill, { type QuillOptions } from 'quill';
 import React, { memo, useEffect, useRef, useState } from 'react';
 import { PiTextAa } from 'react-icons/pi';
@@ -11,14 +11,19 @@ import Hint from '../Hint/Hint';
 
 interface IProps {
   variant?: 'create' | 'edit';
-  onSubmit?: () => void;
   onCancel?: () => void;
+  onSubmit?: (data: { body: string; image?: File | null }) => void;
   placeholder?: string;
   disabled?: boolean;
   defaultValue?: string;
 }
 
-const Editor: React.FC<IProps> = ({ placeholder, disabled = false, defaultValue = '' }) => {
+const Editor: React.FC<IProps> = ({
+  placeholder,
+  disabled = false,
+  defaultValue = '',
+  onSubmit,
+}) => {
   const [isToolbarVisible, setIsToolbarVisible] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const quillRef = useRef<Quill | null>(null);
@@ -112,6 +117,19 @@ const Editor: React.FC<IProps> = ({ placeholder, disabled = false, defaultValue 
         <Hint label="Image">
           <Button size="iconSm" variant="ghost" disabled={false} onClick={() => {}}>
             <ImageIcon className="size-4" />
+          </Button>
+        </Hint>
+
+        <Hint label="Send Message">
+          <Button
+            size="iconSm"
+            className="ml-auto bg-[#007a6a] hover:bg-[#007a6a]/80 text-white"
+            onClick={() => {
+              onSubmit({ body: JSON.stringify(quillRef.current?.getContents()) });
+            }}
+            disabled={false}
+          >
+            <Send className="size-4" />
           </Button>
         </Hint>
       </div>
