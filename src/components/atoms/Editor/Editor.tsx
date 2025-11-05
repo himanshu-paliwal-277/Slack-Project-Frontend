@@ -12,7 +12,7 @@ import Hint from '../Hint/Hint';
 interface IProps {
   variant?: 'create' | 'edit';
   onCancel?: () => void;
-  onSubmit?: (data: { body: string; image?: File | null }) => void;
+  onSubmit: (data: { body: string; image?: File | null }) => void;
   placeholder?: string;
   disabled?: boolean;
   defaultValue?: string;
@@ -30,7 +30,7 @@ const Editor: React.FC<IProps> = ({
 
   function toggleToolbar() {
     setIsToolbarVisible(!isToolbarVisible);
-    const toolbar = containerRef.current.querySelector('.ql-toolbar');
+    const toolbar = containerRef?.current?.querySelector('.ql-toolbar');
     if (toolbar) {
       toolbar.classList.toggle('hidden');
     }

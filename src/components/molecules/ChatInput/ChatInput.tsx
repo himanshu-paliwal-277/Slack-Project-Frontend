@@ -3,7 +3,7 @@ import React, { memo } from 'react';
 import Editor from '@/components/atoms/Editor/Editor';
 
 const ChatInput: React.FC = () => {
-  async function handleSubmit({ body }) {
+  async function handleSubmit({ body }: { body: string }) {
     console.log(body);
   }
 
