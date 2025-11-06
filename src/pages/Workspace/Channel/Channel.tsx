@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 
 import ChannelHeader from '@/components/molecules/Channel/ChannelHeader';
 import ChatInput from '@/components/molecules/ChatInput/ChatInput';
+import Message from '@/components/molecules/Message/Message';
 import { useGetChannelById } from '@/hooks/apis/channel/useGetChannelDetails';
 import { useSocket } from '@/hooks/context/useSocket';
 
@@ -41,7 +42,17 @@ const Channel: React.FC = () => {
     <div className="flex flex-col h-full">
       <ChannelHeader name={channelDetails?.name} />
       <div className="flex flex-col h-full">
-        <div className="flex-1" />
+        <div className="flex-1">
+          {channelDetails.messages.map((message, index) => (
+            <Message
+              key={index ** 2}
+              authorImage={message.senderId.avatar}
+              authorName={message.senderId.userName}
+              createdAt={message.createdAt}
+              body={message.body}
+            />
+          ))}
+        </div>
         <ChatInput />
       </div>
     </div>
