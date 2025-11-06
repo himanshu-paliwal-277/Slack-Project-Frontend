@@ -1,6 +1,6 @@
 import { PlusIcon } from 'lucide-react';
 import React, { memo, useState } from 'react';
-import { FaCaretDown, FaCaretRight } from 'react-icons/fa';
+import { FaCaretRight } from 'react-icons/fa';
 
 import { Button } from '@/components/ui/button';
 
@@ -23,7 +23,8 @@ const WorkspacePanelSection: React.FC<IProps> = ({ label, children, onIconClick 
           variant="transparent"
           className="p-0.5 text-sm size-6 text-[#f9edffcc] !bg-transparent"
         >
-          {open ? <FaCaretDown className="size-4" /> : <FaCaretRight className="size-4" />}
+          {/* {open ? <FaCaretDown className="size-4" /> : <FaCaretRight className="size-4" />} */}
+          <FaCaretRight className={`size-4 ${open ? 'rotate-90' : ''} duration-100`} />
         </Button>
         <Button
           variant="transparent"

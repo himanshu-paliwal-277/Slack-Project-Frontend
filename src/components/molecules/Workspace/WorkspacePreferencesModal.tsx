@@ -17,7 +17,7 @@ import { Input } from '@/components/ui/input';
 import { useDeleteWorkspace } from '@/hooks/apis/workspaces/useDeleteWorkspace';
 import { useUpdateWorkspace } from '@/hooks/apis/workspaces/useUpdateWorkspace';
 import { useWorkspacePreferencesModal } from '@/hooks/context/useWorkspacePreferencesModals';
-import { useConfirm } from '@/hooks/useConfirm';
+import { useConfirm } from '@/hooks/context/useConfirm';
 
 const WorkspacePreferencesModal: React.FC = () => {
   const queryClient = useQueryClient();

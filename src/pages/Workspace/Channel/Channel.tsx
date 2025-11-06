@@ -1,9 +1,62 @@
-import React, { memo } from 'react';
+import { Loader2Icon, TriangleAlertIcon } from 'lucide-react';
+import React, { memo, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+
+import ChannelHeader from '@/components/molecules/Channel/ChannelHeader';
+import ChatInput from '@/components/molecules/ChatInput/ChatInput';
+import Message from '@/components/molecules/Message/Message';
+import { useGetChannelById } from '@/hooks/apis/channel/useGetChannelDetails';
+import { useSocket } from '@/hooks/context/useSocket';
 
 const Channel: React.FC = () => {
   const { channelId } = useParams<{ channelId: string }>();
-  return <div className="">Channel: {channelId}</div>;
+
+  const { channelDetails, isFetching, isError } = useGetChannelById(channelId || '');
+
+  const { joinChannel } = useSocket();
+
+  useEffect(() => {
+    if (!isFetching && !isError) {
+      joinChannel(channelId || '');
+    }
+  }, [isFetching, isError, joinChannel, channelId]);
+
+  if (isFetching) {
+    return (
+      <div className="h-full flex-1 flex items-center justify-center">
+        <Loader2Icon className="size-5 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="h-full flex-1 flex flex-col gap-y-2 items-center justify-center">
+        <TriangleAlertIcon className="size-6 text-muted-foreground" />
+        <span className="text-sm text-muted-foreground">Channel Not found</span>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col h-full">
+      <ChannelHeader name={channelDetails?.name} />
+      <div className="flex flex-col h-full">
+        <div className="flex-1">
+          {channelDetails.messages.map((message, index) => (
+            <Message
+              key={index ** 2}
+              authorImage={message.senderId.avatar}
+              authorName={message.senderId.userName}
+              createdAt={message.createdAt}
+              body={message.body}
+            />
+          ))}
+        </div>
+        <ChatInput />
+      </div>
+    </div>
+  );
 };
 
 export default memo(Channel);
