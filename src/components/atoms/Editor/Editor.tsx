@@ -25,6 +25,8 @@ const Editor: React.FC<IProps> = ({
   onSubmit,
 }) => {
   const [isToolbarVisible, setIsToolbarVisible] = useState(false);
+  const [isSendDisabled, setIsSendDisabled] = useState(true); // ✅ added
+
   const containerRef = useRef<HTMLDivElement | null>(null);
   const quillRef = useRef<Quill | null>(null);
 
@@ -92,50 +94,59 @@ const Editor: React.FC<IProps> = ({
     const quill = new Quill(editor, options);
     quillRef.current = quill;
 
+    // ✅ listen for changes to enable/disable button
+    const handleTextChange = () => {
+      const text = quill.getText().trim();
+      setIsSendDisabled(text.length === 0);
+    };
+    quill.on('text-change', handleTextChange);
+    handleTextChange();
+
     if (defaultValue) quill.clipboard.dangerouslyPasteHTML(defaultValue);
     if (disabled) quill.enable(false);
 
     return () => {
+      quill.off('text-change', handleTextChange);
       if (containerRef.current) containerRef.current.innerHTML = '';
     };
   }, [defaultValue, placeholder, disabled, onSubmit]);
 
   return (
     <div className="flex flex-col">
-      <div
-        className="flex flex-col border border-slate-300 rounded-md bg-white"
-        ref={containerRef}
-      />
-      <div className="flex px-2 pb-2 z-[5]">
-        <Hint
-          label={!isToolbarVisible ? 'Show toolbar' : 'Hide toolbar'}
-          side="bottom"
-          align="center"
-        >
-          <Button size="iconSm" variant="ghost" onClick={toggleToolbar}>
-            <PiTextAa className="size-4" />
-          </Button>
-        </Hint>
-
-        <Hint label="Image">
-          <Button size="iconSm" variant="ghost" onClick={() => {}}>
-            <ImageIcon className="size-4" />
-          </Button>
-        </Hint>
-
-        <Hint label="Send Message">
-          <Button
-            size="iconSm"
-            className="ml-auto bg-[#007a6a] hover:bg-[#007a6a]/80 text-white"
-            onClick={() => {
-              const messageContent = JSON.stringify(quillRef.current?.getContents());
-              onSubmit({ body: messageContent });
-              quillRef.current?.setText('');
-            }}
+      <div className="flex flex-col border border-slate-300 rounded-md bg-white overflow-hidden">
+        <div ref={containerRef} />
+        <div className="flex px-2 pb-2 z-[5]">
+          <Hint
+            label={!isToolbarVisible ? 'Show toolbar' : 'Hide toolbar'}
+            side="bottom"
+            align="center"
           >
-            <Send className="size-4" />
-          </Button>
-        </Hint>
+            <Button size="iconSm" variant="ghost" onClick={toggleToolbar}>
+              <PiTextAa className="size-4" />
+            </Button>
+          </Hint>
+
+          <Hint label="Image">
+            <Button size="iconSm" variant="ghost" onClick={() => {}}>
+              <ImageIcon className="size-4" />
+            </Button>
+          </Hint>
+
+          <Hint label="Send Message">
+            <Button
+              size="iconSm"
+              className="ml-auto bg-[#007a6a] hover:bg-[#007a6a]/80 text-white"
+              disabled={isSendDisabled} // ✅ fixed logic
+              onClick={() => {
+                const messageContent = JSON.stringify(quillRef.current?.getContents());
+                onSubmit({ body: messageContent });
+                quillRef.current?.setText('');
+              }}
+            >
+              <Send className="size-4" />
+            </Button>
+          </Hint>
+        </div>
       </div>
       <p className="p-2 text-[10px] text-muted-foreground flex justify-end">
         <strong>Shift + return</strong> &nbsp; to add a new line
