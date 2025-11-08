@@ -31,9 +31,7 @@ const Editor: React.FC<IProps> = ({
   function toggleToolbar() {
     setIsToolbarVisible(!isToolbarVisible);
     const toolbar = containerRef?.current?.querySelector('.ql-toolbar');
-    if (toolbar) {
-      toolbar.classList.toggle('hidden');
-    }
+    if (toolbar) toolbar.classList.toggle('hidden');
   }
 
   useEffect(() => {
@@ -59,19 +57,31 @@ const Editor: React.FC<IProps> = ({
         ],
         keyboard: {
           bindings: {
+            // ✅ Send message on Enter
             enter: {
               key: 'Enter',
               handler: () => {
-                return;
+                const quill = quillRef.current;
+                if (!quill) return false;
+
+                const text = quill.getText().trim();
+                if (!text) return false; // prevent empty submit
+
+                const messageContent = JSON.stringify(quill.getContents());
+                onSubmit({ body: messageContent });
+                quill.setText(''); // clear editor
+                return false; // prevent default behavior
               },
             },
+            // ✅ Add new line on Shift + Enter
             shift_enter: {
               key: 'Enter',
               shiftKey: true,
               handler: () => {
                 const quill = quillRef.current;
                 if (!quill) return;
-                quill.insertText(quill.getSelection()?.index || 0, '\n');
+                const index = quill.getSelection()?.index || 0;
+                quill.insertText(index, '\n');
               },
             },
           },
@@ -82,20 +92,13 @@ const Editor: React.FC<IProps> = ({
     const quill = new Quill(editor, options);
     quillRef.current = quill;
 
-    if (defaultValue) {
-      quill.clipboard.dangerouslyPasteHTML(defaultValue);
-    }
-
-    if (disabled) {
-      quill.enable(false);
-    }
+    if (defaultValue) quill.clipboard.dangerouslyPasteHTML(defaultValue);
+    if (disabled) quill.enable(false);
 
     return () => {
-      if (containerRef.current) {
-        containerRef.current.innerHTML = ''; // ✅ Safe cleanup
-      }
+      if (containerRef.current) containerRef.current.innerHTML = '';
     };
-  }, [defaultValue, placeholder, disabled]);
+  }, [defaultValue, placeholder, disabled, onSubmit]);
 
   return (
     <div className="flex flex-col">
@@ -109,13 +112,13 @@ const Editor: React.FC<IProps> = ({
           side="bottom"
           align="center"
         >
-          <Button size="iconSm" variant="ghost" disabled={false} onClick={toggleToolbar}>
+          <Button size="iconSm" variant="ghost" onClick={toggleToolbar}>
             <PiTextAa className="size-4" />
           </Button>
         </Hint>
 
         <Hint label="Image">
-          <Button size="iconSm" variant="ghost" disabled={false} onClick={() => {}}>
+          <Button size="iconSm" variant="ghost" onClick={() => {}}>
             <ImageIcon className="size-4" />
           </Button>
         </Hint>
@@ -129,7 +132,6 @@ const Editor: React.FC<IProps> = ({
               onSubmit({ body: messageContent });
               quillRef.current?.setText('');
             }}
-            disabled={false}
           >
             <Send className="size-4" />
           </Button>

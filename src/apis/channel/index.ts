@@ -18,3 +18,32 @@ export const getChannelById = async (channelId: string, token: string) => {
     throw error;
   }
 };
+
+interface GetPaginatedMessagesInput {
+  channelId: string;
+  limit?: number;
+  offset?: number;
+  token: string;
+}
+
+export const getPaginatedMessages = async ({
+  channelId,
+  limit,
+  offset,
+  token,
+}: GetPaginatedMessagesInput) => {
+  try {
+    const response = await AxiosInstance.get(`/messages/${channelId}`, {
+      params: {
+        limit: limit || 20,
+        offset: offset || 0,
+      },
+      headers: {
+        'x-access-token': token,
+      },
+    });
+    return response?.data?.data;
+  } catch (error) {
+    console.log('Error in getPaginatedMessagesRequest', error);
+  }
+};

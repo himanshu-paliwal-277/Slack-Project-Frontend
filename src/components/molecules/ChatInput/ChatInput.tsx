@@ -1,4 +1,3 @@
-import { useQueryClient } from '@tanstack/react-query';
 import React, { memo } from 'react';
 
 import Editor from '@/components/atoms/Editor/Editor';
@@ -10,7 +9,6 @@ const ChatInput: React.FC = () => {
   const { socket, currentChannel } = useSocket();
   const { auth } = useAuth();
   const { currentWorkspace } = useCurrentWorkspace();
-  const queryClient = useQueryClient();
 
   async function handleSubmit({ body }: { body: string }) {
     console.log(body);
@@ -18,6 +16,7 @@ const ChatInput: React.FC = () => {
       'NewMessage',
       {
         channelId: currentChannel,
+        roomId: currentChannel,
         body,
         senderId: auth?.user?._id,
         workspaceId: currentWorkspace?._id,
@@ -26,7 +25,6 @@ const ChatInput: React.FC = () => {
         console.log('Message sent', data);
       }
     );
-    queryClient.invalidateQueries({ queryKey: [`getChannelById`] });
   }
 
   return (

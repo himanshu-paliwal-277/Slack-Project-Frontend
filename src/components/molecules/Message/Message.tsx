@@ -18,7 +18,7 @@ const Message: React.FC<IProps> = ({ authorImage, authorName, createdAt, body })
           <Avatar>
             <AvatarImage className="rounded-md" src={authorImage} />
             <AvatarFallback className="rounded-md bg-sky-500 text-white text-sm">
-              {authorName.charAt(0).toUpperCase()}
+              {authorName?.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
         </button>
@@ -27,7 +27,9 @@ const Message: React.FC<IProps> = ({ authorImage, authorName, createdAt, body })
           <div className="text-xs">
             <button className="font-bold text-primary hover:underline">{authorName}</button>
             <span>&nbsp;&nbsp;</span>
-            <button className="text-xs text-muted-foreground hover:underline">{createdAt}</button>
+            <button className="text-xs text-muted-foreground hover:underline">
+              {createdAt || 'Just now'}
+            </button>
           </div>
 
           <MessageRenderer value={body} />
