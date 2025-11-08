@@ -13,80 +13,62 @@ import { useSocket } from '@/hooks/context/useSocket';
 
 const Channel: React.FC = () => {
   const { channelId } = useParams<{ channelId: string }>();
-
   const queryClient = useQueryClient();
 
   const { channelDetails, isFetching, isError } = useGetChannelById(channelId || '');
   const { setMessageList, messageList } = useChannelMessages();
-
   const { joinChannel } = useSocket();
-
   const { messages, isSuccess } = useGetChannelMessages(channelId as string);
 
   const messageContainerListRef = useRef<HTMLDivElement>(null);
 
+  // Auto scroll to bottom when messageList updates
   useEffect(() => {
-    console.log('messageList change');
     if (messageContainerListRef.current) {
-      console.log('scrollTo bottom');
       const el = messageContainerListRef.current;
-      el.scrollTo({
-        top: el.scrollHeight,
-        // behavior: 'smooth', // or "auto"
-      });
+      el.scrollTo({ top: el.scrollHeight });
     }
   }, [messageList]);
 
+  // Refetch messages when channel changes
   useEffect(() => {
-    console.log('ChannelId', channelId);
-    queryClient.invalidateQueries({ queryKey: [`getPaginatedMessages`] });
+    queryClient.invalidateQueries({ queryKey: ['getPaginatedMessages'] });
   }, [channelId]);
 
+  // Join channel socket only when data is ready
   useEffect(() => {
-    if (!isFetching && !isError) {
-      joinChannel(channelId || '');
+    if (!isFetching && !isError && channelId) {
+      joinChannel(channelId);
     }
   }, [isFetching, isError, joinChannel, channelId]);
 
+  // Update messages after fetch success
   useEffect(() => {
-    if (isSuccess) {
-      console.log('Channel Messages fetched');
-      setMessageList(messages?.reverse());
+    if (isSuccess && messages) {
+      setMessageList(messages.reverse());
     }
   }, [isSuccess, messages, setMessageList, channelId]);
-
-  // if (isFetching) {
-  //   return (
-  //     <div className="h-full flex-1 flex items-center justify-center">
-  //       <Loader2Icon className="size-5 animate-spin text-muted-foreground" />
-  //     </div>
-  //   );
-  // }
-
-  // if (isError) {
-  //   return (
-  //     <div className="h-full flex-1 flex flex-col gap-y-2 items-center justify-center">
-  //       <TriangleAlertIcon className="size-6 text-muted-foreground" />
-  //       <span className="text-sm text-muted-foreground">Channel Not found</span>
-  //     </div>
-  //   );
-  // }
 
   return (
     <div className="flex flex-col h-full">
       <ChannelHeader name={channelDetails?.name} />
-      <div className="flex flex-col h-[calc(100%-50px)]">
+      <div className="flex flex-col h-[calc(100%-50px)] relative">
+        {/* Loader */}
         {isFetching && (
-          <div className="h-full flex-1 flex items-center justify-center">
+          <div className="absolute inset-0 flex items-center justify-center bg-background z-10">
             <Loader2Icon className="size-7 animate-spin text-muted-foreground" />
           </div>
         )}
+
+        {/* Error */}
         {isError && (
-          <div className="h-full flex-1 flex flex-col gap-y-2 items-center justify-center">
+          <div className="absolute inset-0 flex flex-col gap-y-2 items-center justify-center bg-background z-10">
             <TriangleAlertIcon className="size-6 text-muted-foreground" />
-            <span className="text-sm text-muted-foreground">Channel Not found</span>
+            <span className="text-sm text-muted-foreground">Channel Not Found</span>
           </div>
         )}
+
+        {/* Messages */}
         {!isFetching && !isError && (
           <div
             ref={messageContainerListRef}
@@ -98,22 +80,19 @@ const Channel: React.FC = () => {
                 <p className="text-gray-500">No messages</p>
               </div>
             ) : (
-              messageList?.map(
-                (message: { _id: string; body: string; senderId: any; createdAt: string }) => {
-                  return (
-                    <Message
-                      key={message._id}
-                      body={message.body}
-                      authorImage={message.senderId?.avatar}
-                      authorName={message.senderId?.userName}
-                      createdAt={message.createdAt}
-                    />
-                  );
-                }
-              )
+              messageList?.map((message) => (
+                <Message
+                  key={message._id}
+                  body={message.body}
+                  authorImage={message.senderId?.avatar}
+                  authorName={message.senderId?.userName}
+                  createdAt={message.createdAt}
+                />
+              ))
             )}
           </div>
         )}
+
         <ChatInput />
       </div>
     </div>

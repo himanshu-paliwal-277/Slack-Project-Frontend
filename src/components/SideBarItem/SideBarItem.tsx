@@ -10,6 +10,7 @@ interface IProps {
   id: string;
   icon: React.ElementType;
   variant: 'default' | 'active';
+  handleClick?: () => void;
 }
 
 const sideBarItemVariants = cva(
@@ -30,6 +31,7 @@ const SideBarItem: React.FC<IProps> = ({
   id, // channelId
   icon: Icon,
   variant,
+  handleClick,
 }) => {
   const { workspaceId } = useParams();
 
@@ -39,6 +41,7 @@ const SideBarItem: React.FC<IProps> = ({
       size="sm"
       className={cn(sideBarItemVariants({ variant }))}
       asChild
+      onClick={handleClick}
     >
       <Link className="flex items-center gap-1" to={`/workspaces/${workspaceId}/channels/${id}`}>
         <Icon className="size-4 mr-1" />
