@@ -72,7 +72,9 @@ const WorkspacePanel: React.FC = () => {
               label={channel.name}
               id={channel._id}
               variant={activeSection === channel._id ? 'active' : 'default'}
-              handleClick={() => setActiveSection(channel._id)}
+              handleClick={() => {
+                setActiveSection(channel._id);
+              }}
             />
           ))
         ) : (
