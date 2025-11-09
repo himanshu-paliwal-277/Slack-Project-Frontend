@@ -10,15 +10,28 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Skeleton } from '@/components/ui/skeleton';
+import { EllipsisVertical } from 'lucide-react';
+import { Avatar, AvatarImage } from '@/components/ui/avatar';
+import { AvatarFallback } from '@radix-ui/react-avatar';
+
+interface Member {
+  memberId: {
+    userName: string;
+    email: string;
+    avatar: string;
+  };
+  role: string;
+}
 
 interface IProps {
   name: string;
   isFetching: boolean;
+  members: Member[];
 }
 
-const ChannelHeader: React.FC<IProps> = ({ name, isFetching }) => {
+const ChannelHeader: React.FC<IProps> = ({ name, isFetching, members }) => {
   return (
-    <div className="bg-white border-b h-[50px] flex items-center px-4 overflow-hidden">
+    <div className="bg-white border-b h-[50px] flex items-center justify-between px-4 overflow-hidden">
       <Dialog>
         <DialogTrigger asChild>
           <Button variant="ghost" className="text-lg font-semibold px-2 w-auto overflow-hidden">
@@ -44,6 +57,35 @@ const ChannelHeader: React.FC<IProps> = ({ name, isFetching }) => {
           </div>
         </DialogContent>
       </Dialog>
+
+      <div className="flex items-center gap-3">
+        {/* <span>4 Members</span> */}
+        <div className="flex -space-x-2">
+          {members?.[0]?.memberId && (
+            <Avatar className="ring-2 ring-background grayscale bg-gray-300">
+              <AvatarImage src={members[0].memberId.avatar} alt="avatar" />
+              <AvatarFallback>
+                {members[0].memberId.userName?.charAt(0).toUpperCase() || 'U'}
+              </AvatarFallback>
+            </Avatar>
+          )}
+          {members?.[1]?.memberId && (
+            <Avatar className="ring-2 ring-background grayscale bg-gray-300">
+              <AvatarImage src={members[1].memberId.avatar} alt="avatar" />
+              <AvatarFallback>
+                {members[1].memberId.userName?.charAt(0).toUpperCase() || 'U'}
+              </AvatarFallback>
+            </Avatar>
+          )}
+          <Avatar className="ring-2 ring-background bg-muted text-xs font-medium flex items-center justify-center">
+            {members?.length ?? 0}
+          </Avatar>
+        </div>
+
+        <Button variant={'transparent'}>
+          <EllipsisVertical className="size-4" color="black" />
+        </Button>
+      </div>
     </div>
   );
 };
