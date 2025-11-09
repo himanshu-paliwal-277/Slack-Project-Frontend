@@ -1,5 +1,6 @@
 import React, { memo } from 'react';
 
+import sendMessageSound from '@/assets/audio/sendMessageSound.mp3';
 import Editor from '@/components/atoms/Editor/Editor';
 import { useAuth } from '@/hooks/context/useAuth';
 import { useCurrentWorkspace } from '@/hooks/context/useCurrentWorkspace';
@@ -12,6 +13,7 @@ const ChatInput: React.FC = () => {
 
   async function handleSubmit({ body }: { body: string }) {
     console.log(body);
+
     socket?.emit(
       'NewMessage',
       {
@@ -24,6 +26,12 @@ const ChatInput: React.FC = () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (data: any) => {
         console.log('Message sent', data);
+
+        // Play send message sound after successful send (like WhatsApp)
+        const audio = new Audio(sendMessageSound);
+        audio.play().catch((error) => {
+          console.log('Error playing sound:', error);
+        });
       }
     );
   }

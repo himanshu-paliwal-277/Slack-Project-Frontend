@@ -13,6 +13,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useAuth } from '@/hooks/context/useAuth';
 import { useOpenDrawer } from '@/hooks/context/useOpenDrawer';
 
 interface Member {
@@ -32,40 +33,62 @@ interface IProps {
 
 const ChannelHeader: React.FC<IProps> = ({ name, isFetching, members }) => {
   const { setOpenOpenDrawer } = useOpenDrawer();
+  const { auth } = useAuth();
+
+  // Check if current user is an admin
+  const currentUserMember = members?.find((member) => member.memberId?.email === auth.user?.email);
+  const isAdmin = currentUserMember?.role === 'admin';
+  console.log('Members = ', members);
+
   return (
     <div className="bg-white border-b h-[50px] flex items-center px-4 overflow-hidden">
       <Button
         variant={'transparent'}
-        className="sm:hidden flex !p-0"
+        className="sm:hidden flex !p-1"
         onClick={() => setOpenOpenDrawer(true)}
       >
         <ArrowLeft className="size-5" color="black" />
       </Button>
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button variant="ghost" className="text-lg font-semibold px-2 w-auto overflow-hidden">
-            #{' '}
-            {isFetching ? <Skeleton className="h-5 w-[130px] rounded-sm" /> : <span>{name} </span>}
-            <FaChevronDown className="size-3 ml-2" />
-          </Button>
-        </DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle># {name}</DialogTitle>
-          </DialogHeader>
-          <div className="px-4 pb-4 flex flex-col gap-y-2">
-            <div className="px-5 py-4 bg-white rounded-lg border cursor-pointer hover:bg-gray-100">
-              <div className="flex items-center justify-between">
-                <p className="text-sm font-semibold">Channel name</p>
-                <p className="text-sm font-semibold">Edit</p>
+      {isAdmin ? (
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button variant="ghost" className="text-lg font-semibold px-2 w-auto overflow-hidden">
+              #{' '}
+              {isFetching ? (
+                <Skeleton className="h-5 sm:w-[130px] w-[110px] rounded-sm" />
+              ) : (
+                <span>{name} </span>
+              )}
+              <FaChevronDown className="size-3 ml-2" />
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle># {name}</DialogTitle>
+            </DialogHeader>
+            <div className="px-4 pb-4 flex flex-col gap-y-2">
+              <div className="px-5 py-4 bg-white rounded-lg border cursor-pointer hover:bg-gray-100">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-semibold">Channel name</p>
+                  <p className="text-sm font-semibold">Edit</p>
+                </div>
+                <p className="text-sm">{name}</p>
               </div>
-              <p className="text-sm">{name}</p>
-            </div>
 
-            {/* HW implement edit dialog for editting name of a channel */}
-          </div>
-        </DialogContent>
-      </Dialog>
+              {/* HW implement edit dialog for editting name of a channel */}
+            </div>
+          </DialogContent>
+        </Dialog>
+      ) : (
+        <div className="text-lg font-semibold px-2 w-auto overflow-hidden flex items-center gap-2">
+          #{' '}
+          {isFetching ? (
+            <Skeleton className="h-5 sm:w-[130px] w-[110px] rounded-sm" />
+          ) : (
+            <span>{name} </span>
+          )}
+        </div>
+      )}
 
       <div className="flex-1" />
       <div className="flex items-center gap-3">

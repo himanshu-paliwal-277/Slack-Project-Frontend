@@ -55,7 +55,7 @@ const Editor: React.FC<IProps> = ({
           ['bold', 'italic', 'underline', 'strike'],
           ['link'],
           [{ list: 'ordered' }, { list: 'bullet' }],
-          ['clean'],
+          // ['clean'],
         ],
         keyboard: {
           bindings: {
