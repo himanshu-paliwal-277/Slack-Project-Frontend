@@ -5,6 +5,7 @@ interface WorkspaceContextType {
     _id: string;
     name: string;
     members: { memberId: { _id: string; name: string }; role: string }[];
+    channels: { _id: string; name: string }[];
   } | null;
   setCurrentWorkspace: React.Dispatch<
     React.SetStateAction<{

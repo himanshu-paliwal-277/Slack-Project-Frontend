@@ -45,7 +45,7 @@ const AppRoutes: React.FC = () => {
 
           <Route path="/" element={<WorkspaceLayout />}>
             {/* Workspace Routes */}
-            <Route path="workspaces/:workspaceId" element={'workspace'} />
+            {/* <Route path="workspaces/:workspaceId" element={'workspace'} /> */}
 
             {/* Channel Routes */}
             <Route path="workspaces/:workspaceId/channels/:channelId" element={<Channel />} />

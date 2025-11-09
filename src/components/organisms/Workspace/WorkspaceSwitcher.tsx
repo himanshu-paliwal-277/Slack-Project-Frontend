@@ -14,6 +14,7 @@ import { useGetWorkspaceById } from '@/hooks/apis/workspaces/useGetWorkspaceById
 interface WorkspaceData {
   _id: string;
   name: string;
+  channels: string[];
 }
 
 const WorkspaceSwitcher: React.FC = () => {
@@ -51,7 +52,9 @@ const WorkspaceSwitcher: React.FC = () => {
             return (
               <DropdownMenuItem
                 className="cursor-pointer flex-col justify-start items-start"
-                onClick={() => navigate(`/workspaces/${workspace._id}`)}
+                onClick={() =>
+                  navigate(`/workspaces/${workspace._id}/channels/${workspace.channels[0]}`)
+                }
                 key={workspace._id}
               >
                 <p className="truncate">{workspace?.name}</p>

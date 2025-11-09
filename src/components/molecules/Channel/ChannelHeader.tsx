@@ -72,7 +72,7 @@ const ChannelHeader: React.FC<IProps> = ({ name, isFetching, members }) => {
         {/* <span>4 Members</span> */}
         <div className="flex -space-x-2">
           {members?.[0]?.memberId && (
-            <Avatar className="ring-2 ring-background grayscale bg-gray-300">
+            <Avatar className="ring-2 ring-background bg-gray-300">
               <AvatarImage src={members[0].memberId.avatar} alt="avatar" />
               <AvatarFallback>
                 {members[0].memberId.userName?.charAt(0).toUpperCase() || 'U'}
@@ -80,10 +80,18 @@ const ChannelHeader: React.FC<IProps> = ({ name, isFetching, members }) => {
             </Avatar>
           )}
           {members?.[1]?.memberId && (
-            <Avatar className="ring-2 ring-background grayscale bg-gray-300">
+            <Avatar className="ring-2 ring-background bg-gray-300">
               <AvatarImage src={members[1].memberId.avatar} alt="avatar" />
               <AvatarFallback>
                 {members[1].memberId.userName?.charAt(0).toUpperCase() || 'U'}
+              </AvatarFallback>
+            </Avatar>
+          )}
+          {members?.[2]?.memberId && (
+            <Avatar className="ring-2 ring-background bg-gray-300">
+              <AvatarImage src={members[2].memberId.avatar} alt="avatar" />
+              <AvatarFallback>
+                {members[2].memberId.userName?.charAt(0).toUpperCase() || 'U'}
               </AvatarFallback>
             </Avatar>
           )}

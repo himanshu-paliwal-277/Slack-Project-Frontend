@@ -4,9 +4,11 @@ import VerificationInput from 'react-verification-input';
 
 import { Button } from '@/components/ui/button';
 import { useJoinWorkspaceRequest } from '@/hooks/apis/workspaces/useJoinWorkspace';
+import { useCurrentWorkspace } from '@/hooks/context/useCurrentWorkspace';
 
 const JoinPage: React.FC = () => {
   const { workspaceId } = useParams();
+  const { currentWorkspace } = useCurrentWorkspace();
 
   const navigate = useNavigate();
 
@@ -17,7 +19,7 @@ const JoinPage: React.FC = () => {
     try {
       await joinWorkspaceMutation(joinCode);
 
-      navigate(`/workspaces/${workspaceId}`);
+      navigate(`/workspaces/${workspaceId}/channels/${currentWorkspace?.channels[0]}`);
     } catch (error) {
       console.log('Error in adding member to workspace', error);
     }

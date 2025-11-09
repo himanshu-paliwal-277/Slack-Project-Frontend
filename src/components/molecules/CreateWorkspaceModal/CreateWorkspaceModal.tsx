@@ -35,7 +35,7 @@ const CreateWorkspaceModal: React.FC = () => {
     try {
       const data = await createWorkspaceMutation({ name: workspaceName } as CreateWorkspaceInput);
       console.log('Created the workspace', data);
-      navigate(`/workspaces/${data._id}`);
+      navigate(`/workspaces/${data._id}/channels/${data.channels[0]}`);
       queryClient.invalidateQueries({ queryKey: ['fetchWorkspaces'] });
     } catch (error) {
       console.log('Not able to create a new workspace', error);

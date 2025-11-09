@@ -15,7 +15,7 @@ const Home: React.FC = () => {
     if (workspaces?.length === 0 || !workspaces) {
       console.log('No workspaces found, create one');
     } else {
-      navigate(`/workspaces/${workspaces[0]._id}`);
+      navigate(`/workspaces/${workspaces[0]._id}/channels/${workspaces[0].channels[0]}`);
     }
   }, [isFetching, workspaces, navigate]);
 
