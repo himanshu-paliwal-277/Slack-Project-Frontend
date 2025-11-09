@@ -1,6 +1,9 @@
+import { AvatarFallback } from '@radix-ui/react-avatar';
+import { ArrowLeft, EllipsisVertical } from 'lucide-react';
 import React, { memo } from 'react';
 import { FaChevronDown } from 'react-icons/fa';
 
+import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -10,9 +13,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Skeleton } from '@/components/ui/skeleton';
-import { EllipsisVertical } from 'lucide-react';
-import { Avatar, AvatarImage } from '@/components/ui/avatar';
-import { AvatarFallback } from '@radix-ui/react-avatar';
+import { useOpenDrawer } from '@/hooks/context/useOpenDrawer';
 
 interface Member {
   memberId: {
@@ -30,8 +31,16 @@ interface IProps {
 }
 
 const ChannelHeader: React.FC<IProps> = ({ name, isFetching, members }) => {
+  const { setOpenOpenDrawer } = useOpenDrawer();
   return (
-    <div className="bg-white border-b h-[50px] flex items-center justify-between px-4 overflow-hidden">
+    <div className="bg-white border-b h-[50px] flex items-center px-4 overflow-hidden">
+      <Button
+        variant={'transparent'}
+        className="sm:hidden flex"
+        onClick={() => setOpenOpenDrawer(true)}
+      >
+        <ArrowLeft className="size-5" color="black" />
+      </Button>
       <Dialog>
         <DialogTrigger asChild>
           <Button variant="ghost" className="text-lg font-semibold px-2 w-auto overflow-hidden">
@@ -58,6 +67,7 @@ const ChannelHeader: React.FC<IProps> = ({ name, isFetching, members }) => {
         </DialogContent>
       </Dialog>
 
+      <div className="flex-1" />
       <div className="flex items-center gap-3">
         {/* <span>4 Members</span> */}
         <div className="flex -space-x-2">

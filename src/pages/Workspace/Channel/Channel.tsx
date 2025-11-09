@@ -50,7 +50,11 @@ const Channel: React.FC = () => {
 
   return (
     <div className="flex flex-col h-full">
-      <ChannelHeader name={channelDetails?.name} isFetching={isFetching} members={channelDetails?.workspaceId?.members} />
+      <ChannelHeader
+        name={channelDetails?.name}
+        isFetching={isFetching}
+        members={channelDetails?.workspaceId?.members}
+      />
 
       <div className="flex flex-col h-[calc(100%-50px)] relative">
         {(isFetching || (isFetchingMessages && messageList.length === 0)) && (

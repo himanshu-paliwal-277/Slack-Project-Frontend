@@ -5,10 +5,12 @@ import { AuthContextProvider } from './AuthContextProvider';
 import { ChannelMessagesProvider } from './ChannelMessages';
 import { CreateChannelContextProvider } from './CreateChannelContext';
 import { CreateWorkspaceContextProvider } from './CreateWorkspaceContext';
+import { DrawerContextProvider } from './DrawerContext';
 import { SocketContextProvider } from './SocketContext';
 import { WorkspaceContextProvider } from './WorkspaceContext';
 
 export const AppContextProvider = combineContext(
+  DrawerContextProvider,
   ChannelMessagesProvider,
   SocketContextProvider,
   AuthContextProvider,

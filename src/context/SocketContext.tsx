@@ -2,6 +2,7 @@ import React, { createContext, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 
 import { useChannelMessages } from '@/hooks/context/useChannelMessages';
+import type { Channel } from '@/types/channel';
 
 // Define props type
 interface IProps {
@@ -12,14 +13,14 @@ interface IProps {
 interface ISocketContext {
   socket: Socket;
   joinChannel: (channelId: string) => void;
-  currentChannel: any;
+  currentChannel: Channel | null;
 }
 
 // Create the context with proper typing
 const SocketContext = createContext<ISocketContext | null>(null);
 
 export const SocketContextProvider: React.FC<IProps> = ({ children }) => {
-  const [currentChannel, setCurrentChannel] = useState(null);
+  const [currentChannel, setCurrentChannel] = useState<Channel | null>(null);
   const { messageList, setMessageList } = useChannelMessages();
 
   const socket = io(import.meta.env.VITE_BACKEND_SOCKET_URL as string);
@@ -33,7 +34,8 @@ export const SocketContextProvider: React.FC<IProps> = ({ children }) => {
   });
 
   async function joinChannel(channelId: string) {
-    socket.emit('JoinChannel', { channelId }, (data) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    socket.emit('JoinChannel', { channelId }, (data: any) => {
       console.log('Successfully joined the channel', data);
       setCurrentChannel(data?.data);
     });
