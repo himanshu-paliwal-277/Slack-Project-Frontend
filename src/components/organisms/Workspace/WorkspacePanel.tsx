@@ -96,24 +96,31 @@ const WorkspacePanel: React.FC = () => {
       {/* ==== Direct Messages Section ==== */}
       <WorkspacePanelSection label="Direct messages">
         {workspace.members?.length > 0 ? (
-          workspace.members.map(
-            (item: {
-              memberId: { _id: string; userName: string; avatar: string };
-              role: string;
-            }) => (
-              <UserItem
-                key={item.memberId._id}
-                label={`${item.memberId.userName}${item.role === 'admin' ? ' (Admin)' : ''}`}
-                id={item.memberId._id}
-                image={item.memberId.avatar}
-                variant={activeSection === item.memberId._id ? 'active' : 'default'}
-                handleClick={() => {
-                  setActiveSection(item.memberId._id);
-                  if (isMobile) setOpenOpenDrawer(false);
-                }}
-              />
+          workspace.members
+            .filter(
+              (item: {
+                memberId: { _id: string; userName: string; avatar: string } | null;
+                role: string;
+              }) => item.memberId !== null
             )
-          )
+            .map(
+              (item: {
+                memberId: { _id: string; userName: string; avatar: string };
+                role: string;
+              }) => (
+                <UserItem
+                  key={item.memberId._id}
+                  label={`${item.memberId.userName}${item.role === 'admin' ? ' (Admin)' : ''}`}
+                  id={item.memberId._id}
+                  image={item.memberId.avatar}
+                  variant={activeSection === item.memberId._id ? 'active' : 'default'}
+                  handleClick={() => {
+                    setActiveSection(item.memberId._id);
+                    if (isMobile) setOpenOpenDrawer(false);
+                  }}
+                />
+              )
+            )
         ) : (
           <p className="text-xs text-gray-300 italic px-2">No members found</p>
         )}
