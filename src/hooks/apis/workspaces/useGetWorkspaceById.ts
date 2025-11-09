@@ -10,7 +10,7 @@ export const useGetWorkspaceById = (id: string) => {
     isSuccess,
     error,
     data: workspace,
-    isError
+    isError,
   } = useQuery({
     queryFn: () => fetchWorkspaceDetailsRequest(id, auth?.token as string),
     queryKey: [`fetchWorkspaceById-${id}`],
@@ -24,6 +24,6 @@ export const useGetWorkspaceById = (id: string) => {
     isSuccess,
     error,
     workspace,
-    isError
+    isError,
   };
 };

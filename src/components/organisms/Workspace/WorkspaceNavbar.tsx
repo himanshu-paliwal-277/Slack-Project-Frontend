@@ -18,8 +18,8 @@ const WorkspaceNavbar: React.FC = () => {
 
   useEffect(() => {
     if (!isFetching && !isSuccess && error) {
-      console.log('Error fetching workspace', error.status);
-      if (error.status === 403) {
+      console.log('Error fetching workspace', 'status' in error ? error.status : 'unknown');
+      if ('status' in error && error.status === 403) {
         logout();
         navigate('/auth/signin');
       }
@@ -28,7 +28,7 @@ const WorkspaceNavbar: React.FC = () => {
     if (workspace) {
       setCurrentWorkspace(workspace);
     }
-  }, [workspace, setCurrentWorkspace, isSuccess, error, isFetching]);
+  }, [workspace, setCurrentWorkspace, isSuccess, error, isFetching, logout, navigate]);
 
   return (
     <nav className="flex items-center h-[50px] justify-center px-3">
