@@ -43,7 +43,9 @@ const WorkspacePanelHeader: React.FC<WorkspacePanelHeaderProps> = ({ workspace }
         _id: workspace._id,
         name: workspace.name,
         members: workspace.members
-          .filter((member) => member.memberId !== null)
+          .filter((member): member is { memberId: { _id: string; name: string }; role: string } =>
+            member.memberId !== null
+          )
           .map((member) => ({
             memberId: member.memberId._id,
             role: member.role,

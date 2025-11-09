@@ -3,7 +3,8 @@
     "allow": [
       "Bash(dir:*)",
       "Bash(nul)",
-      "Bash(del \"d:\\web dev\\_Full stack web development with PW\\_PW Projects\\Slack-Project-Frontend\\dist\\vite.svg\")"
+      "Bash(del \"d:\\web dev\\_Full stack web development with PW\\_PW Projects\\Slack-Project-Frontend\\dist\\vite.svg\")",
+      "Bash(npm run build:*)"
     ],
     "deny": [],
     "ask": []
