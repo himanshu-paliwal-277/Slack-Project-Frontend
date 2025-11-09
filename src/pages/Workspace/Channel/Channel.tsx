@@ -16,7 +16,7 @@ const Channel: React.FC = () => {
   const queryClient = useQueryClient();
 
   const { channelDetails, isFetching, isError } = useGetChannelById(channelId || '');
-  const { setMessageList, messageList } = useChannelMessages();
+  const { messageList, setMessageList } = useChannelMessages();
   const { joinChannel } = useSocket();
   const { messages, isSuccess } = useGetChannelMessages(channelId as string);
 
@@ -51,7 +51,7 @@ const Channel: React.FC = () => {
 
   return (
     <div className="flex flex-col h-full">
-      <ChannelHeader name={channelDetails?.name} />
+      <ChannelHeader name={channelDetails?.name} isFetching={isFetching} />
       <div className="flex flex-col h-[calc(100%-50px)] relative">
         {/* Loader */}
         {isFetching && (

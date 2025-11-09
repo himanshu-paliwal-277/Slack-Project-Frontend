@@ -9,18 +9,21 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface IProps {
   name: string;
+  isFetching: boolean;
 }
 
-const ChannelHeader: React.FC<IProps> = ({ name }) => {
+const ChannelHeader: React.FC<IProps> = ({ name, isFetching }) => {
   return (
     <div className="bg-white border-b h-[50px] flex items-center px-4 overflow-hidden">
       <Dialog>
         <DialogTrigger asChild>
           <Button variant="ghost" className="text-lg font-semibold px-2 w-auto overflow-hidden">
-            <span># {name} </span>
+            #{' '}
+            {isFetching ? <Skeleton className="h-5 w-[130px] rounded-sm" /> : <span>{name} </span>}
             <FaChevronDown className="size-3 ml-2" />
           </Button>
         </DialogTrigger>
