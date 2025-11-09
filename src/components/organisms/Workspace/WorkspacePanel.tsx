@@ -19,7 +19,7 @@ import { useOpenDrawer } from '@/hooks/context/useOpenDrawer';
 const WorkspacePanel: React.FC = () => {
   const { workspaceId } = useParams();
   const { setOpenCreateChannelModal } = useCreateChannelModal();
-  const [activeSection, setActiveSection] = useState<string>('threads');
+  const [activeSection, setActiveSection] = useState<string>('');
   const { setOpenOpenDrawer } = useOpenDrawer();
 
   const isMobile = window.innerWidth < 640;
@@ -45,86 +45,88 @@ const WorkspacePanel: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col h-full sm:flex-0 flex-1 bg-[#552957] text-white">
+    <div className="flex flex-col h-full sm:flex-0 flex-1 sm:bg-[#552957] bg-gray-800 text-white">
       <WorkspacePanelHeader workspace={workspace} />
 
-      {/* ==== Top Section (Threads & Drafts) ==== */}
-      <div className="flex flex-col px-2 mt-3 space-y-1">
-        <SideBarItem
-          label="Threads"
-          icon={MessageSquareTextIcon}
-          id="threads"
-          variant={activeSection === 'threads' ? 'active' : 'default'}
-          handleClick={() => {
-            setActiveSection('threads');
-            if (isMobile) setOpenOpenDrawer(false);
-          }}
-        />
-        <SideBarItem
-          label="Drafts & Sends"
-          icon={SendHorizontalIcon}
-          id="drafts"
-          variant={activeSection === 'drafts' ? 'active' : 'default'}
-          handleClick={() => {
-            setActiveSection('drafts');
-            if (isMobile) setOpenOpenDrawer(false);
-          }}
-        />
-      </div>
+      <div className="overflow-y-auto">
+        {/* ==== Top Section (Threads & Drafts) ==== */}
+        <div className="flex flex-col px-2 sm:mt-3 mt-4 space-y-1">
+          <SideBarItem
+            label="Threads"
+            icon={MessageSquareTextIcon}
+            id="threads"
+            variant={activeSection === 'threads' ? 'active' : 'default'}
+            handleClick={() => {
+              setActiveSection('threads');
+              if (isMobile) setOpenOpenDrawer(false);
+            }}
+          />
+          <SideBarItem
+            label="Drafts & Sends"
+            icon={SendHorizontalIcon}
+            id="drafts"
+            variant={activeSection === 'drafts' ? 'active' : 'default'}
+            handleClick={() => {
+              setActiveSection('drafts');
+              if (isMobile) setOpenOpenDrawer(false);
+            }}
+          />
+        </div>
 
-      {/* ==== Channels Section ==== */}
-      <WorkspacePanelSection label="Channels" onIconClick={() => setOpenCreateChannelModal(true)}>
-        {workspace.channels?.length > 0 ? (
-          workspace.channels.map((channel: { _id: string; name: string }) => (
-            <SideBarItem
-              key={channel._id}
-              icon={HashIcon}
-              label={channel.name}
-              id={channel._id}
-              variant={activeSection === channel._id ? 'active' : 'default'}
-              handleClick={() => {
-                setActiveSection(channel._id);
-                if (isMobile) setOpenOpenDrawer(false);
-              }}
-            />
-          ))
-        ) : (
-          <p className="text-xs text-gray-300 italic px-2">No channels yet</p>
-        )}
-      </WorkspacePanelSection>
+        {/* ==== Channels Section ==== */}
+        <WorkspacePanelSection label="Channels" onIconClick={() => setOpenCreateChannelModal(true)}>
+          {workspace.channels?.length > 0 ? (
+            workspace.channels.map((channel: { _id: string; name: string }) => (
+              <SideBarItem
+                key={channel._id}
+                icon={HashIcon}
+                label={channel.name}
+                id={channel._id}
+                variant={activeSection === channel._id ? 'active' : 'default'}
+                handleClick={() => {
+                  setActiveSection(channel._id);
+                  if (isMobile) setOpenOpenDrawer(false);
+                }}
+              />
+            ))
+          ) : (
+            <p className="text-xs text-gray-300 italic px-2">No channels yet</p>
+          )}
+        </WorkspacePanelSection>
 
-      {/* ==== Direct Messages Section ==== */}
-      <WorkspacePanelSection label="Direct messages">
-        {workspace.members?.length > 0 ? (
-          workspace.members
-            .filter(
-              (item: {
-                memberId: { _id: string; userName: string; avatar: string } | null;
-                role: string;
-              }) => item.memberId !== null
-            )
-            .map(
-              (item: {
-                memberId: { _id: string; userName: string; avatar: string };
-                role: string;
-              }) => (
-                <UserItem
-                  key={item.memberId._id}
-                  label={`${item.memberId.userName}${item.role === 'admin' ? ' (Admin)' : ''}`}
-                  id={item.memberId._id}
-                  image={item.memberId.avatar}
-                  variant={activeSection === item.memberId._id ? 'active' : 'default'}
-                  handleClick={() => {
-                    setActiveSection(item.memberId._id);
-                    if (isMobile) setOpenOpenDrawer(false);
-                  }}
-                />
+        {/* ==== Direct Messages Section ==== */}
+        <WorkspacePanelSection label="Direct messages">
+          {workspace.members?.length > 0 ? (
+            workspace.members
+              .filter(
+                (item: {
+                  memberId: { _id: string; userName: string; avatar: string } | null;
+                  role: string;
+                }) => item.memberId !== null
               )
-            )
-        ) : (
-          <p className="text-xs text-gray-300 italic px-2">No members found</p>
-        )}
-      </WorkspacePanelSection>
+              .map(
+                (item: {
+                  memberId: { _id: string; userName: string; avatar: string };
+                  role: string;
+                }) => (
+                  <UserItem
+                    key={item.memberId._id}
+                    label={`${item.memberId.userName}${item.role === 'admin' ? ' (Admin)' : ''}`}
+                    id={item.memberId._id}
+                    image={item.memberId.avatar}
+                    variant={activeSection === item.memberId._id ? 'active' : 'default'}
+                    handleClick={() => {
+                      setActiveSection(item.memberId._id);
+                      if (isMobile) setOpenOpenDrawer(false);
+                    }}
+                  />
+                )
+              )
+          ) : (
+            <p className="text-xs text-gray-300 italic px-2">No members found</p>
+          )}
+        </WorkspacePanelSection>
+      </div>
     </div>
   );
 };

@@ -13,7 +13,7 @@ interface IProps {
 
 const Message: React.FC<IProps> = ({ authorImage, authorName, createdAt, body }) => {
   return (
-    <div className="flex flex-col gap-2 p-1.5 px-5 hover:bg-gray-100/60 group relative">
+    <div className="flex flex-col gap-2 p-1.5 sm:px-5 px-4 hover:bg-gray-100/60 group relative">
       <div className="flex items-start gap-3">
         <button>
           <Avatar className="w-[36px] h-[36px] bg-gray-200 rounded-lg">

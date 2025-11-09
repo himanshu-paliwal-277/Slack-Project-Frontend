@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 export const Notfound = () => {
   const navigate = useNavigate();
   return (
-    <div className="flex h-screen w-full flex-col items-center justify-center bg-gray-100">
+    <div className="flex h-[100dvh] w-full flex-col items-center justify-center bg-gray-100">
       <Card className="text-center shadow-lg max-w-lg">
         <CardHeader>
           <CardTitle>404 Not Found</CardTitle>

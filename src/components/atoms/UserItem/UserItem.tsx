@@ -8,7 +8,7 @@ import { useCurrentWorkspace } from '@/hooks/context/useCurrentWorkspace';
 import { cn } from '@/lib/utils';
 
 const userItemVariants = cva(
-  'flex items-center gap-1.5 justify-start font-normal h-8 px-4 text-sm',
+  'flex items-center gap-1.5 justify-start font-normal h-8 sm:px-4 px-[8px] text-sm',
   {
     variants: {
       variant: {

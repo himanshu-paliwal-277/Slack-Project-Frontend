@@ -14,16 +14,13 @@ import { useGetWorkspaceById } from '@/hooks/apis/workspaces/useGetWorkspaceById
 interface WorkspaceData {
   _id: string;
   name: string;
-  channels: { _id: string; name: string }[];
+  channels: string[];
 }
 
 const WorkspaceSwitcher: React.FC = () => {
   const navigate = useNavigate();
-
   const { workspaces, isFetching: isFetchingWorkspace } = useFetchWorkspace();
-
   const { workspaceId } = useParams();
-
   const { isFetching, workspace } = useGetWorkspaceById(workspaceId || '');
 
   return (

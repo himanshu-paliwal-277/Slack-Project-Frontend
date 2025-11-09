@@ -113,7 +113,7 @@ const Editor: React.FC<IProps> = ({
 
   return (
     <div className="flex flex-col">
-      <div className="flex flex-col border border-slate-300 rounded-md bg-white overflow-hidden">
+      <div className="flex flex-col sm:mb-0 mb-4 border border-slate-300 rounded-md bg-white overflow-hidden">
         <div ref={containerRef} />
         <div className="flex px-2 pb-2 z-[5]">
           <Hint
@@ -148,7 +148,7 @@ const Editor: React.FC<IProps> = ({
           </Hint>
         </div>
       </div>
-      <p className="p-2 text-[10px] text-muted-foreground flex justify-end">
+      <p className="p-2 hidden text-[10px] text-muted-foreground sm:flex justify-end">
         <strong>Shift + return</strong> &nbsp; to add a new line
       </p>
     </div>

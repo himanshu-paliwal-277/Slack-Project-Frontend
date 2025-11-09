@@ -16,7 +16,7 @@ const WorkspacePanelSection: React.FC<IProps> = ({ label, children, onIconClick 
   return (
     <div className="flex flex-col mt-3 px-2 ">
       <div
-        className="flex items-center gap-1.5 mb-1 group px-[15px] hover:bg-accent/10 rounded-sm cursor-pointer"
+        className="flex items-center gap-1.5 mb-1 group sm:px-[15px] px-2 hover:bg-accent/10 rounded-sm cursor-pointer"
         onClick={() => setOpen(!open)}
       >
         <Button

@@ -1,6 +1,7 @@
-import { ChevronDownIcon, ListFilterIcon, SquarePenIcon } from 'lucide-react';
+import { ChevronDownIcon, ListFilterIcon, SearchIcon, SquarePenIcon } from 'lucide-react';
 import React, { memo, useEffect, useState } from 'react';
 
+import UserButton from '@/components/atoms/UserButton/UserButton';
 import WorkspaceInviteModal from '@/components/organisms/Modals/WorkspaceInviteModal';
 import { Button } from '@/components/ui/button';
 import {
@@ -43,8 +44,9 @@ const WorkspacePanelHeader: React.FC<WorkspacePanelHeaderProps> = ({ workspace }
         _id: workspace._id,
         name: workspace.name,
         members: workspace.members
-          .filter((member): member is { memberId: { _id: string; name: string }; role: string } =>
-            member.memberId !== null
+          .filter(
+            (member): member is { memberId: { _id: string; name: string }; role: string } =>
+              member.memberId !== null
           )
           .map((member) => ({
             memberId: member.memberId._id,
@@ -60,59 +62,78 @@ const WorkspacePanelHeader: React.FC<WorkspacePanelHeaderProps> = ({ workspace }
 
   return (
     <>
-      <div className="flex items-center justify-between px-4 py-3 gap-0.5">
-        <DropdownMenu>
-          <DropdownMenuTrigger className="rounded-sm cursor-pointer bg-transparent hover:bg-accent/10 text-accent flex items-center gap-2 font-semibold text-lg w-auto px-2 py-[2px] overflow-hidden">
-            {/* <Button
+      <div className="sm:bg-transparent bg-[#552957] sm:pb-0 pb-2">
+        <div className="flex items-center justify-between px-4 py-3 gap-0.5">
+          <DropdownMenu>
+            <DropdownMenuTrigger className="rounded-sm cursor-pointer bg-transparent hover:bg-accent/10 text-accent flex items-center gap-2 font-semibold text-lg w-auto px-2 py-[2px] overflow-hidden">
+              {/* <Button
             variant="transparent"
             className="font-semibold text-lg w-auto p-1.5 overflow-hidden"
           > */}
-            <span className="truncate font-bold">{workspace?.name}</span>
-            <ChevronDownIcon className="size-5 ml-1" />
-            {/* </Button> */}
-          </DropdownMenuTrigger>
+              <span className="truncate font-bold">{workspace?.name}</span>
+              <ChevronDownIcon className="size-5 ml-1" />
+              {/* </Button> */}
+            </DropdownMenuTrigger>
 
-          <DropdownMenuContent side="bottom" align="start" className="w-64">
-            <DropdownMenuItem>
-              <div className="size-9 relative overflow-hidden text-white font-semibold text-xl rounded-md flex items-center justify-center mr-2 bg-[#616061]">
-                {workspace?.name.charAt(0).toUpperCase()}
-              </div>
-              <div className="flex flex-col items-start">
-                <p className="font-bold">{workspace?.name}</p>
-                <p className="text-xs text-muted-foreground">Active Workspace</p>
-              </div>
-            </DropdownMenuItem>
+            <DropdownMenuContent side="bottom" align="start" className="w-64">
+              <DropdownMenuItem>
+                <div className="size-9 relative overflow-hidden text-white font-semibold text-xl rounded-md flex items-center justify-center mr-2 bg-[#616061]">
+                  {workspace?.name.charAt(0).toUpperCase()}
+                </div>
+                <div className="flex flex-col items-start">
+                  <p className="font-bold">{workspace?.name}</p>
+                  <p className="text-xs text-muted-foreground">Active Workspace</p>
+                </div>
+              </DropdownMenuItem>
 
-            {isLoggedInUserAdminOfWorkspace && (
-              <>
-                <DropdownMenuItem
-                  className="cursor-pointer py-2"
-                  onClick={() => {
-                    setInitialValue(workspace?.name ?? '');
-                    setOpenPreferences(true);
-                  }}
-                >
-                  Preferences
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  onClick={() => setOpenInviteModal(true)}
-                  className="cursor-pointer py-2"
-                >
-                  Invite people to {workspace?.name}
-                </DropdownMenuItem>
-              </>
-            )}
-          </DropdownMenuContent>
-        </DropdownMenu>
+              {isLoggedInUserAdminOfWorkspace && (
+                <>
+                  <DropdownMenuItem
+                    className="cursor-pointer py-2"
+                    onClick={() => {
+                      setInitialValue(workspace?.name ?? '');
+                      setOpenPreferences(true);
+                    }}
+                  >
+                    Preferences
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onClick={() => setOpenInviteModal(true)}
+                    className="cursor-pointer py-2"
+                  >
+                    Invite people to {workspace?.name}
+                  </DropdownMenuItem>
+                </>
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
 
-        <div className="flex items-center gap-0.5">
-          <Button variant="transparent" size="iconSm">
-            <ListFilterIcon className="size-5" />
+          <div className="sm:flex hidden items-center gap-0.5">
+            <Button variant="transparent" size="iconSm">
+              <ListFilterIcon className="size-5" />
+            </Button>
+
+            <Button variant="transparent" size="iconSm">
+              <SquarePenIcon className="size-5" />
+            </Button>
+          </div>
+
+          <div className="sm:hidden block">
+            <UserButton />
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 sm:hidden px-4 py-[2px]">
+          <Button
+            size="sm"
+            className="flex items-center bg-accent/20 hover:bg-accent/15 flex-1 justify-start h-8 px-2"
+          >
+            <SearchIcon className="size-4 text-white mr-2" />
+            <span className="text-white text-xs">Jump to or search...</span>
           </Button>
-
-          <Button variant="transparent" size="iconSm">
-            <SquarePenIcon className="size-5" />
+          <Button variant="transparent" size="iconSm" className="bg-accent/20 rounded-md">
+            <ListFilterIcon className="size-4" />
           </Button>
         </div>
       </div>

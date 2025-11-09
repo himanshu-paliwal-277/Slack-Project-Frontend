@@ -36,7 +36,7 @@ const ChannelHeader: React.FC<IProps> = ({ name, isFetching, members }) => {
     <div className="bg-white border-b h-[50px] flex items-center px-4 overflow-hidden">
       <Button
         variant={'transparent'}
-        className="sm:hidden flex"
+        className="sm:hidden flex !p-0"
         onClick={() => setOpenOpenDrawer(true)}
       >
         <ArrowLeft className="size-5" color="black" />
@@ -72,7 +72,7 @@ const ChannelHeader: React.FC<IProps> = ({ name, isFetching, members }) => {
         {/* <span>4 Members</span> */}
         <div className="flex -space-x-2">
           {members?.[0]?.memberId && (
-            <Avatar className="ring-2 ring-background bg-gray-300">
+            <Avatar className="sm:size-8 size-7 ring-2 ring-background bg-gray-300">
               <AvatarImage src={members[0].memberId.avatar} alt="avatar" />
               <AvatarFallback>
                 {members[0].memberId.userName?.charAt(0).toUpperCase() || 'U'}
@@ -80,7 +80,7 @@ const ChannelHeader: React.FC<IProps> = ({ name, isFetching, members }) => {
             </Avatar>
           )}
           {members?.[1]?.memberId && (
-            <Avatar className="ring-2 ring-background bg-gray-300">
+            <Avatar className="sm:size-8 size-7 ring-2 ring-background bg-gray-300">
               <AvatarImage src={members[1].memberId.avatar} alt="avatar" />
               <AvatarFallback>
                 {members[1].memberId.userName?.charAt(0).toUpperCase() || 'U'}
@@ -88,7 +88,7 @@ const ChannelHeader: React.FC<IProps> = ({ name, isFetching, members }) => {
             </Avatar>
           )}
           {members?.[2]?.memberId && (
-            <Avatar className="ring-2 ring-background bg-gray-300">
+            <Avatar className="sm:size-8 size-7 ring-2 ring-background bg-gray-300">
               <AvatarImage src={members[2].memberId.avatar} alt="avatar" />
               <AvatarFallback>
                 {members[2].memberId.userName?.charAt(0).toUpperCase() || 'U'}
@@ -100,7 +100,7 @@ const ChannelHeader: React.FC<IProps> = ({ name, isFetching, members }) => {
           </Avatar>
         </div>
 
-        <Button variant={'transparent'}>
+        <Button className="!p-0" variant={'transparent'}>
           <EllipsisVertical className="size-4" color="black" />
         </Button>
       </div>

@@ -12,7 +12,7 @@ const WorkspaceLayout: React.FC = () => {
   const { openDrawer: isOpen, setOpenOpenDrawer: setIsOpen } = useOpenDrawer();
   return (
     <>
-      <div className="h-[100vh] bg-[#3b0d3c]">
+      <div className="h-[100dvh] bg-[#3b0d3c]">
         <div className="sm:block hidden">
           <WorkspaceNavbar />
         </div>
@@ -38,9 +38,8 @@ const WorkspaceLayout: React.FC = () => {
         </div>
       </div>
       <Drawer open={isOpen} onClose={() => setIsOpen(false)} direction="left">
-        <DrawerContent className="!w-screen max-w-none bg-[#5c3b58]">
-          <WorkspaceNavbar />
-          <div className="flex items-center h-[calc(100vh-50px)]">
+        <DrawerContent className="!w-screen !h-[100dvh] !max-w-none fixed top-0 left-0 m-0 rounded-none p-0 overflow-hidden">
+          <div className="flex flex-col h-full bg-white">
             <WorkspaceSidebar />
             <WorkspacePanel />
           </div>

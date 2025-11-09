@@ -29,7 +29,7 @@ const ChatInput: React.FC = () => {
   }
 
   return (
-    <div className="px-5 w-full">
+    <div className="sm:px-5 px-4 w-full">
       <Editor
         placeholder="Type a message..."
         onSubmit={handleSubmit}

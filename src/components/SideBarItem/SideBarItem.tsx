@@ -14,7 +14,7 @@ interface IProps {
 }
 
 const sideBarItemVariants = cva(
-  'flex items-center justify-start gap-1.5 font-normal h-8 !px-[18px] text-sm overflow-hidden rounded-sm',
+  'flex items-center justify-start gap-1.5 font-normal h-8 sm:!px-[18px] !px-[10px] text-sm overflow-hidden rounded-sm',
   {
     variants: {
       variant: {

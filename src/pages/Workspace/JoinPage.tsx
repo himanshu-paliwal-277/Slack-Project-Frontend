@@ -26,7 +26,7 @@ const JoinPage: React.FC = () => {
   }
 
   return (
-    <div className="h-[100vh] flex flex-col gap-y-8 items-center justify-center p-8 bg-white rounded-lg shadow-sm">
+    <div className="h-[100dvh] flex flex-col gap-y-8 items-center justify-center p-8 bg-white rounded-lg shadow-sm">
       <div className="flex flex-col gap-y-4 items-center justify-center">
         <div className="flex flex-col gap-y-2 items-center">
           <h1 className="font-bold text-3xl">Join Workspace</h1>
