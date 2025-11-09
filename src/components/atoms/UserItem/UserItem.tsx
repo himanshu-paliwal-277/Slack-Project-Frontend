@@ -27,13 +27,20 @@ interface IProps {
   label?: string;
   image?: string;
   variant?: 'default' | 'active';
+  handleClick?: () => void;
 }
 
-const UserItem: React.FC<IProps> = ({ id, label = 'Member', image, variant }) => {
+const UserItem: React.FC<IProps> = ({ id, label = 'Member', image, variant, handleClick }) => {
   const { currentWorkspace: workspace } = useCurrentWorkspace();
 
   return (
-    <Button className={cn(userItemVariants({ variant }))} variant="transparent" size="sm" asChild>
+    <Button
+      onClick={handleClick}
+      className={cn(userItemVariants({ variant }))}
+      variant="transparent"
+      size="sm"
+      asChild
+    >
       <Link to={`/workspaces/${workspace?._id}/members/${id}`}>
         <Avatar className="size-6 shrink-0 overflow-hidden rounded-sm bg-gray-300">
           <AvatarImage src={image} className="rounded-md" />

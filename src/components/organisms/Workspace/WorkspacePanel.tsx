@@ -14,11 +14,15 @@ import WorkspacePanelSection from '@/components/molecules/Workspace/WorkspacePan
 import SideBarItem from '@/components/SideBarItem/SideBarItem';
 import { useGetWorkspaceById } from '@/hooks/apis/workspaces/useGetWorkspaceById';
 import { useCreateChannelModal } from '@/hooks/context/useCreateChannelModal';
+import { useOpenDrawer } from '@/hooks/context/useOpenDrawer';
 
 const WorkspacePanel: React.FC = () => {
   const { workspaceId } = useParams();
   const { setOpenCreateChannelModal } = useCreateChannelModal();
   const [activeSection, setActiveSection] = useState<string>('threads');
+  const { setOpenOpenDrawer } = useOpenDrawer();
+
+  const isMobile = window.innerWidth < 640;
 
   const { workspace, isFetching, isError } = useGetWorkspaceById(workspaceId as string);
 
@@ -41,7 +45,7 @@ const WorkspacePanel: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col h-full bg-[#552957] text-white">
+    <div className="flex flex-col h-full sm:flex-0 flex-1 bg-[#552957] text-white">
       <WorkspacePanelHeader workspace={workspace} />
 
       {/* ==== Top Section (Threads & Drafts) ==== */}
@@ -51,14 +55,20 @@ const WorkspacePanel: React.FC = () => {
           icon={MessageSquareTextIcon}
           id="threads"
           variant={activeSection === 'threads' ? 'active' : 'default'}
-          handleClick={() => setActiveSection('threads')}
+          handleClick={() => {
+            setActiveSection('threads');
+            if (isMobile) setOpenOpenDrawer(false);
+          }}
         />
         <SideBarItem
           label="Drafts & Sends"
           icon={SendHorizontalIcon}
           id="drafts"
           variant={activeSection === 'drafts' ? 'active' : 'default'}
-          handleClick={() => setActiveSection('drafts')}
+          handleClick={() => {
+            setActiveSection('drafts');
+            if (isMobile) setOpenOpenDrawer(false);
+          }}
         />
       </div>
 
@@ -74,6 +84,7 @@ const WorkspacePanel: React.FC = () => {
               variant={activeSection === channel._id ? 'active' : 'default'}
               handleClick={() => {
                 setActiveSection(channel._id);
+                if (isMobile) setOpenOpenDrawer(false);
               }}
             />
           ))
@@ -95,6 +106,11 @@ const WorkspacePanel: React.FC = () => {
                 label={`${item.memberId.userName}${item.role === 'admin' ? ' (Admin)' : ''}`}
                 id={item.memberId._id}
                 image={item.memberId.avatar}
+                variant={activeSection === item.memberId._id ? 'active' : 'default'}
+                handleClick={() => {
+                  setActiveSection(item.memberId._id);
+                  if (isMobile) setOpenOpenDrawer(false);
+                }}
               />
             )
           )
