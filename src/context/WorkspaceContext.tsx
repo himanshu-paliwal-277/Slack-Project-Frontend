@@ -5,13 +5,14 @@ interface WorkspaceContextType {
     _id: string;
     name: string;
     members: { memberId: { _id: string; name: string }; role: string }[];
-    channels: { _id: string; name: string }[];
+    channels: string[];
   } | null;
   setCurrentWorkspace: React.Dispatch<
     React.SetStateAction<{
       _id: string;
       name: string;
       members: { memberId: { _id: string; name: string }; role: string }[];
+      channels: string[];
     } | null>
   >;
 }
@@ -27,6 +28,7 @@ export const WorkspaceContextProvider: React.FC<IProps> = ({ children }) => {
     _id: string;
     name: string;
     members: { memberId: { _id: string; name: string }; role: string }[];
+    channels: string[];
   } | null>(null);
 
   return (

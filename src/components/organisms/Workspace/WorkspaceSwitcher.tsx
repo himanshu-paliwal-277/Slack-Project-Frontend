@@ -14,7 +14,7 @@ import { useGetWorkspaceById } from '@/hooks/apis/workspaces/useGetWorkspaceById
 interface WorkspaceData {
   _id: string;
   name: string;
-  channels: string[];
+  channels: { _id: string; name: string }[];
 }
 
 const WorkspaceSwitcher: React.FC = () => {
