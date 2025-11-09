@@ -21,7 +21,8 @@ const ChatInput: React.FC = () => {
         senderId: auth?.user?._id,
         workspaceId: currentWorkspace?._id,
       },
-      (data) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (data: any) => {
         console.log('Message sent', data);
       }
     );
