@@ -210,3 +210,29 @@
     border-color: var(--ocean-secondary);
   }
 }
+
+/* Mobile keyboard behavior fixes */
+@layer base {
+  /* Ensure proper viewport height behavior on mobile */
+  html,
+  body,
+  #root {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  /* Prevent body scroll when keyboard is open on mobile */
+  @media (max-width: 640px) {
+    body {
+      position: fixed;
+      width: 100%;
+      height: 100vh;
+      height: 100dvh; /* Use dynamic viewport height for better mobile support */
+    }
+
+    #root {
+      height: 100vh;
+      height: 100dvh;
+    }
+  }
+}

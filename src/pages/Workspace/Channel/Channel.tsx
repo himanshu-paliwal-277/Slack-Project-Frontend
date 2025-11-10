@@ -49,16 +49,20 @@ const Channel: React.FC = () => {
   const groupedMessages = groupMessagesByDate(messageList);
 
   return (
-    <div className="flex flex-col h-full">
-      <ChannelHeader
-        name={channelDetails?.name}
-        isFetching={isFetching}
-        members={channelDetails?.workspaceId?.members}
-      />
+    <div className="flex flex-col h-full overflow-hidden">
+      {/* Fixed Header */}
+      <div className="flex-shrink-0">
+        <ChannelHeader
+          name={channelDetails?.name}
+          isFetching={isFetching}
+          members={channelDetails?.workspaceId?.members}
+        />
+      </div>
 
-      <div className="flex flex-col h-[calc(100%-50px)] relative">
+      {/* Messages Area - Flexible and scrollable */}
+      <div className="flex-1 min-h-0 relative">
         {(isFetching || (isFetchingMessages && messageList.length === 0)) && (
-          <div className="flex-1 flex items-center justify-center w-full">
+          <div className="absolute inset-0 flex items-center justify-center w-full">
             <Loader2Icon className="size-7 animate-spin text-muted-foreground" />
           </div>
         )}
@@ -73,7 +77,7 @@ const Channel: React.FC = () => {
         {!isFetching && !(isFetchingMessages && messageList.length === 0) && !isError && (
           <div
             ref={messageContainerListRef}
-            className="flex-1 overflow-y-auto py-2 space-y-4"
+            className="h-full overflow-y-auto py-2 space-y-4"
             style={{ scrollbarWidth: 'thin' }}
           >
             {messageList?.length === 0 ? (
@@ -99,7 +103,10 @@ const Channel: React.FC = () => {
             )}
           </div>
         )}
+      </div>
 
+      {/* Fixed Chat Input at Bottom */}
+      <div className="flex-shrink-0 pb-2">
         <ChatInput />
       </div>
     </div>
