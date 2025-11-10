@@ -118,9 +118,11 @@ const ChannelHeader: React.FC<IProps> = ({ name, isFetching, members }) => {
               </AvatarFallback>
             </Avatar>
           )}
-          <Avatar className="ring-2 ring-background bg-muted text-xs font-medium flex items-center justify-center">
-            {members?.length ?? 0}
-          </Avatar>
+          {members?.length > 3 && (
+            <Avatar className="ring-2 ring-background bg-muted text-xs font-medium flex items-center justify-center">
+              {members?.length - 3 + '+' || 0}
+            </Avatar>
+          )}
         </div>
 
         <Button className="!p-0" variant={'transparent'}>

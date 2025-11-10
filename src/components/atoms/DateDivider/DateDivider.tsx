@@ -17,6 +17,8 @@ const DateDivider: React.FC<DateDividerProps> = ({ date }) => {
   const yesterday = new Date();
   yesterday.setDate(today.getDate() - 1);
 
+  const isMobile = window.innerWidth < 640;
+
   const todayStr = today.toDateString();
   const yesterdayStr = yesterday.toDateString();
 
@@ -35,17 +37,23 @@ const DateDivider: React.FC<DateDividerProps> = ({ date }) => {
   return (
     <div className="relative flex items-center justify-center py-3 ">
       <div className="absolute  left-0 h-[1px] w-full bg-gray-300" />
-      <DropdownMenu>
-        <DropdownMenuTrigger className="flex items-center gap-1 sticky top-20 z-[1] cursor-pointer border-[1px] border-gray-300 bg-white shadow-sm sm:text-sm text-xs px-3 py-[2px] rounded-full">
-          <span>{formattedDate}</span>
-          <ChevronDown className="sm:size-4 size-3" />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent side="bottom" align="center" className="w-64">
-          <DropdownMenuItem className="cursor-pointer">Most Recent</DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer">Last Week</DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer">Last Month</DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      {isMobile ? (
+        <div className="text-xs text-gray-500 bg-white relative z-1 border px-4 py-[3px] rounded-full">
+          {formattedDate}
+        </div>
+      ) : (
+        <DropdownMenu>
+          <DropdownMenuTrigger className="flex items-center gap-1 sticky top-20 z-[1] cursor-pointer border-[1px] border-gray-300 bg-white shadow-sm sm:text-sm text-xs px-3 py-[2px] rounded-full">
+            <span>{formattedDate}</span>
+            <ChevronDown className="sm:size-4 size-3" />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent side="bottom" align="center" className="w-64">
+            <DropdownMenuItem className="cursor-pointer">Most Recent</DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer">Last Week</DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer">Last Month</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )}
     </div>
   );
 };

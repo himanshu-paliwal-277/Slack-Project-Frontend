@@ -48,7 +48,7 @@ const WorkspacePanel: React.FC = () => {
     <div className="flex flex-col h-full sm:flex-0 flex-1 bg-ocean-primary text-white">
       <WorkspacePanelHeader workspace={workspace} />
 
-      <div className="overflow-y-auto sm:bg-transparent bg-gray-800 sm:h-full h-[calc(100%-178px)] pb-2 relative z-1">
+      <div className="overflow-y-auto sm:bg-ocean-primary bg-gray-800 sm:h-full h-[calc(100%-178px)] pb-2 relative z-1">
         {/* ==== Top Section (Threads & Drafts) ==== */}
         <div className="flex flex-col px-2 sm:mt-3 mt-4 space-y-1">
           <SideBarItem

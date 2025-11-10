@@ -32,7 +32,7 @@ const UserButton: React.FC = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="outline-none relative">
-        <Avatar className="sm:size-12 size-8 sm:rounded-full rounded-sm hover:opacity-65 transition bg-gray-200">
+        <Avatar className="sm:size-12 size-9 sm:rounded-full rounded-sm hover:opacity-65 transition bg-gray-200">
           <AvatarImage src={auth?.user?.avatar} />
           {auth?.user?.userName && (
             <AvatarFallback>{auth?.user?.userName[0].toUpperCase()}</AvatarFallback>

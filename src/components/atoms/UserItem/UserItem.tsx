@@ -8,7 +8,7 @@ import { useCurrentWorkspace } from '@/hooks/context/useCurrentWorkspace';
 import { cn } from '@/lib/utils';
 
 const userItemVariants = cva(
-  'flex items-center gap-1.5 justify-start font-normal h-8 sm:px-4 px-[8px] text-sm',
+  'flex items-center gap-1.5 justify-start font-normal sm:h-8 h-[36px] sm:px-4 px-[8px] text-sm',
   {
     variants: {
       variant: {
@@ -42,13 +42,13 @@ const UserItem: React.FC<IProps> = ({ id, label = 'Member', image, variant, hand
       asChild
     >
       <Link to={`/workspaces/${workspace?._id}/members/${id}`}>
-        <Avatar className="size-6 shrink-0 overflow-hidden rounded-sm bg-gray-300">
-          <AvatarImage src={image} className="rounded-md" />
+        <Avatar className="sm:size-6 size-7 shrink-0 overflow-hidden rounded-sm bg-gray-300">
+          <AvatarImage src={image} className="rounded-md " />
           <AvatarFallback className="rounded-md bg-sky-500 text-white">
             {label.charAt(0).toUpperCase()}
           </AvatarFallback>
         </Avatar>
-        <span className="text-[15px] font-[400] truncate">{label}</span>
+        <span className="sm:text-[15px] text-[16px] font-[400] truncate">{label}</span>
       </Link>
     </Button>
   );

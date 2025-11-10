@@ -24,7 +24,7 @@ const WorkspaceLayout: React.FC = () => {
           <WorkspaceNavbar />
         </div>
         <div className="flex sm:h-[calc(100vh-50px)] h-full">
-          <div className="sm:block hidden">
+          <div className="sm:flex sm:flex-col hidden">
             <WorkspaceSidebar />
           </div>
           <div className="sm:pb-4 sm:pr-4 flex-1 flex">
@@ -45,7 +45,7 @@ const WorkspaceLayout: React.FC = () => {
         </div>
       </div>
       <Drawer open={isOpen} onClose={() => setIsOpen(false)} direction="left">
-        <DrawerContent className="!w-screen !h-[100dvh] !max-w-none fixed top-0 left-0 m-0 rounded-none p-0 overflow-hidden">
+        <DrawerContent className="!w-screen sm:hidden !h-[100dvh] !max-w-none fixed top-0 left-0 m-0 rounded-none p-0 overflow-hidden">
           <div className="flex flex-col h-full bg-white">
             <WorkspaceSidebar />
             <WorkspacePanel />

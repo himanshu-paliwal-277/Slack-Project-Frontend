@@ -21,7 +21,7 @@ const SidebarButton: React.FC<IProps> = ({ Icon, label, handleClick, active }) =
       >
         <Icon className="size-5 text-white group-hover:scale-110 transition-all" />
       </Button>
-      <span className="text-[10px] text-white group-hover:text-accent">{label}</span>
+      <span className="sm:text-[10px] text-[12px] text-white group-hover:text-accent">{label}</span>
     </div>
   );
 };

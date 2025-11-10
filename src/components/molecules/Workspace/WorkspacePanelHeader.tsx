@@ -70,7 +70,7 @@ const WorkspacePanelHeader: React.FC<WorkspacePanelHeaderProps> = ({ workspace }
             variant="transparent"
             className="font-semibold text-lg w-auto p-1.5 overflow-hidden"
           > */}
-              <span className="truncate font-bold">{workspace?.name}</span>
+              <span className="truncate font-bold sm:text-md text-xl">{workspace?.name}</span>
               <ChevronDownIcon className="size-5 ml-1" />
               {/* </Button> */}
             </DropdownMenuTrigger>
