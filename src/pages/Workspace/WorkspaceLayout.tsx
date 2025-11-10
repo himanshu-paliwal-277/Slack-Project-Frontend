@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import WorkspaceNavbar from '@/components/organisms/Workspace/WorkspaceNavbar';
@@ -10,9 +10,16 @@ import { useOpenDrawer } from '@/hooks/context/useOpenDrawer';
 
 const WorkspaceLayout: React.FC = () => {
   const { openDrawer: isOpen, setOpenOpenDrawer: setIsOpen } = useOpenDrawer();
+
+  const isMobile = window.innerWidth < 640;
+
+  useEffect(() => {
+    if (isMobile) setIsOpen(true);
+  }, [isMobile, setIsOpen]);
+
   return (
     <>
-      <div className="h-[100dvh] bg-[#3b0d3c]">
+      <div className="h-[100dvh] bg-[#0F172A]">
         <div className="sm:block hidden">
           <WorkspaceNavbar />
         </div>
