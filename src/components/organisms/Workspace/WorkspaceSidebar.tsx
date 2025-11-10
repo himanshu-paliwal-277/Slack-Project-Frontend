@@ -10,7 +10,7 @@ const WorkspaceSidebar: React.FC = () => {
   const [activeSection, setActiveSection] = useState<string>('Home');
 
   return (
-    <aside className="sm:w-[80px] sm:static sm:border-none border-t-2 sm:bg-transparent bg-gray-800 border-gray-600 absolute bottom-0 sm:px-0 px-10 w-full sm:h-full flex justify-between sm:flex-col gap-y-4 items-center sm:pt-[10px] sm:pb-[5px] py-2">
+    <div className="sm:w-[80px] z-[10] sm:static sm:border-none border-t-2 sm:bg-transparent bg-gray-800 border-gray-600 absolute bottom-0 sm:px-0 px-10 w-full sm:h-full !h-[72px] flex justify-between sm:flex-col gap-y-4 items-center sm:pt-[10px] sm:pb-[5px]">
       <div className="sm:block hidden">
         <WorkspaceSwitcher />
       </div>
@@ -46,7 +46,7 @@ const WorkspaceSidebar: React.FC = () => {
       <div className="sm:flex hidden flex-col items-center justify-center mt-auto mb-5 gap-y-1">
         <UserButton />
       </div>
-    </aside>
+    </div>
   );
 };
 
