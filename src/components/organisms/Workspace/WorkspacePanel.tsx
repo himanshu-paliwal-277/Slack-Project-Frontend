@@ -29,7 +29,7 @@ const WorkspacePanel: React.FC = () => {
   // ✅ Unified loader & error UI
   if (isFetching) {
     return (
-      <div className="flex h-full items-center justify-center bg-[#552957] text-white">
+      <div className="flex h-full items-center justify-center bg-ocean-primary text-white">
         <Loader className="animate-spin size-6" />
       </div>
     );
@@ -37,7 +37,7 @@ const WorkspacePanel: React.FC = () => {
 
   if (isError || !workspace) {
     return (
-      <div className="flex flex-col gap-y-2 h-full bg-[#552957] items-center justify-center text-white">
+      <div className="flex flex-col gap-y-2 h-full bg-ocean-primary items-center justify-center text-white">
         <AlertTriangleIcon className="size-6" />
         <span>Something went wrong</span>
       </div>
@@ -45,7 +45,7 @@ const WorkspacePanel: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col h-full sm:flex-0 flex-1 sm:bg-[#552957] bg-gray-800 text-white">
+    <div className="flex flex-col h-full sm:flex-0 flex-1 bg-ocean-primary text-white">
       <WorkspacePanelHeader workspace={workspace} />
 
       <div className="overflow-y-auto">

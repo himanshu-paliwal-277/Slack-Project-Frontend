@@ -62,7 +62,7 @@ const WorkspacePanelHeader: React.FC<WorkspacePanelHeaderProps> = ({ workspace }
 
   return (
     <>
-      <div className="sm:bg-transparent bg-[#552957] sm:pb-0 pb-2">
+      <div className="sm:bg-transparent bg-ocean-primary sm:pb-0 pb-2">
         <div className="flex items-center justify-between px-4 py-3 gap-0.5">
           <DropdownMenu>
             <DropdownMenuTrigger className="rounded-sm cursor-pointer bg-transparent hover:bg-accent/10 text-accent flex items-center gap-2 font-semibold text-lg w-auto px-2 py-[2px] overflow-hidden">
@@ -77,7 +77,7 @@ const WorkspacePanelHeader: React.FC<WorkspacePanelHeaderProps> = ({ workspace }
 
             <DropdownMenuContent side="bottom" align="start" className="w-64">
               <DropdownMenuItem>
-                <div className="size-9 relative overflow-hidden text-white font-semibold text-xl rounded-md flex items-center justify-center mr-2 bg-[#616061]">
+                <div className="size-9 relative overflow-hidden text-white font-semibold text-xl rounded-md flex items-center justify-center mr-2 bg-ocean-secondary">
                   {workspace?.name.charAt(0).toUpperCase()}
                 </div>
                 <div className="flex flex-col items-start">

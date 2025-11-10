@@ -135,7 +135,7 @@ const Editor: React.FC<IProps> = ({
           <Hint label="Send Message">
             <Button
               size="iconSm"
-              className="ml-auto bg-[#007a6a] hover:bg-[#007a6a]/80 text-white"
+              className="ml-auto bg-ocean-secondary hover:bg-ocean-secondary/80 text-white"
               disabled={isSendDisabled} // ✅ fixed logic
               onClick={() => {
                 const messageContent = JSON.stringify(quillRef.current?.getContents());

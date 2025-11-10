@@ -13,11 +13,11 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['icons/icon-192x192.png', 'icons/icon-512x512.png'],
       manifest: {
-        name: 'Slack Clone',
-        short_name: 'Slack',
-        description: 'A Slack-like chat web app',
-        theme_color: '#000000',
-        background_color: '#ffffff',
+        name: 'Vibe - Team Collaboration',
+        short_name: 'Vibe',
+        description: 'A modern team collaboration and chat application',
+        theme_color: '#0B2447',
+        background_color: '#0B2447',
         display: 'standalone',
         start_url: '/',
         icons: [

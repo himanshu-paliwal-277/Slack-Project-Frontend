@@ -40,6 +40,10 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-slack: var(--slack);
+  /* Ocean Mist Theme Colors */
+  --color-ocean-bg: var(--ocean-bg);
+  --color-ocean-primary: var(--ocean-primary);
+  --color-ocean-secondary: var(--ocean-secondary);
 }
 
 :root {
@@ -76,6 +80,10 @@
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
   --slack: #5c3b58;
+  /* Ocean Mist Theme - Light Mode */
+  --ocean-bg: #0b2447;
+  --ocean-primary: #19376d;
+  --ocean-secondary: #576cbc;
 }
 
 .dark {
@@ -111,6 +119,10 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
   --slack: #481349;
+  /* Ocean Mist Theme - Dark Mode */
+  --ocean-bg: #0b2447;
+  --ocean-primary: #19376d;
+  --ocean-secondary: #576cbc;
 }
 
 @layer base {
@@ -166,4 +178,35 @@
   font-weight: 400 !important;
   color: #8d8d8d !important;
   @apply truncate;
+}
+
+/* Ocean Mist Theme Utility Classes */
+@layer utilities {
+  .bg-ocean-bg {
+    background-color: var(--ocean-bg);
+  }
+  .bg-ocean-primary {
+    background-color: var(--ocean-primary);
+  }
+  .bg-ocean-secondary {
+    background-color: var(--ocean-secondary);
+  }
+  .text-ocean-bg {
+    color: var(--ocean-bg);
+  }
+  .text-ocean-primary {
+    color: var(--ocean-primary);
+  }
+  .text-ocean-secondary {
+    color: var(--ocean-secondary);
+  }
+  .border-ocean-bg {
+    border-color: var(--ocean-bg);
+  }
+  .border-ocean-primary {
+    border-color: var(--ocean-primary);
+  }
+  .border-ocean-secondary {
+    border-color: var(--ocean-secondary);
+  }
 }

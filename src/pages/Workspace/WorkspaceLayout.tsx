@@ -19,7 +19,7 @@ const WorkspaceLayout: React.FC = () => {
 
   return (
     <>
-      <div className="h-[100dvh] bg-[#0F172A]">
+      <div className="h-[100dvh] bg-ocean-bg">
         <div className="sm:block hidden">
           <WorkspaceNavbar />
         </div>

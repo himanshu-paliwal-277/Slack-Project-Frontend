@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 
-import sendMessageSound from '@/assets/audio/sendMessageSound.mp3';
+const sendMessageSound = '/audio/sendMessageSound.mp3';
 import Editor from '@/components/atoms/Editor/Editor';
 import { useAuth } from '@/hooks/context/useAuth';
 import { useCurrentWorkspace } from '@/hooks/context/useCurrentWorkspace';

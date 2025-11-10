@@ -37,7 +37,7 @@ class ErrorBoundary extends Component<Props, State> {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <button
                 onClick={() => window.location.reload()}
-                className="px-6 py-2 bg-[#00C16A] text-white rounded-lg font-medium shadow hover:bg-[#00a85c] transition"
+                className="px-6 py-2 bg-ocean-secondary text-white rounded-lg font-medium shadow hover:bg-ocean-secondary/80 transition"
               >
                 Reload Page
               </button>
