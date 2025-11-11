@@ -16,15 +16,20 @@ const Channel: React.FC = () => {
   const { channelId } = useParams<{ channelId: string }>();
   const { channelDetails, isFetching, isError } = useGetChannelById(channelId || '');
   const { messageList, setMessageList } = useChannelMessages();
-  const { joinChannel } = useSocket();
+  const { joinChannel, leaveChannel } = useSocket();
   const { messages, isFetching: isFetchingMessages } = useGetChannelMessages(channelId as string);
 
   const messageContainerListRef = useRef<HTMLDivElement>(null);
+  const previousChannelIdRef = useRef<string | undefined>(undefined);
 
   // Update messages when fetched
   useEffect(() => {
-    if (messages) {
-      setMessageList([...messages].reverse());
+    if (messages && messages.length > 0) {
+      // Sort messages by createdAt to ensure chronological order
+      const sortedMessages = [...messages].sort(
+        (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+      );
+      setMessageList(sortedMessages);
     } else {
       setMessageList([]);
     }
@@ -38,12 +43,26 @@ const Channel: React.FC = () => {
     }
   }, [messageList]);
 
-  // Join socket when ready
+  // Join socket when ready and leave when switching channels
   useEffect(() => {
     if (!isFetching && !isError && channelId) {
+      // Leave previous channel if it exists
+      if (previousChannelIdRef.current && previousChannelIdRef.current !== channelId) {
+        leaveChannel(previousChannelIdRef.current);
+      }
+
+      // Join new channel
       joinChannel(channelId);
+      previousChannelIdRef.current = channelId;
     }
-  }, [isFetching, isError, joinChannel, channelId]);
+
+    // Cleanup: leave channel when component unmounts
+    return () => {
+      if (channelId) {
+        leaveChannel(channelId);
+      }
+    };
+  }, [isFetching, isError, joinChannel, leaveChannel, channelId]);
 
   // ✅ Group messages by date
   const groupedMessages = groupMessagesByDate(messageList);
