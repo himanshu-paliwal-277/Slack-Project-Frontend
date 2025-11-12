@@ -7,6 +7,7 @@ interface IProps {
 export interface ChannelMessage {
   _id: string;
   body: string; // JSON string (e.g., Quill Delta)
+  image?: string;
   channelId: string;
   senderId: Sender;
   workspaceId: string;

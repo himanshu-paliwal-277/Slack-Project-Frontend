@@ -1,5 +1,6 @@
 import React, { memo } from 'react';
 
+import MessageImageThumbnail from '@/components/atoms/MessageImageThumbnail/MessageImageThumbnail';
 import MessageRenderer from '@/components/atoms/MessageRenderer/MessageRenderer';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { formatTo12HourTime } from '@/utils/timeFormatter';
@@ -9,9 +10,10 @@ interface IProps {
   authorName: string;
   createdAt: string;
   body: string;
+  image?: string;
 }
 
-const Message: React.FC<IProps> = ({ authorImage, authorName, createdAt, body }) => {
+const Message: React.FC<IProps> = ({ authorImage, authorName, createdAt, body, image }) => {
   return (
     <div className="flex flex-col gap-2 p-1.5 sm:px-5 px-4 hover:bg-gray-100/60 group relative">
       <div className="flex items-start gap-3">
@@ -35,7 +37,7 @@ const Message: React.FC<IProps> = ({ authorImage, authorName, createdAt, body })
           </div>
 
           <MessageRenderer value={body} />
-          {/* Any images if there are */}
+          {image && <MessageImageThumbnail url={image} />}
         </div>
       </div>
     </div>

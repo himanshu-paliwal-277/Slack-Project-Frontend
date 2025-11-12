@@ -112,6 +112,7 @@ const Channel: React.FC = () => {
                     <Message
                       key={message._id}
                       body={message.body}
+                      image={message.image}
                       authorImage={message.senderId?.avatar}
                       authorName={message.senderId?.userName}
                       createdAt={message.createdAt}
