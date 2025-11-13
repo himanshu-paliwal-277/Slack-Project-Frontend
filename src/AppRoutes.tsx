@@ -9,8 +9,10 @@ import Auth from './pages/Auth/Auth';
 import Home from './pages/Home/Home';
 import { Notfound } from './pages/NotFound/NotFound';
 import Channel from './pages/Workspace/Channel/Channel';
+import Drafts from './pages/Workspace/Drafts/Drafts';
 import JoinPage from './pages/Workspace/JoinPage';
 import Members from './pages/Workspace/Members/Members';
+import Threads from './pages/Workspace/Threads/Threads';
 import WorkspaceLayout from './pages/Workspace/WorkspaceLayout';
 
 const AppRoutes: React.FC = () => {
@@ -52,6 +54,12 @@ const AppRoutes: React.FC = () => {
 
             {/* Members Routes */}
             <Route path="workspaces/:workspaceId/members/:memberId" element={<Members />} />
+
+            {/* Threads Routes */}
+            <Route path="workspaces/:workspaceId/threads" element={<Threads />} />
+
+            {/* Drafts Routes */}
+            <Route path="workspaces/:workspaceId/drafts" element={<Drafts />} />
           </Route>
         </Route>
 

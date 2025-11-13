@@ -9,6 +9,7 @@ interface IProps {
   label: string;
   id: string;
   icon: React.ElementType;
+  redirectTo?: string;
   variant: 'default' | 'active';
   handleClick?: () => void;
 }
@@ -30,6 +31,7 @@ const SideBarItem: React.FC<IProps> = ({
   label,
   id, // channelId
   icon: Icon,
+  redirectTo,
   variant,
   handleClick,
 }) => {
@@ -43,7 +45,7 @@ const SideBarItem: React.FC<IProps> = ({
       asChild
       onClick={handleClick}
     >
-      <Link className="flex items-center gap-1" to={`/workspaces/${workspaceId}/channels/${id}`}>
+      <Link className="flex items-center gap-1" to={redirectTo || `/workspaces/${workspaceId}/channels/${id}`}>
         <Icon className="sm:size-4 size-4.5 mr-1" />
         <span className="sm:text-[15px] text-[16px] font-[400]">{label}</span>
       </Link>

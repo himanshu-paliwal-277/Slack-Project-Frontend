@@ -60,6 +60,7 @@ const WorkspacePanel: React.FC = () => {
               setActiveSection('threads');
               if (isMobile) setOpenOpenDrawer(false);
             }}
+            redirectTo={`/workspaces/${workspaceId}/threads`}
           />
           <SideBarItem
             label="Drafts & Sends"
@@ -70,6 +71,7 @@ const WorkspacePanel: React.FC = () => {
               setActiveSection('drafts');
               if (isMobile) setOpenOpenDrawer(false);
             }}
+            redirectTo={`/workspaces/${workspaceId}/drafts`}
           />
         </div>
 
