@@ -17,14 +17,6 @@ const WorkspaceNavbar: React.FC = () => {
   const { setCurrentWorkspace } = useCurrentWorkspace();
 
   useEffect(() => {
-    if (!isFetching && !isSuccess && error) {
-      console.log('Error fetching workspace', 'status' in error ? error.status : 'unknown');
-      if ('status' in error && error.status === 403) {
-        logout();
-        navigate('/auth/signin');
-      }
-    }
-
     if (workspace) {
       setCurrentWorkspace(workspace);
     }

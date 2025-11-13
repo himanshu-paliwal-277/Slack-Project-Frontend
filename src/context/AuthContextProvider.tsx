@@ -1,10 +1,15 @@
-import React, { createContext, useEffect, useState } from 'react';
+import React, { createContext, useCallback, useEffect, useState } from 'react';
+
+declare global {
+  interface Window {
+    logoutUser?: () => void;
+  }
+}
 
 interface IProps {
   children: React.ReactNode;
 }
 
-// Define proper user type
 interface User {
   avatar: string;
   email: string;
@@ -12,14 +17,12 @@ interface User {
   _id: string;
 }
 
-// Auth data type
 interface AuthData {
   user: User | null;
   token: string | null;
   isLoading: boolean;
 }
 
-// Context type
 interface AuthContextType {
   auth: AuthData;
   setAuth: React.Dispatch<React.SetStateAction<AuthData>>;
@@ -35,16 +38,39 @@ export const AuthContextProvider: React.FC<IProps> = ({ children }) => {
     isLoading: true,
   });
 
-  const logout = (): void => {
-    localStorage.removeItem('user');
-    localStorage.removeItem('token');
-    setAuth({
-      user: null,
-      token: null,
-      isLoading: false,
-    });
-  };
+  /**
+   * ✅ Logout function — clears localStorage + context + redirects
+   */
+  const logout = useCallback((): void => {
+    try {
+      // Remove token and user from local storage
+      localStorage.removeItem('user');
+      localStorage.removeItem('token');
 
+      // Reset auth state
+      setAuth({
+        user: null,
+        token: null,
+        isLoading: false,
+      });
+
+      // Redirect to signin page
+      window.location.href = '/auth/signin';
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  }, []);
+
+  /**
+   * ✅ Make logout available globally for Axios interceptor
+   */
+  useEffect(() => {
+    window.logoutUser = logout;
+  }, [logout]);
+
+  /**
+   * ✅ Initialize auth from localStorage
+   */
   useEffect(() => {
     const userData = localStorage.getItem('user');
     const token = localStorage.getItem('token');
