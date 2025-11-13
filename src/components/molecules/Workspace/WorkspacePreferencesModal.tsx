@@ -71,7 +71,9 @@ const WorkspacePreferencesModal: React.FC = () => {
 
       // Navigate to the next available workspace or home
       if (updatedWorkspaces && Array.isArray(updatedWorkspaces) && updatedWorkspaces.length > 0) {
-        navigate(`/workspaces/${updatedWorkspaces[0]._id}/channels/${updatedWorkspaces[0].channels[0]}`);
+        navigate(
+          `/workspaces/${updatedWorkspaces[0]._id}/channels/${updatedWorkspaces[0].channels[0]}`
+        );
       } else {
         navigate('/home');
       }

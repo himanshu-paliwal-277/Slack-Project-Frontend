@@ -84,12 +84,7 @@ interface SendDMMessageInput {
   token: string;
 }
 
-export const sendDMMessageRequest = async ({
-  roomId,
-  body,
-  image,
-  token,
-}: SendDMMessageInput) => {
+export const sendDMMessageRequest = async ({ roomId, body, image, token }: SendDMMessageInput) => {
   try {
     const response = await AxiosInstance.post(
       `/dms/${roomId}/message`,

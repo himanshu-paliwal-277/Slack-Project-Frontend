@@ -73,9 +73,7 @@ const JoinPage: React.FC = () => {
 
       <div className="flex gap-x-4">
         <Button size="lg" variant="outline" disabled={isJoining}>
-          <Link to={`/`}>
-            Go to home
-          </Link>
+          <Link to={`/`}>Go to home</Link>
         </Button>
       </div>
     </div>

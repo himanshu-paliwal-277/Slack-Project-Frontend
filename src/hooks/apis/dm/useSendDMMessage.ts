@@ -7,15 +7,7 @@ export const useSendDMMessage = () => {
   const { auth } = useAuth();
 
   const { mutateAsync, isPending, isSuccess, isError, error } = useMutation({
-    mutationFn: ({
-      roomId,
-      body,
-      image,
-    }: {
-      roomId: string;
-      body: string;
-      image?: string;
-    }) =>
+    mutationFn: ({ roomId, body, image }: { roomId: string; body: string; image?: string }) =>
       sendDMMessageRequest({
         roomId,
         body,

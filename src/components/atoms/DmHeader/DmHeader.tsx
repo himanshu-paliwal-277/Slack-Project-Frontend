@@ -2,6 +2,7 @@ import { ArrowLeft, Loader2Icon } from 'lucide-react';
 import React, { memo } from 'react';
 
 import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
 import { useOpenDrawer } from '@/hooks/context/useOpenDrawer';
 
 interface OtherUser {
@@ -32,9 +33,9 @@ const DmHeader: React.FC<DmHeaderProps> = ({ isFetching, otherUser }) => {
       </Button>
 
       {isFetching ? (
-        <div className="flex items-center gap-2">
-          <Loader2Icon className="size-5 animate-spin text-muted-foreground" />
-          <span className="text-muted-foreground text-sm">Loading...</span>
+        <div className="flex items-center gap-3">
+          <Skeleton className="size-8 rounded-full" />
+          <Skeleton className="h-5 sm:w-[130px] w-[110px] rounded-sm" />
         </div>
       ) : (
         <div className="flex items-center gap-3">
@@ -46,10 +47,7 @@ const DmHeader: React.FC<DmHeaderProps> = ({ isFetching, otherUser }) => {
               e.currentTarget.src = 'https://robohash.org/Unknown';
             }}
           />
-          <div>
-            <p className="font-medium text-lg">{userName}</p>
-            <p className="text-xs text-muted-foreground">Direct Message</p>
-          </div>
+          <p className="font-medium text-lg">{userName}</p>
         </div>
       )}
     </div>

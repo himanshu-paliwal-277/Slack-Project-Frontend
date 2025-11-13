@@ -94,9 +94,10 @@ export const SocketContextProvider: React.FC<IProps> = ({ children }) => {
       });
 
       // Extract the actual ID string (handle both string and object cases)
-      const channelId = typeof data.channelId === 'string'
-        ? data.channelId
-        : (data.channelId as unknown as { _id: string })?._id || null;
+      const channelId =
+        typeof data.channelId === 'string'
+          ? data.channelId
+          : (data.channelId as unknown as { _id: string })?._id || null;
       const roomId = data.roomId;
 
       console.log('🔍 Extracted IDs:', { channelId, roomId });
@@ -205,7 +206,9 @@ export const SocketContextProvider: React.FC<IProps> = ({ children }) => {
   }, []); // Empty deps - socket is stable via ref
 
   return (
-    <SocketContext.Provider value={{ socket: socketRef.current, joinChannel, leaveChannel, currentChannel }}>
+    <SocketContext.Provider
+      value={{ socket: socketRef.current, joinChannel, leaveChannel, currentChannel }}
+    >
       {children}
     </SocketContext.Provider>
   );

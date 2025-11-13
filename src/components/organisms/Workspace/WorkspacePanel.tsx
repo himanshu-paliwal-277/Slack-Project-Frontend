@@ -83,7 +83,8 @@ const WorkspacePanel: React.FC = () => {
 
         {/* ==== Channels Section ==== */}
         <WorkspacePanelSection label="Channels" onIconClick={() => setOpenCreateChannelModal(true)}>
-          {workspace.channels?.filter((channel: any) => !channel.type || channel.type !== 'dm').length > 0 ? (
+          {workspace.channels?.filter((channel: any) => !channel.type || channel.type !== 'dm')
+            .length > 0 ? (
             workspace.channels
               .filter((channel: any) => !channel.type || channel.type !== 'dm')
               .map((channel: { _id: string; name: string }) => (
@@ -105,32 +106,40 @@ const WorkspacePanel: React.FC = () => {
         </WorkspacePanelSection>
 
         {/* ==== Direct Messages Section ==== */}
-        <WorkspacePanelSection label="Direct messages" onIconClick={() => setOpenCreateDMModal(true)}>
+        <WorkspacePanelSection
+          label="Direct messages"
+          onIconClick={() => setOpenCreateDMModal(true)}
+        >
           {isFetchingDMs ? (
             <div className="flex justify-center items-center py-4">
               <Loader className="animate-spin size-4 text-gray-300" />
             </div>
           ) : dms && dms.length > 0 ? (
-            dms.map((dm: { _id: string; members: Array<{ _id: string; userName: string; avatar: string }> }) => {
-              // Find the other member in the DM (not the current user)
-              const currentUserId = auth.user?._id;
-              const otherMember = dm.members?.find((member) => member._id !== currentUserId);
+            dms.map(
+              (dm: {
+                _id: string;
+                members: Array<{ _id: string; userName: string; avatar: string }>;
+              }) => {
+                // Find the other member in the DM (not the current user)
+                const currentUserId = auth.user?._id;
+                const otherMember = dm.members?.find((member) => member._id !== currentUserId);
 
-              return (
-                <UserItem
-                  key={dm._id}
-                  label={otherMember?.userName || 'Unknown User'}
-                  id={dm._id}
-                  image={otherMember?.avatar || 'https://robohash.org/Unknown'}
-                  variant={activeSection === dm._id ? 'active' : 'default'}
-                  handleClick={() => {
-                    setActiveSection(dm._id);
-                    navigate(`/workspaces/${workspaceId}/dm/${dm._id}`);
-                    if (isMobile) setOpenOpenDrawer(false);
-                  }}
-                />
-              );
-            })
+                return (
+                  <UserItem
+                    key={dm._id}
+                    label={otherMember?.userName || 'Unknown User'}
+                    id={dm._id}
+                    image={otherMember?.avatar || 'https://robohash.org/Unknown'}
+                    variant={activeSection === dm._id ? 'active' : 'default'}
+                    handleClick={() => {
+                      setActiveSection(dm._id);
+                      navigate(`/workspaces/${workspaceId}/dm/${dm._id}`);
+                      if (isMobile) setOpenOpenDrawer(false);
+                    }}
+                  />
+                );
+              }
+            )
           ) : (
             <p className="text-xs text-gray-300 italic px-2">No direct messages yet</p>
           )}

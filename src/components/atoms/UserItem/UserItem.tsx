@@ -30,7 +30,6 @@ interface IProps {
 }
 
 const UserItem: React.FC<IProps> = ({ label = 'Member', image, variant, handleClick }) => {
-
   return (
     <Button
       onClick={handleClick}
