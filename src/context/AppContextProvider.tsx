@@ -4,6 +4,7 @@ import combineContext from '@/utils/combineContext';
 import { AuthContextProvider } from './AuthContextProvider';
 import { ChannelMessagesProvider } from './ChannelMessages';
 import { CreateChannelContextProvider } from './CreateChannelContext';
+import { CreateDMContextProvider } from './CreateDMContext';
 import { CreateWorkspaceContextProvider } from './CreateWorkspaceContext';
 import { DrawerContextProvider } from './DrawerContext';
 import { SocketContextProvider } from './SocketContext';
@@ -17,5 +18,6 @@ export const AppContextProvider = combineContext(
   CreateWorkspaceContextProvider,
   WorkspacePreferencesModalContextProvider,
   CreateChannelContextProvider,
+  CreateDMContextProvider,
   WorkspaceContextProvider
 );

@@ -11,7 +11,7 @@ import { Notfound } from './pages/NotFound/NotFound';
 import Channel from './pages/Workspace/Channel/Channel';
 import Drafts from './pages/Workspace/Drafts/Drafts';
 import JoinPage from './pages/Workspace/JoinPage';
-import Members from './pages/Workspace/Members/Members';
+import DM from './pages/Workspace/Members/DM';
 import Threads from './pages/Workspace/Threads/Threads';
 import WorkspaceLayout from './pages/Workspace/WorkspaceLayout';
 
@@ -52,8 +52,9 @@ const AppRoutes: React.FC = () => {
             {/* Channel Routes */}
             <Route path="workspaces/:workspaceId/channels/:channelId" element={<Channel />} />
 
-            {/* Members Routes */}
-            <Route path="workspaces/:workspaceId/members/:memberId" element={<Members />} />
+            {/* DM Routes */}
+            {/* <Route path="workspaces/:workspaceId/members/:memberId" element={<DM />} /> */}
+            <Route path="workspaces/:workspaceId/dm/:dmId" element={<DM />} />
 
             {/* Threads Routes */}
             <Route path="workspaces/:workspaceId/threads" element={<Threads />} />

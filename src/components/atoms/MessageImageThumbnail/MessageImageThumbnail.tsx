@@ -112,6 +112,7 @@ const MessageImageThumbnail: React.FC<IProps> = ({ url }) => {
         <div className="relative">
           <img src={url} className="rounded-md object-cover size-full" />
           <div className="absolute bottom-4 right-4 flex gap-2">
+            <button className="relative z-[-10]">dummy</button>
             <Hint label="Open in new tab">
               <button
                 onClick={handleOpenInNewTab}

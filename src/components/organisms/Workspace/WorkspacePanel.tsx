@@ -6,25 +6,31 @@ import {
   SendHorizontalIcon,
 } from 'lucide-react';
 import React, { memo, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import UserItem from '@/components/atoms/UserItem/UserItem';
 import WorkspacePanelHeader from '@/components/molecules/Workspace/WorkspacePanelHeader';
 import WorkspacePanelSection from '@/components/molecules/Workspace/WorkspacePanelSection';
 import SideBarItem from '@/components/SideBarItem/SideBarItem';
+import { useGetAllDMs } from '@/hooks/apis/dm/useGetAllDMs';
 import { useGetWorkspaceById } from '@/hooks/apis/workspaces/useGetWorkspaceById';
+import { useAuth } from '@/hooks/context/useAuth';
 import { useCreateChannelModal } from '@/hooks/context/useCreateChannelModal';
+import { useCreateDMModal } from '@/hooks/context/useCreateDMModal';
 import { useOpenDrawer } from '@/hooks/context/useOpenDrawer';
 
 const WorkspacePanel: React.FC = () => {
   const { workspaceId } = useParams();
   const { setOpenCreateChannelModal } = useCreateChannelModal();
+  const { setOpenCreateDMModal } = useCreateDMModal();
   const [activeSection, setActiveSection] = useState<string>('');
   const { setOpenOpenDrawer } = useOpenDrawer();
-
+  const navigate = useNavigate();
   const isMobile = window.innerWidth < 640;
+  const { auth } = useAuth();
 
   const { workspace, isFetching, isError } = useGetWorkspaceById(workspaceId as string);
+  const { dms, isFetching: isFetchingDMs } = useGetAllDMs(workspaceId as string);
 
   // ✅ Unified loader & error UI
   if (isFetching) {
@@ -77,55 +83,56 @@ const WorkspacePanel: React.FC = () => {
 
         {/* ==== Channels Section ==== */}
         <WorkspacePanelSection label="Channels" onIconClick={() => setOpenCreateChannelModal(true)}>
-          {workspace.channels?.length > 0 ? (
-            workspace.channels.map((channel: { _id: string; name: string }) => (
-              <SideBarItem
-                key={channel._id}
-                icon={HashIcon}
-                label={channel.name}
-                id={channel._id}
-                variant={activeSection === channel._id ? 'active' : 'default'}
-                handleClick={() => {
-                  setActiveSection(channel._id);
-                  if (isMobile) setOpenOpenDrawer(false);
-                }}
-              />
-            ))
+          {workspace.channels?.filter((channel: any) => !channel.type || channel.type !== 'dm').length > 0 ? (
+            workspace.channels
+              .filter((channel: any) => !channel.type || channel.type !== 'dm')
+              .map((channel: { _id: string; name: string }) => (
+                <SideBarItem
+                  key={channel._id}
+                  icon={HashIcon}
+                  label={channel.name}
+                  id={channel._id}
+                  variant={activeSection === channel._id ? 'active' : 'default'}
+                  handleClick={() => {
+                    setActiveSection(channel._id);
+                    if (isMobile) setOpenOpenDrawer(false);
+                  }}
+                />
+              ))
           ) : (
             <p className="text-xs text-gray-300 italic px-2">No channels yet</p>
           )}
         </WorkspacePanelSection>
 
         {/* ==== Direct Messages Section ==== */}
-        <WorkspacePanelSection label="Direct messages">
-          {workspace.members?.length > 0 ? (
-            workspace.members
-              .filter(
-                (item: {
-                  memberId: { _id: string; userName: string; avatar: string } | null;
-                  role: string;
-                }) => item.memberId !== null
-              )
-              .map(
-                (item: {
-                  memberId: { _id: string; userName: string; avatar: string };
-                  role: string;
-                }) => (
-                  <UserItem
-                    key={item.memberId._id}
-                    label={`${item.memberId.userName}${item.role === 'admin' ? ' (Admin)' : ''}`}
-                    id={item.memberId._id}
-                    image={item.memberId.avatar}
-                    variant={activeSection === item.memberId._id ? 'active' : 'default'}
-                    handleClick={() => {
-                      setActiveSection(item.memberId._id);
-                      if (isMobile) setOpenOpenDrawer(false);
-                    }}
-                  />
-                )
-              )
+        <WorkspacePanelSection label="Direct messages" onIconClick={() => setOpenCreateDMModal(true)}>
+          {isFetchingDMs ? (
+            <div className="flex justify-center items-center py-4">
+              <Loader className="animate-spin size-4 text-gray-300" />
+            </div>
+          ) : dms && dms.length > 0 ? (
+            dms.map((dm: { _id: string; members: Array<{ _id: string; userName: string; avatar: string }> }) => {
+              // Find the other member in the DM (not the current user)
+              const currentUserId = auth.user?._id;
+              const otherMember = dm.members?.find((member) => member._id !== currentUserId);
+
+              return (
+                <UserItem
+                  key={dm._id}
+                  label={otherMember?.userName || 'Unknown User'}
+                  id={dm._id}
+                  image={otherMember?.avatar || 'https://robohash.org/Unknown'}
+                  variant={activeSection === dm._id ? 'active' : 'default'}
+                  handleClick={() => {
+                    setActiveSection(dm._id);
+                    navigate(`/workspaces/${workspaceId}/dm/${dm._id}`);
+                    if (isMobile) setOpenOpenDrawer(false);
+                  }}
+                />
+              );
+            })
           ) : (
-            <p className="text-xs text-gray-300 italic px-2">No members found</p>
+            <p className="text-xs text-gray-300 italic px-2">No direct messages yet</p>
           )}
         </WorkspacePanelSection>
       </div>

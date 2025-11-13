@@ -1,4 +1,5 @@
 import React, { memo } from 'react';
+import { useParams } from 'react-router-dom';
 
 const sendMessageSound = '/audio/sendMessageSound.mp3';
 import Editor from '@/components/atoms/Editor/Editor';
@@ -10,22 +11,65 @@ const ChatInput: React.FC = () => {
   const { socket, currentChannel } = useSocket();
   const { auth } = useAuth();
   const { currentWorkspace } = useCurrentWorkspace();
+  const { dmId } = useParams<{ channelId?: string; dmId?: string }>();
 
   async function handleSubmit({ body }: { body: string }) {
-    console.log(body);
+    if (!socket) {
+      console.error('❌ Socket is not connected');
+      return;
+    }
 
-    socket?.emit(
+    if (!socket.connected) {
+      console.error('❌ Socket is disconnected');
+      return;
+    }
+
+    if (!currentChannel) {
+      console.error('❌ No current channel/room ID');
+      return;
+    }
+
+    // Determine if we're in a channel or DM based on route params
+    const isDM = !!dmId;
+    const messagePayload = isDM
+      ? {
+          roomId: currentChannel,
+          body,
+          senderId: auth?.user?._id,
+          workspaceId: currentWorkspace?._id,
+        }
+      : {
+          channelId: currentChannel,
+          body,
+          senderId: auth?.user?._id,
+          workspaceId: currentWorkspace?._id,
+        };
+
+    console.log('📤 Sending message:', {
+      isDM,
+      type: isDM ? 'DM' : 'Channel',
+      targetId: currentChannel,
+      messagePayload,
+    });
+
+    // Set a timeout to detect if the message wasn't acknowledged
+    const timeout = setTimeout(() => {
+      console.error('⏱️ Message send timeout - no acknowledgment received');
+    }, 5000);
+
+    socket.emit(
       'NewMessage',
-      {
-        channelId: currentChannel,
-        roomId: currentChannel,
-        body,
-        senderId: auth?.user?._id,
-        workspaceId: currentWorkspace?._id,
-      },
+      messagePayload,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (data: any) => {
-        console.log('Message sent', data);
+      (response: any) => {
+        clearTimeout(timeout);
+
+        console.log('✅ Message acknowledgment received:', response);
+
+        if (response?.error) {
+          console.error('❌ Backend error:', response.error);
+          return;
+        }
 
         // Play send message sound after successful send (like WhatsApp)
         const audio = new Audio(sendMessageSound);

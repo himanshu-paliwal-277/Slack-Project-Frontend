@@ -1,10 +1,9 @@
 import { cva } from 'class-variance-authority';
 import React, { memo } from 'react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { useCurrentWorkspace } from '@/hooks/context/useCurrentWorkspace';
 import { cn } from '@/lib/utils';
 
 const userItemVariants = cva(
@@ -30,8 +29,7 @@ interface IProps {
   handleClick?: () => void;
 }
 
-const UserItem: React.FC<IProps> = ({ id, label = 'Member', image, variant, handleClick }) => {
-  const { currentWorkspace: workspace } = useCurrentWorkspace();
+const UserItem: React.FC<IProps> = ({ label = 'Member', image, variant, handleClick }) => {
 
   return (
     <Button
@@ -41,7 +39,8 @@ const UserItem: React.FC<IProps> = ({ id, label = 'Member', image, variant, hand
       size="sm"
       asChild
     >
-      <Link to={`/workspaces/${workspace?._id}/members/${id}`}>
+      {/* <Link to={`/workspaces/${workspace?._id}/dm/${id}`}> */}
+      <div>
         <Avatar className="sm:size-6 size-7 shrink-0 overflow-hidden rounded-sm bg-gray-300">
           <AvatarImage src={image} className="rounded-md " />
           <AvatarFallback className="rounded-md bg-sky-500 text-white">
@@ -49,7 +48,8 @@ const UserItem: React.FC<IProps> = ({ id, label = 'Member', image, variant, hand
           </AvatarFallback>
         </Avatar>
         <span className="sm:text-[15px] text-[16px] font-[400] truncate">{label}</span>
-      </Link>
+      </div>
+      {/* </Link> */}
     </Button>
   );
 };

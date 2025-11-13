@@ -9,7 +9,9 @@
       "Bash(copy \"d:\\web dev\\_Full stack web development with PW\\_PW Projects\\Slack-Project-Frontend\\src\\assets\\slack_logo.png\" \"d:\\web dev\\_Full stack web development with PW\\_PW Projects\\Slack-Project-Frontend\\public\\icons\\icon-512x512.png\")",
       "Bash(cp:*)",
       "Bash(del \"d:\\web dev\\_Full stack web development with PW\\_PW Projects\\Slack-Project-Frontend\\src\\assets\\slack_logo.png\")",
-      "Bash(del \"d:\\web dev\\_Full stack web development with PW\\_PW Projects\\Slack-Project-Frontend\\public\\icons\\slack_logo.png\")"
+      "Bash(del \"d:\\web dev\\_Full stack web development with PW\\_PW Projects\\Slack-Project-Frontend\\public\\icons\\slack_logo.png\")",
+      "Bash(cat:*)",
+      "Bash(curl:*)"
     ],
     "deny": [],
     "ask": []
