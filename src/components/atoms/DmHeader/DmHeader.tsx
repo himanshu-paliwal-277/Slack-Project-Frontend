@@ -1,4 +1,4 @@
-import { ArrowLeft, Loader2Icon } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import React, { memo } from 'react';
 
 import { Button } from '@/components/ui/button';

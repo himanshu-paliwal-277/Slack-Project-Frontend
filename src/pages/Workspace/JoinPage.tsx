@@ -1,12 +1,12 @@
+import { Loader2Icon } from 'lucide-react';
 import React, { memo, useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import VerificationInput from 'react-verification-input';
-import { Loader2Icon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { useJoinWorkspaceRequest } from '@/hooks/apis/workspaces/useJoinWorkspace';
-import { useCurrentWorkspace } from '@/hooks/context/useCurrentWorkspace';
 import { useAuth } from '@/hooks/context/useAuth'; // ✅ custom hook to access AuthContext
+import { useCurrentWorkspace } from '@/hooks/context/useCurrentWorkspace';
 
 const JoinPage: React.FC = () => {
   const { workspaceId } = useParams();

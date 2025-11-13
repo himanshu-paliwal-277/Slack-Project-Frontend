@@ -5,8 +5,8 @@ import {
   MessageSquareTextIcon,
   SendHorizontalIcon,
 } from 'lucide-react';
-import React, { memo, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { memo, useMemo } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import UserItem from '@/components/atoms/UserItem/UserItem';
 import WorkspacePanelHeader from '@/components/molecules/Workspace/WorkspacePanelHeader';
@@ -18,21 +18,55 @@ import { useAuth } from '@/hooks/context/useAuth';
 import { useCreateChannelModal } from '@/hooks/context/useCreateChannelModal';
 import { useCreateDMModal } from '@/hooks/context/useCreateDMModal';
 import { useOpenDrawer } from '@/hooks/context/useOpenDrawer';
+import type { Channel, DM } from '@/types/workspace';
 
 const WorkspacePanel: React.FC = () => {
-  const { workspaceId } = useParams();
+  const { workspaceId, channelId, dmId } = useParams<{
+    workspaceId: string;
+    channelId?: string;
+    dmId?: string;
+  }>();
+
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const { setOpenCreateChannelModal } = useCreateChannelModal();
   const { setOpenCreateDMModal } = useCreateDMModal();
-  const [activeSection, setActiveSection] = useState<string>('');
   const { setOpenOpenDrawer } = useOpenDrawer();
-  const navigate = useNavigate();
-  const isMobile = window.innerWidth < 640;
   const { auth } = useAuth();
 
+  const isMobile = window.innerWidth < 640;
+
+  // === API Calls ===
   const { workspace, isFetching, isError } = useGetWorkspaceById(workspaceId as string);
   const { dms, isFetching: isFetchingDMs } = useGetAllDMs(workspaceId as string);
 
-  // ✅ Unified loader & error UI
+  // === Determine Active Section ===
+  const activeSection = useMemo(() => {
+    const path = location.pathname;
+
+    if (path.includes('/threads')) return 'threads';
+    if (path.includes('/drafts')) return 'drafts';
+    if (channelId) return channelId;
+    if (dmId) return dmId;
+
+    return '';
+  }, [location.pathname, channelId, dmId]);
+
+  // === Regular Channels (not DMs) ===
+  const regularChannels = useMemo(() => {
+    if (!workspace?.channels) return [];
+    return (workspace.channels as Channel[]).filter(
+      (channel) => !channel.type || channel.type !== 'dm'
+    );
+  }, [workspace?.channels]);
+
+  // === Close drawer on mobile ===
+  const handleMobileClose = () => {
+    if (isMobile) setOpenOpenDrawer(false);
+  };
+
+  // === Loader and Error Handling ===
   if (isFetching) {
     return (
       <div className="flex h-full items-center justify-center bg-ocean-primary text-white">
@@ -50,6 +84,7 @@ const WorkspacePanel: React.FC = () => {
     );
   }
 
+  // === Render ===
   return (
     <div className="flex flex-col h-full sm:flex-0 flex-1 bg-ocean-primary text-white">
       <WorkspacePanelHeader workspace={workspace} />
@@ -62,10 +97,7 @@ const WorkspacePanel: React.FC = () => {
             icon={MessageSquareTextIcon}
             id="threads"
             variant={activeSection === 'threads' ? 'active' : 'default'}
-            handleClick={() => {
-              setActiveSection('threads');
-              if (isMobile) setOpenOpenDrawer(false);
-            }}
+            handleClick={handleMobileClose}
             redirectTo={`/workspaces/${workspaceId}/threads`}
           />
           <SideBarItem
@@ -73,33 +105,25 @@ const WorkspacePanel: React.FC = () => {
             icon={SendHorizontalIcon}
             id="drafts"
             variant={activeSection === 'drafts' ? 'active' : 'default'}
-            handleClick={() => {
-              setActiveSection('drafts');
-              if (isMobile) setOpenOpenDrawer(false);
-            }}
+            handleClick={handleMobileClose}
             redirectTo={`/workspaces/${workspaceId}/drafts`}
           />
         </div>
 
         {/* ==== Channels Section ==== */}
         <WorkspacePanelSection label="Channels" onIconClick={() => setOpenCreateChannelModal(true)}>
-          {workspace.channels?.filter((channel: any) => !channel.type || channel.type !== 'dm')
-            .length > 0 ? (
-            workspace.channels
-              .filter((channel: any) => !channel.type || channel.type !== 'dm')
-              .map((channel: { _id: string; name: string }) => (
-                <SideBarItem
-                  key={channel._id}
-                  icon={HashIcon}
-                  label={channel.name}
-                  id={channel._id}
-                  variant={activeSection === channel._id ? 'active' : 'default'}
-                  handleClick={() => {
-                    setActiveSection(channel._id);
-                    if (isMobile) setOpenOpenDrawer(false);
-                  }}
-                />
-              ))
+          {regularChannels.length > 0 ? (
+            regularChannels.map((channel: Channel) => (
+              <SideBarItem
+                key={channel._id}
+                icon={HashIcon}
+                label={channel.name}
+                id={channel._id}
+                variant={activeSection === channel._id ? 'active' : 'default'}
+                handleClick={handleMobileClose}
+                redirectTo={`/workspaces/${workspaceId}/channels/${channel._id}`}
+              />
+            ))
           ) : (
             <p className="text-xs text-gray-300 italic px-2">No channels yet</p>
           )}
@@ -115,31 +139,24 @@ const WorkspacePanel: React.FC = () => {
               <Loader className="animate-spin size-4 text-gray-300" />
             </div>
           ) : dms && dms.length > 0 ? (
-            dms.map(
-              (dm: {
-                _id: string;
-                members: Array<{ _id: string; userName: string; avatar: string }>;
-              }) => {
-                // Find the other member in the DM (not the current user)
-                const currentUserId = auth.user?._id;
-                const otherMember = dm.members?.find((member) => member._id !== currentUserId);
+            (dms as DM[]).map((dm: DM) => {
+              const currentUserId = auth.user?._id;
+              const otherMember = dm.members?.find((member) => member._id !== currentUserId);
 
-                return (
-                  <UserItem
-                    key={dm._id}
-                    label={otherMember?.userName || 'Unknown User'}
-                    id={dm._id}
-                    image={otherMember?.avatar || 'https://robohash.org/Unknown'}
-                    variant={activeSection === dm._id ? 'active' : 'default'}
-                    handleClick={() => {
-                      setActiveSection(dm._id);
-                      navigate(`/workspaces/${workspaceId}/dm/${dm._id}`);
-                      if (isMobile) setOpenOpenDrawer(false);
-                    }}
-                  />
-                );
-              }
-            )
+              return (
+                <UserItem
+                  key={dm._id}
+                  label={otherMember?.userName || 'Unknown User'}
+                  id={dm._id}
+                  image={otherMember?.avatar || 'https://robohash.org/Unknown'}
+                  variant={activeSection === dm._id ? 'active' : 'default'}
+                  handleClick={() => {
+                    navigate(`/workspaces/${workspaceId}/dm/${dm._id}`);
+                    handleMobileClose();
+                  }}
+                />
+              );
+            })
           ) : (
             <p className="text-xs text-gray-300 italic px-2">No direct messages yet</p>
           )}

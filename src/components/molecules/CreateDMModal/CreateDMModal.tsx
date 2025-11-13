@@ -13,6 +13,7 @@ import { useStartDM } from '@/hooks/apis/dm/useStartDM';
 import { useAuth } from '@/hooks/context/useAuth';
 import { useCreateDMModal } from '@/hooks/context/useCreateDMModal';
 import { useCurrentWorkspace } from '@/hooks/context/useCurrentWorkspace';
+import type { DM, WorkspaceMember } from '@/types/workspace';
 
 const CreateDMModal: React.FC = () => {
   const { openCreateDMModal, setOpenCreateDMModal } = useCreateDMModal();
@@ -36,26 +37,33 @@ const CreateDMModal: React.FC = () => {
     if (!dms) return [];
 
     return dms
-      .flatMap((dm: { members: Array<{ _id: string }> }) => dm.members.map((m) => m._id))
+      .flatMap((dm: DM) => dm.members.map((m) => m._id))
       .filter((memberId: string) => memberId !== auth.user?._id);
   }, [dms, auth.user?._id]);
 
   // Filter members based on search query, exclude current user, and exclude members with existing DMs
-  const filteredMembers = currentWorkspace?.members
-    ?.filter((member: any) => {
-      const isNotCurrentUser = member.memberId?._id !== auth.user?._id;
-      const matchesSearch = member.memberId?.userName
-        ?.toLowerCase()
-        .includes(searchQuery.toLowerCase());
-      const hasExistingDM = existingDMMembers?.includes(member.memberId?._id);
-      return isNotCurrentUser && matchesSearch && member.memberId !== null && !hasExistingDM;
-    })
-    .sort((a: any, b: any) => {
-      // Sort admins first
-      if (a.role === 'admin' && b.role !== 'admin') return -1;
-      if (a.role !== 'admin' && b.role === 'admin') return 1;
-      return 0;
-    });
+  const filteredMembers = useMemo(() => {
+    if (!currentWorkspace?.members) return [];
+
+    // Cast to WorkspaceMember since runtime data has full user info
+    const members = currentWorkspace.members as unknown as WorkspaceMember[];
+
+    return members
+      .filter((member) => {
+        const isNotCurrentUser = member.memberId?._id !== auth.user?._id;
+        const matchesSearch = member.memberId?.userName
+          ?.toLowerCase()
+          .includes(searchQuery.toLowerCase());
+        const hasExistingDM = existingDMMembers?.includes(member.memberId?._id);
+        return isNotCurrentUser && matchesSearch && member.memberId !== null && !hasExistingDM;
+      })
+      .sort((a, b) => {
+        // Sort admins first
+        if (a.role === 'admin' && b.role !== 'admin') return -1;
+        if (a.role !== 'admin' && b.role === 'admin') return 1;
+        return 0;
+      });
+  }, [currentWorkspace?.members, searchQuery, existingDMMembers, auth.user?._id]);
 
   async function handleMemberClick(recipientId: string) {
     try {
@@ -83,6 +91,10 @@ const CreateDMModal: React.FC = () => {
     }
   }
 
+  function getMemberDisplayName(member: WorkspaceMember): string {
+    return `${member.memberId.userName}${member.role === 'admin' ? ' (Admin)' : ''}`;
+  }
+
   return (
     <Dialog open={openCreateDMModal} onOpenChange={handleClose}>
       <DialogContent className="max-w-md">
@@ -105,34 +117,31 @@ const CreateDMModal: React.FC = () => {
                 <LucideLoader2 className="animate-spin size-6" />
               </div>
             ) : filteredMembers && filteredMembers.length > 0 ? (
-              filteredMembers.map((member: any) => (
-                <div
-                  key={member.memberId._id}
-                  className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-colors"
-                  onClick={() => handleMemberClick(member.memberId._id)}
-                >
-                  {/* <UserItem
-                    label={`${member.memberId.userName}${member.role === 'admin' ? ' (Admin)' : ''}`}
-                    id={member.memberId._id}
-                    image={member.memberId.avatar}
-                    variant="default"
-                    handleClick={() => {}}
-                  /> */}
-                  <Button variant="transparent" size="sm" asChild>
-                    <div>
-                      <Avatar className="sm:size-6 size-7 shrink-0 overflow-hidden rounded-sm bg-gray-300">
-                        <AvatarImage src={member.memberId.avatar} className="rounded-md " />
-                        <AvatarFallback className="rounded-md bg-sky-500 text-white">
-                          {`${member.memberId.userName}${member.role === 'admin' ? ' (Admin)' : ''}`
-                            .charAt(0)
-                            .toUpperCase()}
-                        </AvatarFallback>
-                      </Avatar>
-                      <span className="sm:text-[15px] text-[16px] font-[400] truncate text-black">{`${member.memberId.userName}${member.role === 'admin' ? ' (Admin)' : ''}`}</span>
-                    </div>
-                  </Button>
-                </div>
-              ))
+              filteredMembers.map((member: WorkspaceMember) => {
+                const displayName = getMemberDisplayName(member);
+
+                return (
+                  <div
+                    key={member.memberId._id}
+                    className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-colors"
+                    onClick={() => handleMemberClick(member.memberId._id)}
+                  >
+                    <Button variant="transparent" size="sm" asChild>
+                      <div>
+                        <Avatar className="sm:size-6 size-7 shrink-0 overflow-hidden rounded-sm bg-gray-300">
+                          <AvatarImage src={member.memberId.avatar} className="rounded-md" />
+                          <AvatarFallback className="rounded-md bg-sky-500 text-white">
+                            {displayName.charAt(0).toUpperCase()}
+                          </AvatarFallback>
+                        </Avatar>
+                        <span className="sm:text-[15px] text-[16px] font-[400] truncate text-black">
+                          {displayName}
+                        </span>
+                      </div>
+                    </Button>
+                  </div>
+                );
+              })
             ) : (
               <p className="text-sm text-gray-500 text-center py-8">
                 {searchQuery ? 'No members found' : 'No members available'}

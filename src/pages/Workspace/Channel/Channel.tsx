@@ -113,7 +113,7 @@ const Channel: React.FC = () => {
               </div>
             ) : (
               Object.entries(groupedMessages).map(([date, messagesData]) => (
-                <div key={date} className="space-y-2">
+                <div key={date} className="">
                   <DateDivider date={date} />
 
                   {messagesData.map((message) => (
