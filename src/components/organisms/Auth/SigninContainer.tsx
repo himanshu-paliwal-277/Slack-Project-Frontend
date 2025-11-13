@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { useSignin } from '@/hooks/apis/auth/useSignin';
 
@@ -16,6 +16,8 @@ export interface ValidationError {
 
 const SigninContainer: React.FC = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const redirectTo = searchParams.get('redirect') || '/'; // ✅ handle redirect
 
   const [signinForm, setSigninForm] = useState<SignInData>({
     email: '',
@@ -23,32 +25,33 @@ const SigninContainer: React.FC = () => {
   });
 
   const [validationError, setValidationError] = useState<ValidationError | null>(null);
-
   const { isPending, isSuccess, error, signinMutation } = useSignin();
 
   async function onSigninFormSubmit(e: React.FormEvent) {
     e.preventDefault();
-    console.log('Signin form submitted', signinForm);
 
-    if (!signinForm.email || !signinForm.password) {
-      console.error('All fields are required');
+    if (!signinForm.email.trim() || !signinForm.password.trim()) {
       setValidationError({ message: 'All fields are required' });
       return;
     }
 
     setValidationError(null);
 
-    await signinMutation({
-      email: signinForm.email,
-      password: signinForm.password,
-    });
+    try {
+      await signinMutation({
+        email: signinForm.email,
+        password: signinForm.password,
+      });
+    } catch (err) {
+      console.error('Sign-in error:', err);
+    }
   }
 
   useEffect(() => {
     if (isSuccess) {
-      navigate('/');
+      navigate(redirectTo, { replace: true });
     }
-  }, [isSuccess, navigate]);
+  }, [isSuccess, navigate, redirectTo]);
 
   return (
     <SigninCard

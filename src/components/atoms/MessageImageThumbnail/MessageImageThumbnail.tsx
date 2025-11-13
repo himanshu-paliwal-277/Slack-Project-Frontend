@@ -9,8 +9,8 @@ interface IProps {
 const MessageImageThumbnail: React.FC<IProps> = ({ url }) => {
   return (
     <Dialog>
-      <DialogTrigger>
-        <div className="relative overflow-hidden cursor-zoom-in border rounded-lg max-w-[350px] mt-2">
+      <DialogTrigger className="max-w-[350px]">
+        <div className="relative overflow-hidden cursor-zoom-in border rounded-lg w-full mt-2">
           <img src={url} className="rounded-md object-cover size-full" />
         </div>
       </DialogTrigger>
