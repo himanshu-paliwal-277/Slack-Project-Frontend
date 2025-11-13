@@ -35,13 +35,21 @@ const Channel: React.FC = () => {
     }
   }, [messages, channelId, setMessageList]);
 
-  // Scroll to bottom when messages update
+  // ✅ Fixed Scroll to bottom issue
   useEffect(() => {
-    if (messageContainerListRef.current) {
-      const el = messageContainerListRef.current;
-      el.scrollTo({ top: el.scrollHeight });
-    }
-  }, [messageList]);
+    const el = messageContainerListRef.current;
+    if (!el) return;
+
+    // Use slight delay to ensure DOM + messages are fully rendered before measuring scroll height
+    const timeout = setTimeout(() => {
+      el.scrollTo({
+        top: el.scrollHeight,
+        behavior: 'smooth',
+      });
+    }, 50);
+
+    return () => clearTimeout(timeout);
+  }, [messageList, channelId]);
 
   // Join socket when ready and leave when switching channels
   useEffect(() => {
