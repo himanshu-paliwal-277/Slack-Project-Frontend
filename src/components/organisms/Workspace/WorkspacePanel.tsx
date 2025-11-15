@@ -69,13 +69,11 @@ const WorkspacePanel: React.FC = () => {
   // === Loader and Error Handling ===
   if (isFetching) {
     return (
-      <div className="flex h-full items-center justify-center bg-ocean-primary text-white">
-        <Loader className="animate-spin size-6" />
-      </div>
+      <div className="flex h-full items-center justify-center bg-ocean-primary text-white"></div>
     );
   }
 
-  if (isError || !workspace) {
+  if (isError) {
     return (
       <div className="flex flex-col gap-y-2 h-full bg-ocean-primary items-center justify-center text-white">
         <AlertTriangleIcon className="size-6" />
@@ -112,7 +110,11 @@ const WorkspacePanel: React.FC = () => {
 
         {/* ==== Channels Section ==== */}
         <WorkspacePanelSection label="Channels" onIconClick={() => setOpenCreateChannelModal(true)}>
-          {regularChannels.length > 0 ? (
+          {isFetching ? (
+            <div className="flex justify-center items-center py-4">
+              <Loader className="animate-spin size-4 text-gray-300" />
+            </div>
+          ) : regularChannels.length > 0 ? (
             regularChannels.map((channel: Channel) => (
               <SideBarItem
                 key={channel._id}

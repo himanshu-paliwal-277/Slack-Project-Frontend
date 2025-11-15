@@ -30,7 +30,9 @@ const WorkspaceNavbar: React.FC = () => {
         className="bg-accent/25 hover:bg-accent/15 sm:w-[400px] w-[220px] justify-start h-7 px-2"
       >
         <SearchIcon className="size-5 text-white mr-2" />
-        <span className="text-white text-xs">Search in {workspace?.name || 'Workspace'}</span>
+        <span className="text-white text-xs">
+          Search in {workspace?.name || 'Workspace'}
+        </span>
       </Button>
 
       <div className="ml-auto flex-1 flex items-center justify-end">

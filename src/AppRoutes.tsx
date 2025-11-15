@@ -1,19 +1,21 @@
-import React, { memo, Suspense } from 'react';
+import React, { lazy, memo, Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import LoadingFallback from './components/molecules/LoadingFallback/LoadingFallback';
 import ProtectedRoute from './components/molecules/ProtectedRoute/ProtectedRoute';
-import SigninContainer from './components/organisms/Auth/SigninContainer';
-import SignupContainer from './components/organisms/Auth/SignupContainer';
-import Auth from './pages/Auth/Auth';
-import Home from './pages/Home/Home';
-import { Notfound } from './pages/NotFound/NotFound';
-import Channel from './pages/Workspace/Channel/Channel';
-import Drafts from './pages/Workspace/Drafts/Drafts';
-import JoinPage from './pages/Workspace/JoinPage';
-import DM from './pages/Workspace/Members/DM';
-import Threads from './pages/Workspace/Threads/Threads';
-import WorkspaceLayout from './pages/Workspace/WorkspaceLayout';
+
+// Lazy load components for better performance
+const SigninContainer = lazy(() => import('./components/organisms/Auth/SigninContainer'));
+const SignupContainer = lazy(() => import('./components/organisms/Auth/SignupContainer'));
+const Auth = lazy(() => import('./pages/Auth/Auth'));
+const Home = lazy(() => import('./pages/Home/Home'));
+const Notfound = lazy(() => import('./pages/NotFound/NotFound').then(module => ({ default: module.Notfound })));
+const Channel = lazy(() => import('./pages/Workspace/Channel/Channel'));
+const Drafts = lazy(() => import('./pages/Workspace/Drafts/Drafts'));
+const JoinPage = lazy(() => import('./pages/Workspace/JoinPage'));
+const DM = lazy(() => import('./pages/Workspace/Members/DM'));
+const Threads = lazy(() => import('./pages/Workspace/Threads/Threads'));
+const WorkspaceLayout = lazy(() => import('./pages/Workspace/WorkspaceLayout'));
 
 const AppRoutes: React.FC = () => {
   return (

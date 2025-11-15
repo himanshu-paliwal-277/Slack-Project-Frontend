@@ -25,6 +25,8 @@ const CreateDMModal: React.FC = () => {
   const { startDMMutation, isPending } = useStartDM();
   const { dms } = useGetAllDMs(currentWorkspace?._id || '');
 
+  const isMobile = window.innerWidth < 640;
+
   function handleClose() {
     setOpenCreateDMModal(false);
     setTimeout(() => {
@@ -97,7 +99,13 @@ const CreateDMModal: React.FC = () => {
 
   return (
     <Dialog open={openCreateDMModal} onOpenChange={handleClose}>
-      <DialogContent className="max-w-md">
+      <DialogContent
+        className={
+          isMobile
+            ? 'max-w-md top-20 translate-y-0 sm:top-[50%] sm:translate-y-[-50%]'
+            : 'max-w-md'
+        }
+      >
         <DialogHeader>
           <DialogTitle>Start a Direct Message</DialogTitle>
         </DialogHeader>

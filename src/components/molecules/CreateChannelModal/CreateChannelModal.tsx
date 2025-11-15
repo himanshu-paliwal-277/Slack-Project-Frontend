@@ -21,6 +21,8 @@ const CreateChannelModal: React.FC = () => {
 
   const { currentWorkspace } = useCurrentWorkspace();
 
+  const isMobile = window.innerWidth < 640;
+
   function handleClose() {
     setOpenCreateChannelModal(false);
     setTimeout(() => {
@@ -48,7 +50,9 @@ const CreateChannelModal: React.FC = () => {
 
   return (
     <Dialog open={openCreateChannelModal} onOpenChange={handleClose}>
-      <DialogContent>
+      <DialogContent
+        className={isMobile ? 'top-20 translate-y-0 sm:top-[50%] sm:translate-y-[-50%]' : ''}
+      >
         <DialogHeader>
           <DialogTitle>Create a channel</DialogTitle>
         </DialogHeader>

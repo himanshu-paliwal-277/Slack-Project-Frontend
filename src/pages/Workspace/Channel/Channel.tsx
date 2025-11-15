@@ -1,5 +1,5 @@
 import { Loader2Icon, TriangleAlertIcon } from 'lucide-react';
-import React, { memo, useEffect, useRef } from 'react';
+import React, { memo, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import DateDivider from '@/components/atoms/DateDivider/DateDivider';
@@ -21,6 +21,7 @@ const Channel: React.FC = () => {
 
   const messageContainerListRef = useRef<HTMLDivElement>(null);
   const previousChannelIdRef = useRef<string | undefined>(undefined);
+  const [activeMessageId, setActiveMessageId] = useState<string | null>(null);
 
   // Update messages when fetched
   useEffect(() => {
@@ -33,6 +34,8 @@ const Channel: React.FC = () => {
     } else {
       setMessageList([]);
     }
+    // Reset active message when channel changes
+    setActiveMessageId(null);
   }, [messages, channelId, setMessageList]);
 
   // ✅ Fixed Scroll to bottom issue
@@ -119,11 +122,14 @@ const Channel: React.FC = () => {
                   {messagesData.map((message) => (
                     <Message
                       key={message._id}
+                      messageId={message._id}
                       body={message.body}
                       image={message.image}
                       authorImage={message.senderId?.avatar}
                       authorName={message.senderId?.userName}
                       createdAt={message.createdAt}
+                      activeMessageId={activeMessageId}
+                      onSetActiveMessage={setActiveMessageId}
                     />
                   ))}
                 </div>

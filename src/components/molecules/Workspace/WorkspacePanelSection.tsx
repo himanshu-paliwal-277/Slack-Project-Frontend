@@ -12,6 +12,7 @@ interface IProps {
 
 const WorkspacePanelSection: React.FC<IProps> = ({ label, children, onIconClick }) => {
   const [open, setOpen] = useState(true);
+  const isMobile = window.innerWidth < 640;
 
   return (
     <div className="flex flex-col mt-3 px-2 ">
@@ -23,7 +24,6 @@ const WorkspacePanelSection: React.FC<IProps> = ({ label, children, onIconClick 
           variant="transparent"
           className="p-0.5 text-sm size-6 text-[#f9edffcc] !bg-transparent"
         >
-          {/* {open ? <FaCaretDown className="size-4" /> : <FaCaretRight className="size-4" />} */}
           <FaCaretRight className={`size-4 ${open ? 'rotate-90' : ''} duration-100`} />
         </Button>
         <Button
@@ -41,7 +41,7 @@ const WorkspacePanelSection: React.FC<IProps> = ({ label, children, onIconClick 
               e.stopPropagation();
               onIconClick();
             }}
-            className="text-[#f9edffcc] hidden group-hover:flex transition opacity ml-auto p-0.5 text-sm size-6 bg-transparent hover:bg-accent/10"
+            className={`text-[#f9edffcc] hidden ${isMobile ? 'flex' : ''} sm:group-hover:flex transition opacity ml-auto p-0.5 text-sm size-6 bg-transparent hover:bg-accent/10`}
           >
             <PlusIcon className="size-4 text-[#f9edffcc]" />
           </Button>

@@ -1,5 +1,5 @@
 import { Forward, MoreHorizontal, Reply, SaveIcon, Smile } from 'lucide-react'; // ✅ sample icons
-import React, { memo } from 'react';
+import React, { memo, useEffect, useRef } from 'react';
 
 import Hint from '@/components/atoms/Hint/Hint'; // ✅ import Hint
 import MessageImageThumbnail from '@/components/atoms/MessageImageThumbnail/MessageImageThumbnail';
@@ -13,32 +13,104 @@ interface IProps {
   createdAt: string;
   body: string;
   image?: string;
+  messageId?: string;
+  activeMessageId?: string | null;
+  onSetActiveMessage?: (messageId: string | null) => void;
 }
 
-const Message: React.FC<IProps> = ({ authorImage, authorName, createdAt, body, image }) => {
+const Message: React.FC<IProps> = ({
+  authorImage,
+  authorName,
+  createdAt,
+  body,
+  image,
+  messageId,
+  activeMessageId,
+  onSetActiveMessage,
+}) => {
+  const longPressTimer = useRef<number | null>(null);
+  const isMobile = window.innerWidth < 640;
+
+  // Check if this message's actions should be shown
+  const showActions = activeMessageId === messageId;
+
+  // Handle touch start (long press start)
+  const handleTouchStart = () => {
+    if (isMobile && onSetActiveMessage && messageId) {
+      longPressTimer.current = window.setTimeout(() => {
+        onSetActiveMessage(messageId);
+      }, 500); // 500ms long press duration
+    }
+  };
+
+  // Handle touch end (cancel long press)
+  const handleTouchEnd = () => {
+    if (longPressTimer.current) {
+      clearTimeout(longPressTimer.current);
+      longPressTimer.current = null;
+    }
+  };
+
+  // Handle touch move (cancel long press if user moves finger)
+  const handleTouchMove = () => {
+    if (longPressTimer.current) {
+      clearTimeout(longPressTimer.current);
+      longPressTimer.current = null;
+    }
+  };
+
+  // Hide actions when clicking anywhere on mobile
+  useEffect(() => {
+    const handleClickAnywhere = () => {
+      if (isMobile && showActions && onSetActiveMessage) {
+        onSetActiveMessage(null);
+      }
+    };
+
+    if (isMobile && showActions) {
+      document.addEventListener('click', handleClickAnywhere);
+      return () => {
+        document.removeEventListener('click', handleClickAnywhere);
+      };
+    }
+  }, [isMobile, showActions, onSetActiveMessage]);
+
   return (
-    <div className="flex flex-col gap-1 py-2 sm:px-5 px-4 hover:bg-gray-100/60 group relative">
+    <div
+      className="flex flex-col gap-1 py-2 sm:px-5 px-4 hover:bg-gray-100/60 group relative"
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      onTouchMove={handleTouchMove}
+    >
       {/* Hover Action Box */}
-      <div className="absolute right-0 top-[-15px] opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 bg-white shadow-md border-1 border-gray-200 rounded-lg px-2 py-1 z-10">
+      <div
+        className={`absolute right-0 top-[-15px] transition-opacity flex items-center gap-1 bg-white shadow-md border-1 border-gray-200 rounded-lg px-2 py-1 z-10 ${
+          isMobile
+            ? showActions
+              ? 'opacity-100'
+              : 'opacity-0 pointer-events-none'
+            : 'opacity-0 group-hover:opacity-100'
+        }`}
+      >
         <Hint label="React">
-          <button className="p-1.5 hover:bg-gray-100 rounded-lg">
+          <button className="cursor-pointer p-1.5 hover:bg-gray-100 rounded-lg">
             <Smile className="w-4 h-4 text-gray-600" />
           </button>
         </Hint>
 
         <Hint label="Reply">
-          <button className="p-1.5 hover:bg-gray-100 rounded-lg">
+          <button className="cursor-pointer p-1.5 hover:bg-gray-100 rounded-lg">
             <Reply className="w-4 h-4 text-gray-600" />
           </button>
         </Hint>
 
         <Hint label="Forward">
-          <button className="p-1.5 hover:bg-gray-100 rounded-lg">
+          <button className="cursor-pointer p-1.5 hover:bg-gray-100 rounded-lg">
             <Forward className="w-4 h-4 text-gray-600" />
           </button>
         </Hint>
         <Hint label="Save">
-          <button className="p-1.5 hover:bg-gray-100 rounded-lg">
+          <button className="cursor-pointer p-1.5 hover:bg-gray-100 rounded-lg">
             <SaveIcon className="w-4 h-4 text-gray-600" />
           </button>
         </Hint>

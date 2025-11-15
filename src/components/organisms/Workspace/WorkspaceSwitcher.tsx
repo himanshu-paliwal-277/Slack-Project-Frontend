@@ -25,13 +25,9 @@ const WorkspaceSwitcher: React.FC = () => {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
+      <DropdownMenuTrigger disabled={isFetching}>
         <div className="w-[44px] h-[44px] flex items-center justify-center rounded-lg relative overflow-hidden bg-ocean-secondary hover:bg-ocean-secondary/80 font-semibold text-white text-xl">
-          {isFetching ? (
-            <Loader className="size-5 animate-spin" />
-          ) : (
-            workspace?.name.charAt(0).toUpperCase()
-          )}
+          {isFetching ? <div /> : workspace?.name.charAt(0).toUpperCase()}
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
